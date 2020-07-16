@@ -2,14 +2,14 @@ const mongoose = require('mongoose');
 
 const ProjectSchema = mongoose.Schema({
     name: String,
-    // code: String,
-    // fixed_budget: Boolean,
-    // budget: Number,
-    // buffer_percentage: Number,
-    // billing_rate: Number,
-    // start_date: Date,
-    // deadline: Date,
-    // client: [{ type: Schema.Types.ObjectId, ref: 'Client' }],
+    code: String,
+    fixed_budget: Boolean,
+    budget: Number,
+    buffer_percentage: Number,
+    billing_rate: Number,
+    start_date: Date,
+    deadline: Date,
+    client: { type: 'ObjectId', ref: 'Client' },
     // workers: [ workerDocument1,  workerDocument2, WorkerDocument3 ],
     // factors: {
     //     id1: 1.2,
