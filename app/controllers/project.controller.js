@@ -1,5 +1,6 @@
 const db = require("../models");
 const Projects = db.projects;
+const Project = require('../models/project.model.js');
 
 // Create and Save a new Tutorial
 exports.create = (req, res) => {
