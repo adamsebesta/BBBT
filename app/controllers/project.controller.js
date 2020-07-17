@@ -4,19 +4,20 @@ const Project = require('../models/project.model.js');
 
 // Create and Save a new Tutorial
 exports.create = (req, res) => {
+  const r = req.body;
   const project = new Project({
-    name: req.body.name,
-    code: req.body.code,
-    budget: req.body.budget,
-    fixed_budget: req.body.fixed_budget,
-    buffer_percentage: req.body.buffer_percentage,
-    billing_rate: req.body.billing_rate,
-    start_date: req.body.start_date,
-    deadline: req.body.deadline,
-    client: req.body.client,
-    workers: req.body.workers,
-    factors: req.body.factors,
-    tasks: req.body.tasks
+    name: r.name,
+    code: r.code,
+    budget: r.budget,
+    fixed_budget: r.fixed_budget,
+    buffer_percentage: r.buffer_percentage,
+    billing_rate: r.billing_rate,
+    start_date: r.start_date,
+    deadline: r.deadline,
+    client: r.client,
+    workers: r.workers,
+    factors: r.workers,
+    tasks: r.tasks
   })
 
   project
@@ -59,6 +60,7 @@ return Project.findById(id)
      }
    })
   .populate('client')
+  .populate('factors', 'first_name last_name')
   .exec((err, project) => {
     if (!project) {
       res.status(404).send({ message: "Not found Project with id " + id });

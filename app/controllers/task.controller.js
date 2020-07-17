@@ -4,13 +4,14 @@ const Task = require('../models/task.model.js');
 
 // Create and Save a new Task
 exports.create = (req, res) => {
+  const r = req.body;
   const task = new Task({
-    description: req.body.description,
-    estimation: req.body.estimation,
-    status: req.body.status,
-    project: req.body.project,
-    assigned_workers: req.body.assigned_workers,
-    tracked_hours: req.body.tracked_hours
+    description: r.description,
+    estimation: r.estimation,
+    status: r.status,
+    project: r.project,
+    assigned_workers: r.assigned_workers,
+    tracked_hours: r.tracked_hours
   });
 
   task
