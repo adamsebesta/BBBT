@@ -37,8 +37,8 @@ exports.findAll = (req, res) => {
 
 // Find a client by ID
 exports.findOne = (req, res) => {
-const id = req.params.id;
-return Client.findById(id)
+  const id = req.params.id;
+  return Client.findById(id)
   .exec((err, client) => {
     if (!client) {
       res.status(404).send({ message: "Not found Client with id " + id });
