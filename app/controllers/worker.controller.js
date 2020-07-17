@@ -26,9 +26,17 @@ exports.create = (req, res) => {
 
 // Retrieve all Workers from the database.
 exports.findAll = (req, res) => {
-
+  Worker.find()
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving Workers."
+      });
+    });
 };
-
 
 exports.findOne = (req, res) => {
 const id = req.params.id;

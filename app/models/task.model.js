@@ -12,7 +12,7 @@ const TaskSchema = mongoose.Schema({
   estimation: EstimationSchema,
   status: String,
   project: { type: Schema.Types.ObjectId, ref: 'Project' },
-  workers: [{ type: Schema.Types.ObjectId, ref: 'Worker' }],
+  assigned_workers: [{ type: Schema.Types.ObjectId, ref: 'Worker' }],
   tracked_hours: Schema.Types.Mixed
 },
   { timestamps: true }
