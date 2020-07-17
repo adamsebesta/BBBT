@@ -4,11 +4,12 @@ const Worker = require('../models/worker.model.js');
 
 // Create and Save a new Worker
 exports.create = (req, res) => {
+  const r = req.body;
   const worker = new Worker({
-    rate_brutto: req.body.rate_brutto,
-    first_name: req.body.first_name,
-    last_name: req.body.last_name,
-    internal: req.body.internal,
+    rate_brutto: r.rate_brutto,
+    first_name: r.first_name,
+    last_name: r.last_name,
+    internal: r.internal,
   });
 
   worker
