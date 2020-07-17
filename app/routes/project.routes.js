@@ -6,11 +6,11 @@ module.exports = app => {
   // Create a new Project
   router.post("/", projects.create);
 
+  // Add a client to a project
+  router.put("/updateClientInProject", projects.updateClient);
+
   // Retrieve all Projects
   router.get("/", projects.findAll);
-
-  // Retrieve all published Projects
-  router.get("/published", projects.findAllPublished);
 
   // Retrieve a single Project with id
   router.get("/:id", projects.findOne);

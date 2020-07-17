@@ -9,7 +9,7 @@ exports.create = (req, res) => {
     estimation: req.body.estimation,
     status: req.body.status,
     project: req.body.project,
-    assigned_workers: [],
+    assigned_workers: req.body.assigned_workers,
     tracked_hours: req.body.tracked_hours
   });
 
@@ -26,16 +26,21 @@ exports.create = (req, res) => {
     });
 };
 
+
 // Retrieve all Tasks from the database.
 exports.findAll = (req, res) => {
 
 };
 
-
 exports.findOne = (req, res) => {
 const id = req.params.id;
-return Task.findById(id)
-  .populate('project').exec((err, task) => {
+return Task.findById(id).
+  populate('project').
+  populate({
+    path: 'assigned_workers',
+    model: 'Worker'
+    }).
+  exec((err, task) => {
     if (!task) {
       res.status(404).send({ message: "Not found Task with id " + id });
     }
