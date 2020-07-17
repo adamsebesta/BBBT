@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const TrackedHoursSchema = new Schema({ name: Number });
 const EstimationSchema = new Schema({
   time: Number,
   approved_via: String,
@@ -14,7 +13,7 @@ const TaskSchema = mongoose.Schema({
   status: String,
   project: { type: Schema.Types.ObjectId, ref: 'Project' },
   assigned_workers: [{type: Schema.Types.ObjectId, ref: 'Workers'}],
-  tracked_hours: TrackedHoursSchema
+  tracked_hours: Schema.Types.Mixed
 },
   { timestamps: true }
 )
