@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import App from './App.vue';
-import HelloWorld from './components/HelloWorld.vue';
+import ProjectIndex from './components/ProjectIndex.vue';
 import VueFormulate from '@braid/vue-formulate';
 import { store } from './state/store.js'
 
@@ -16,7 +16,7 @@ const router = new Router({
     {
       path: '/',
       name: 'home',
-      component: HelloWorld,
+      component: ProjectIndex,
     }
   ],
 });
