@@ -49,7 +49,7 @@ export default {
     }
   },
   methods: {
-    async finalProjects() {
+    async wrapperProjects() {
       await this.$store.dispatch('fetchProjects');
       this.setProjects();
     },
@@ -78,7 +78,7 @@ export default {
     }
   },
   created() {
-    this.finalProjects();
+    this.wrapperProjects();
   },
 }
 </script>
