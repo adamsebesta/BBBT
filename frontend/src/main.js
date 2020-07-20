@@ -6,6 +6,7 @@ import { store } from './state/store.js'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
+import Project from './components/Project.vue';
 
 Vue.use(VueFormulate);
 library.add(fas);
@@ -25,7 +26,7 @@ const router = new Router({
     {
       path: '/project/:id',
       name: 'project',
-      // component: Project,
+      component: Project,
       props: true
     }
   ],

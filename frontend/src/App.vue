@@ -72,6 +72,11 @@ export default {
   },
   created() {
     this.fetchProjects();
+  },
+  watch: {
+    listingCount () {
+      this.fetchListings();
+    }
   }
 }
 </script>
