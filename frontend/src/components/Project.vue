@@ -1,15 +1,31 @@
 <template lang="html">
   <div class="project" v-if="project">
     <div class="project-details">
-      <h1 class="project_name">{{ project.name }}</h1>
-      <p class="project_budget">${{ project.budget }}</p>
+      <h1 class="project_name"> <span>Name:</span> {{ project.name }}</h1>
+      <p class="project_budget"> <span>Budget:</span>${{ project.budget }}</p>
       <div class="tasks">
-        Tasks:
+        <h2>Tasks:</h2>
         <div
-          v-for='task in project.tasks'
+          v-for='(task, index) in project.tasks'
           v-bind:key='task._id'
         >
-          {{task.description}}
+          <div class="task-number">
+          {{index + 1}}.
+          </div>
+            <div class="task-details">
+              <div class="">
+                description: {{task.description}}
+              </div>
+              <h3>Assigned workers:</h3>
+              <div
+                v-for= '(worker, index) in task.assigned_workers'
+                v-bind:key='worker._id'
+              >
+              {{index + 1}}.
+            <p>{{worker.first_name + " " + worker.last_name}}</p>
+              </div>
+            --------------
+            </div>
         </div>
       </div>
     </div>
@@ -75,13 +91,18 @@ export default {
     flex-direction: column;
   }
 
-  .project-product {
-    flex: 0 1 70%;
+  .tasks {
+    flex-direction: column;
+    display: flex;
+
   }
 
-  .user-sidebar {
-    flex: 0 1 30%;
+  .task-details {
+    flex-direction: column;
+    display: flex;
+    margin-top: 1rem;
   }
+
 
   .project .project_name {
     position: relative;
