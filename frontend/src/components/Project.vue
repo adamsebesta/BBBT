@@ -1,34 +1,75 @@
 <template lang="html">
   <div class="project" v-if="project">
-    <div class="project-details">
-      <h1 class="project_name"> <span>Name:</span> {{ project.name }}</h1>
-      <p class="project_budget"> <span>Budget:</span>${{ project.budget }}</p>
-      <div class="tasks">
-        <h2>Tasks:</h2>
-        <div
-          v-for='(task, index) in project.tasks'
-          v-bind:key='task._id'
+    <div id="tabs" class="container">
+
+    <div class="tabs">
+        <a
+          v-on:click="activetab=1"
+          v-bind:class="[ activetab === 1 ? 'active' : '' ]"
         >
-          <div class="task-number">
-          {{index + 1}}.
-          </div>
-            <div class="task-details">
-              <div class="">
-                description: {{task.description}}
-              </div>
-              <h3>Assigned workers:</h3>
-              <div
-                v-for= '(worker, index) in task.assigned_workers'
-                v-bind:key='worker._id'
-              >
-              {{index + 1}}.
-            <p>{{worker.first_name + " " + worker.last_name}}</p>
-              </div>
-            --------------
-            </div>
-        </div>
-      </div>
+          Tasks
+        </a>
+        <a
+          v-on:click="activetab=2"
+          v-bind:class="[ activetab === 2 ? 'active' : '' ]"
+        >
+          Budget
+        </a>
+        <a
+          v-on:click="activetab=3"
+          v-bind:class="[ activetab === 3 ? 'active' : '' ]"
+        >
+          Timeline
+        </a>
     </div>
+
+    <div class="content">
+        <div v-if="activetab === 1" class="tabcontent">
+          <div class="project-details">
+            <h1 class="project_name"> <span>Name:</span> {{ project.name }}</h1>
+            <p class="project_budget"> <span>Budget:</span>${{ project.budget }}</p>
+            <div class="tasks">
+              <h2>Tasks:</h2>
+              <div
+                class= "task"
+                v-for='(task, index) in project.tasks'
+                v-bind:key='task._id'
+              >
+                <div class="task-number">
+                {{index + 1}}.
+                </div>
+                  <div class="task-details">
+                    <div class="">
+                      description: {{task.description}}
+                    </div>
+                    <h3>Assigned workers:</h3>
+                    <div
+                      v-for= '(workerObject, index) in task.assigned_workers'
+                      v-bind:key='workerObject.worker._id'
+                    >
+                    {{index + 1}}.
+                  <p>
+                    {{workerObject.worker.first_name +
+                       " " +
+                       workerObject.worker.last_name}}
+                  </p>
+                    </div>
+                  --------------
+                  </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div v-if="activetab === 2" class="tabcontent">
+            Content for tab two
+        </div>
+        <div v-if="activetab === 3" class="tabcontent">
+            Content for tab three
+        </div>
+    </div>
+
+</div>
+
   </div>
 
 </template>
@@ -46,7 +87,8 @@ export default {
       project: null,
       endpoint: 'http://localhost:8080/api/projects/',
       showModal: false,
-      isClicked: false
+      isClicked: false,
+      activetab: 1
     }
   },
   methods: {
@@ -75,13 +117,11 @@ export default {
 
 .project {
     position: relative;
-    width: 90%;
+    width: 100%;
     margin: 0 auto;
-    padding: 50px 20px 70px;
-    height: 80vh;
-    margin-top: 3.5rem;
+    padding: 0px 20px 70px;
+    height: 100vh;
   }
-
 
   .project-details {
     display: flex;
@@ -94,8 +134,8 @@ export default {
   .tasks {
     flex-direction: column;
     display: flex;
-
   }
+
 
   .task-details {
     flex-direction: column;
@@ -122,5 +162,73 @@ export default {
       font-weight: 900;
       z-index: 0;
   }
+
+  * {
+ box-sizing: border-box;
+ margin: 0;
+ padding: 0;
+}
+
+.container {
+   max-width: 90%;
+   min-width: 420px;
+   height: 100vh;
+   margin: 40px auto;
+   font-family: Arial, Helvetica, sans-serif;
+   font-size: 0.9em;
+   color: #888;
+}
+
+/* Style the tabs */
+.tabs {
+   overflow: hidden;
+   margin-left: 20px;
+   margin-bottom: -2px; // hide bottom border
+}
+
+.tabs ul {
+   list-style-type: none;
+   margin-left: 20px;
+}
+
+.tabs a{
+   float: left;
+   cursor: pointer;
+   padding: 12px 24px;
+   transition: background-color 0.2s;
+   border: 1px solid #ccc;
+   border-right: none;
+   background-color: #f1f1f1;
+   border-radius: 5px 5px 0 0;
+   font-weight: bold;
+}
+.tabs a:last-child {
+   border-right: 1px solid #ccc;
+}
+
+/* Change background color of tabs on hover */
+.tabs a:hover {
+   background-color: #aaa;
+   color: #fff;
+}
+
+/* Styling for active tab */
+.tabs a.active {
+   background-color: #fff;
+   color: #484848;
+   border-bottom: 2px solid #fff;
+   cursor: default;
+}
+
+/* Style the tab content */
+.tabcontent {
+   padding: 30px;
+   padding-bottom: 10rem;
+   border: 1px solid #ccc;
+   border-radius: 5px;
+   box-shadow: 3px 3px 6px #e1e1e1;
+   width: 100%;
+
+}
 
 </style>

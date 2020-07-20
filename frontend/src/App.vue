@@ -46,7 +46,6 @@ export default {
       return this.setResults(data);
     },
     setResults (results) {
-      console.log(results);
       this.projects = results;
       this.$store.commit('setProjectCount', results.length);
     },
@@ -116,7 +115,7 @@ aside {
   overflow-y: auto;
   overflow-x: hidden;
   width: 20%;
-  padding: 50px 0 ;
+  
   box-sizing: border-box;
   border-right: 2px solid rgba(246, 246, 246, 1);
   border-bottom: 2px solid rgba(246, 246, 246, 1);
