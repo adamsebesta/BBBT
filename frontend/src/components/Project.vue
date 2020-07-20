@@ -119,7 +119,7 @@ export default {
     position: relative;
     width: 100%;
     margin: 0 auto;
-    padding: 0px 20px 70px;
+    padding: 0px 10px 10px;
     height: 100vh;
   }
 
@@ -170,7 +170,7 @@ export default {
 }
 
 .container {
-   max-width: 90%;
+   max-width: 95%;
    min-width: 420px;
    height: 100vh;
    margin: 40px auto;
