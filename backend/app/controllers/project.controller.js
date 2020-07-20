@@ -16,7 +16,6 @@ exports.create = (req, res) => {
     deadline: r.deadline,
     client: r.client,
     workers: r.workers,
-    factors: r.workers,
     tasks: r.tasks
   })
 
@@ -51,16 +50,18 @@ exports.findAll = (req, res) => {
 exports.findOne = (req, res) => {
 const id = req.params.id;
 return Project.findById(id)
-  .populate('workers')
+  .populate('workers.worker')
+  // .populate('tasks')
   .populate({
-     path: 'tasks',
-     populate: {
-       path: 'assigned_workers',
-       model: 'Worker'
-     }
+    path: 'tasks',
+    populate: {
+      path: 'assigned_workers', 
+      populate: {
+        path: 'worker', 
+        model: 'Worker'}
+    }
    })
   .populate('client')
-  .populate('factors', 'first_name last_name')
   .exec((err, project) => {
     if (!project) {
       res.status(404).send({ message: "Not found Project with id " + id });

@@ -11,8 +11,13 @@ const ProjectSchema = mongoose.Schema({
   start_date: Date,
   deadline: Date,
   client: { type: 'ObjectId', ref: 'Client' },
-  workers: [{ type: Schema.Types.ObjectId, ref: 'Worker' }],
-  factors: [{ type: Schema.Types.ObjectId, ref: 'Worker' }],
+  workers: [
+    {
+      worker: { type: Schema.Types.ObjectId, ref: 'Worker' },
+      factor: Number,
+      hours_planned: Number
+    }
+  ],
   tasks: [{ type: Schema.Types.ObjectId, ref: 'Task' }]
 }, {
     timestamps: true

@@ -38,7 +38,7 @@ const id = req.params.id;
 return Task.findById(id).
   populate('project').
   populate({
-    path: 'assigned_workers',
+    path: 'assigned_workers.worker',
     model: 'Worker'
     }).
   exec((err, task) => {
