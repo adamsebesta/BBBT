@@ -2,10 +2,11 @@
   <div class="">
     <div class="">
       <FormulateInput
-        v-model="selected_pm"
-        :options="pms"
+        v-model="selected_worker"
+        :options="current_workers"
         type="select"
-        placeholder="Select a PM"
+        placeholder="Select a worker"
+        @click='filterByWorker'
       >
       </FormulateInput>
     </div>
@@ -28,22 +29,25 @@ export default {
   },
   data() {
     return {
-      pms: null,
-      selected_pm: null
+      current_workers: null,
+      selected_worker: null
     }
   },
   methods: {
     async wrapperPMs() {
       await this.$store.dispatch('fetchPMs');
-      this.setPms();
+      this.setWorkers();
     },
-    setPms() {
-      const pms = this.$store.getters['pms'];
+    setWorkers() {
+      const w = this.$store.getters['workers'];
       const ob = {};
-      pms.forEach((pm, index) => {
+      w.forEach((pm, index) => {
         ob[String(index)] = pm.last_name
       })
-      this.pms = ob;
+      this.current_workers = ob;
+    },
+    filterByWorker() {
+
     }
   },
   computed: {
