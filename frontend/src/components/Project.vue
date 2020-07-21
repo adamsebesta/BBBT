@@ -200,7 +200,6 @@ export default {
     },
     resetFilters() {
       if (this.tasksFiltered) {
-      this.tasksFiltered = this.project.tasks
       this.selected_worker = null;
       this.selected_cat = null;
       }
