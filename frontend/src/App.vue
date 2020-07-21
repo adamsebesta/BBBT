@@ -2,8 +2,13 @@
   <div id="app">
     <main>
       <aside class="sidebar">
+        <router-link
+          :to="{ name: 'dashboard', params: {} }"
+        >
+          dashboard
+        </router-link>
         <div class="">
-          <h3 class='count' v-if='this.projects'>Projects: {{this.projectCount}}</h3>
+          <h3 class='count' v-if='this.projects'>Open Projects: {{this.projectCount}}</h3>
         </div>
         <div @click='toggleCollapse' class="collapse">
           <font-awesome-icon :icon="['fas', 'chevron-left']"/>
@@ -13,8 +18,9 @@
             :key="project.code"
             v-for="project in projects"
             class="link"
-            :to="{ name: 'project', params: { id: project._id } }">
-          {{project.name}}
+            :to="{ name: 'project', params: { id: project._id } }"
+          >
+            {{project.name}}
           </router-link>
         </div>
       </aside>
@@ -34,50 +40,46 @@ export default {
   data() {
     return {
       projects: null,
-      endpoint: 'http://localhost:8080/api/projects',
       asideShrunk: false,
-      projectCount: null
+    }
+  },
+  computed : {
+    projectCount() {
+    return this.$store.getters['projectCount']
     }
   },
   methods: {
-    async fetchProjects() {
-      let res = await fetch(this.endpoint)
-      let data = await res.json()
-      return this.setResults(data);
+    async wrapperProjects() {
+      await this.$store.dispatch('fetchProjects');
+      this.setProjects();
     },
-    setResults (results) {
-      console.log(results);
-      this.projects = results;
-      this.$store.commit('setProjectCount', results.length);
+    setProjects() {
+      this.projects = this.$store.getters['projects'];
     },
     toggleCollapse() {
+      const d = document;
       if (!this.asideShrunk) {
-         document.querySelector('aside').style.flex = '0 1 3%';
-         document.querySelector('.collapse').style.transform = 'rotate(180deg)';
-         document.querySelector('.collapse').style.left = '45%';
-         // document.querySelector('.project').style.marginLeft = '10rem'
-         // document.querySelector('.project-product').style.flex = '0 1 59%'
-         document.querySelector('.count').style.display = 'none';
+         d.querySelector('aside').style.flex = '0 1 3%';
+         d.querySelector('.collapse').style.transform = 'rotate(180deg)';
+         d.querySelector('.collapse').style.left = '20%';
+         //d.querySelector('.project').style.marginLeft = '2rem'
+         // d.querySelector('.project-product').style.flex = '0 1 59%'
+         d.querySelector('.count').style.display = 'none';
          this.asideShrunk = true;
     } else {
-        document.querySelector('aside').style.flex = '';
-        document.querySelector('.collapse').style.transform = '';
-        document.querySelector('.collapse').style.left = '85%';
-        // document.querySelector('.project').style.marginLeft = '';
-        // document.querySelector('.project-product').style.flex = '0 1 70%'
-        document.querySelector('.count').style.display = '';
+        d.querySelector('aside').style.flex = '';
+        d.querySelector('.collapse').style.transform = '';
+        d.querySelector('.collapse').style.left = '85%';
+        //d.querySelector('.project').style.marginLeft = '';
+        // d.querySelector('.project-product').style.flex = '0 1 70%'
+        d.querySelector('.count').style.display = '';
         this.asideShrunk = false;
       }
     }
   },
   created() {
-    this.fetchProjects();
+    this.wrapperProjects();
   },
-  watch: {
-    listingCount () {
-      this.fetchListings();
-    }
-  }
 }
 </script>
 
@@ -111,12 +113,12 @@ main {
 
 }
 aside {
-  flex: 0 1 20%;
+  flex: 0 1 15%;
   height: 100%;
   overflow-y: auto;
   overflow-x: hidden;
   width: 20%;
-  padding: 50px 0 ;
+
   box-sizing: border-box;
   border-right: 2px solid rgba(246, 246, 246, 1);
   border-bottom: 2px solid rgba(246, 246, 246, 1);
@@ -145,7 +147,7 @@ aside {
 
 .content {
   position: relative;
-  flex: 1 1 80%;
+  flex: 1 1 85%;
   display: flex;
   align-items: center;
   justify-content: center;

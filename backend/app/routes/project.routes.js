@@ -12,6 +12,9 @@ module.exports = app => {
   // Retrieve all Projects
   router.get("/", projects.findAll);
 
+  // Retrieve Project by PM
+  router.get("/filtered/:worker_id", projects.findAllByPM) 
+
   // Retrieve a single Project with id
   router.get("/:id", projects.findOne);
 

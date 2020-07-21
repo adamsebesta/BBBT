@@ -46,6 +46,22 @@ exports.findAll = (req, res) => {
     });
 };
 
+// Find all Projects by Project Manager
+exports.findAllByPM = (req, res) => {
+  const id = req.params.worker_id
+  Project.find({'workers.worker._id': id })
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving Projects."
+      });
+    });
+};
+
+
 // Find one Project by ID
 exports.findOne = (req, res) => {
 const id = req.params.id;
@@ -55,9 +71,9 @@ return Project.findById(id)
   .populate({
     path: 'tasks',
     populate: {
-      path: 'assigned_workers', 
+      path: 'assigned_workers',
       populate: {
-        path: 'worker', 
+        path: 'worker',
         model: 'Worker'}
     }
    })

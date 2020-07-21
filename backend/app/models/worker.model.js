@@ -7,6 +7,7 @@ const WorkerSchema = mongoose.Schema({
     first_name: String,
     last_name: String,
     internal: Boolean,
+    role: String
   },
   { timestamps: true }
 )

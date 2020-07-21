@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import Project from './components/Project.vue';
+import Dashboard from './components/Dashboard.vue';
 
 Vue.use(VueFormulate);
 library.add(fas);
@@ -27,6 +28,12 @@ const router = new Router({
       path: '/project/:id',
       name: 'project',
       component: Project,
+      props: true
+    },
+    {
+      path: '/dashboard',
+      name: 'dashboard',
+      component: Dashboard,
       props: true
     }
   ],
