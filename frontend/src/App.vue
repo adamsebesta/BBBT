@@ -122,7 +122,7 @@ aside {
   box-sizing: border-box;
   border-right: 2px solid rgba(246, 246, 246, 1);
   border-bottom: 2px solid rgba(246, 246, 246, 1);
-  border-radius: 5px;
+  border-radius: 3px;
   flex-direction: column;
   justify-content: center;
   h3 {
@@ -152,7 +152,7 @@ aside {
   align-items: center;
   justify-content: center;
   right: 0.5%;
-
+  flex-direction: column;
 }
 .link {
   display: block;
@@ -173,7 +173,7 @@ aside {
   opacity: .7;
   border: none;
   padding: 1rem;
-  border-radius: 5px;
+  border-radius: 3px;
   justify-content: center;
   cursor: pointer;
   text-shadow: 1px 1px 1px rgba(0,0,0,0.2);

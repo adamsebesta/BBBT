@@ -8,6 +8,7 @@ const EstimationSchema = new Schema({
 });
 
 const TaskSchema = mongoose.Schema({
+  category: String,
   description: String,
   estimation: EstimationSchema,
   status: String,

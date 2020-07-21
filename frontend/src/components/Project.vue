@@ -1,5 +1,8 @@
 <template lang="html">
   <div class="project" v-if="project">
+    <div class="project_name">
+      <h1> <span>Name:</span> {{ project.name }}</h1>
+    </div>
     <div id="tabs" class="container">
 
     <div class="tabs">
@@ -22,17 +25,41 @@
           Timeline
         </a>
     </div>
-
     <div class="content">
         <div v-if="activetab === 1" class="tabcontent">
           <div class="project-details">
-            <h1 class="project_name"> <span>Name:</span> {{ project.name }}</h1>
-            <p class="project_budget"> <span>Budget:</span>${{ project.budget }}</p>
             <div class="tasks">
+              <div class="filters">
+
+                <FormulateInput
+                  v-model="selected_cat"
+                  :options="{
+                    0: 'Project Management',
+                    1: 'Design',
+                    2: 'Programming'
+                  }"
+                  type="select"
+                  placeholder="Select a category"
+
+                >
+                </FormulateInput>
+
+                <FormulateInput
+                  v-model="selected_worker"
+                  :options="current_workers"
+                  type="select"
+                  placeholder="Select a worker"
+                  @change="filterByWorker"
+                  ref="task_worker"
+                >
+                </FormulateInput>
+
+              </div>
+
               <h2>Tasks:</h2>
               <div
                 class= "task"
-                v-for='(task, index) in project.tasks'
+                v-for='(task, index) in tasksFiltered'
                 v-bind:key='task._id'
               >
                 <div class="task-number">
@@ -75,20 +102,25 @@
 </template>
 
 <script>
+import FilterMixin from '../mixins/FilterMixin';
+
 export default {
   props: {
     id: String
   },
   components: {
-
   },
+  mixins: [FilterMixin],
   data() {
     return {
       project: null,
       endpoint: 'http://localhost:8080/api/projects/',
-      showModal: false,
-      isClicked: false,
-      activetab: 1
+      activetab: 1,
+      current_workers: null,
+      selected_worker: null,
+      current_cats: null,
+      selected_cat: null,
+      tasksFiltered: null
     }
   },
   methods: {
@@ -97,13 +129,32 @@ export default {
       let data = await res.json()
       return this.setResults(data);
     },
-
     setResults(results) {
-      this.project= results
+      this.project = results
+      this.tasksFiltered = results.tasks;
+    },
+    filterByWorker() {
+      const newList = []
+      this.project.tasks.forEach((task) => {
+        const wl = this.getWorkerList(task);
+        if (wl.includes(this.selected_worker)) {
+          newList.push(task);
+        }
+      })
+      this.tasksFiltered = newList;
+    },
+    getWorkerList(t) {
+      const wl = [];
+        t.assigned_workers.forEach((w) => {
+          wl.push(w.worker.last_name);
+        })
+      return wl;
     }
   },
   created() {
+    this.selected_worker = null;
     this.fetchListing(this.id);
+    this.wrapperWorkers();
   },
   watch: {
     '$route'() {
@@ -121,6 +172,7 @@ export default {
     margin: 0 auto;
     padding: 0px 10px 10px;
     height: 100vh;
+
   }
 
   .project-details {
@@ -129,6 +181,13 @@ export default {
     margin-left: 10px;
     width: 100%;
     flex-direction: column;
+  }
+
+  .filters {
+    display: flex;
+    width: 50%;
+    margin: 0 auto;
+    justify-content: space-around;
   }
 
   .tasks {
@@ -149,6 +208,7 @@ export default {
     text-transform: uppercase;
     z-index: 1;
     margin-top: 0;
+    text-align: center;
   }
   .project .project_description {
     position: relative;
@@ -199,7 +259,7 @@ export default {
    border: 1px solid #ccc;
    border-right: none;
    background-color: #f1f1f1;
-   border-radius: 5px 5px 0 0;
+   border-radius: 3px 3px 0 0;
    font-weight: bold;
 }
 .tabs a:last-child {
@@ -225,7 +285,7 @@ export default {
    padding: 30px;
    padding-bottom: 10rem;
    border: 1px solid #ccc;
-   border-radius: 5px;
+   border-radius: 3px;
    box-shadow: 3px 3px 6px #e1e1e1;
    width: 100%;
 
