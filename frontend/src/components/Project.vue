@@ -67,7 +67,7 @@
               <h2>Tasks:</h2>
               <div
                 class= "task"
-                v-for='(task, index) in tasksFiltered'
+                v-for='(task, index) in combinedFiltered'
                 v-bind:key='task._id'
               >
                 <div class="task-number">
@@ -133,14 +133,33 @@ export default {
       selected_worker: null,
       current_cats: null,
       selected_cat: null,
-      tasksFiltered: null
+      tasksFilteredByCat: null,
+      tasksFilteredByWorker: null
     }
   },
   computed: {
     combinedFiltered() {
-      if (!this.selected_worker && !this.selected_cat) {
-        return this.project.tasks
+      if (this.selected_worker && this.selected_cat) {
+        const newList = [];
+        this.tasksFilteredByWorker.forEach((task) => {
+          if (task.category === this.selected_cat) {
+            newList.push(task);
+          }
+        })
+        return newList;
+
       }
+
+      if (this.selected_worker && !this.selected_cat) {
+        return this.tasksFilteredByWorker
+
+      }
+
+      if (!this.selected_worker && this.selected_cat) {
+        return this.tasksFilteredByCat
+
+      }
+      return this.project.tasks
     }
   },
   methods: {
@@ -160,7 +179,7 @@ export default {
           newList.push(task);
         }
       })
-      this.tasksFiltered = newList;
+      this.tasksFilteredByCat = newList;
     },
     filterByWorker() {
       const newList = []
@@ -170,7 +189,7 @@ export default {
           newList.push(task);
         }
       })
-      this.tasksFiltered = newList;
+      this.tasksFilteredByWorker = newList;
     },
     getWorkerList(t) {
       const wl = [];
@@ -182,6 +201,8 @@ export default {
     resetFilters() {
       if (this.tasksFiltered) {
       this.tasksFiltered = this.project.tasks
+      this.selected_worker = null;
+      this.selected_cat = null;
       }
     }
   },
