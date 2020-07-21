@@ -34,15 +34,24 @@
                 <FormulateInput
                   v-model="selected_cat"
                   :options="{
-                    0: 'Project Management',
-                    1: 'Design',
-                    2: 'Programming'
+                    'Project Management': 'Project Management',
+                    'Design': 'Design',
+                    'Programming': 'Programming'
                   }"
                   type="select"
                   placeholder="Select a category"
-
+                  @change="filterByCat"
                 >
                 </FormulateInput>
+
+                <button
+                  type="button"
+                  name="button"
+                  @click="resetFilters"
+                  class='clear-button'
+                >
+                  clear
+                </button>
 
                 <FormulateInput
                   v-model="selected_worker"
@@ -50,7 +59,6 @@
                   type="select"
                   placeholder="Select a worker"
                   @change="filterByWorker"
-                  ref="task_worker"
                 >
                 </FormulateInput>
 
@@ -68,6 +76,11 @@
                   <div class="task-details">
                     <div class="">
                       description: {{task.description}}
+                      <br>
+                      <br>
+                      category: {{task.category}}
+                      <br>
+                      <br>
                     </div>
                     <h3>Assigned workers:</h3>
                     <div
@@ -123,6 +136,13 @@ export default {
       tasksFiltered: null
     }
   },
+  computed: {
+    combinedFiltered() {
+      if (!this.selected_worker && !this.selected_cat) {
+        return this.project.tasks
+      }
+    }
+  },
   methods: {
     async fetchListing(id) {
       let res = await fetch(`${this.endpoint}${id}`);
@@ -132,6 +152,15 @@ export default {
     setResults(results) {
       this.project = results
       this.tasksFiltered = results.tasks;
+    },
+    filterByCat() {
+      const newList = [];
+      this.project.tasks.forEach((task) => {
+        if (task.category === this.selected_cat) {
+          newList.push(task);
+        }
+      })
+      this.tasksFiltered = newList;
     },
     filterByWorker() {
       const newList = []
@@ -149,6 +178,11 @@ export default {
           wl.push(w.worker.last_name);
         })
       return wl;
+    },
+    resetFilters() {
+      if (this.tasksFiltered) {
+      this.tasksFiltered = this.project.tasks
+      }
     }
   },
   created() {
@@ -188,6 +222,26 @@ export default {
     width: 50%;
     margin: 0 auto;
     justify-content: space-around;
+
+  }
+
+  .clear-button {
+    display: flex;
+    align-items: center;
+    width: 75px;
+    height: 25px;
+    font-size: 12px;
+    font-weight: bold;
+    opacity: .7;
+    border: none;
+    border-radius: 5px;
+    justify-content: center;
+    cursor: pointer;
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
+    box-shadow: 0.5px 0.5px rgba(0, 0, 0, 0.1);
+    outline: none;
+    margin-right: 2rem;
+    margin-top: 0.2rem;
   }
 
   .tasks {
