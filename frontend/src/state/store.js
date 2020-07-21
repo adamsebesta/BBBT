@@ -38,7 +38,7 @@ export const store = new Vuex.Store({
       commit('SET_PROJECTS', data);
       commit('SET_PROJECT_COUNT', data.length);
   },
-    async fetchPMs({commit}) {
+    async fetchWorkers({commit}) {
       let res = await fetch(`${this.state.endpoint}workers/`)
       let data = await res.json();
       commit('SET_WORKERS', data);

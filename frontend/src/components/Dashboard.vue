@@ -30,12 +30,13 @@ export default {
   data() {
     return {
       current_workers: null,
-      selected_worker: null
+      selected_worker: null,
+      projects: null
     }
   },
   methods: {
-    async wrapperPMs() {
-      await this.$store.dispatch('fetchPMs');
+    async wrapperWorkers() {
+      await this.$store.dispatch('fetchWorkers');
       this.setWorkers();
     },
     setWorkers() {
@@ -54,12 +55,12 @@ export default {
     projectCount() {
       return this.$store.getters['projectCount'];
     },
-    projects() {
-      return this.$store.getters['projects'];
-    },
+    // projects() {
+    //   return this.$store.getters['projects'];
+    // },
   },
   created() {
-    this.wrapperPMs();
+    this.wrapperWorkers();
   }
 }
 
