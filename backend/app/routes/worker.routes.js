@@ -9,6 +9,9 @@ module.exports = app => {
   // Retrieve all Workers
   router.get("/", workers.findAll);
 
+  // Retrieve all PM's
+  router.get("/pm", workers.findAllPM);
+
   // Retrieve a single Worker with id
   router.get("/:id", workers.findOne);
 

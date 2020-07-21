@@ -10,6 +10,7 @@ exports.create = (req, res) => {
     first_name: r.first_name,
     last_name: r.last_name,
     internal: r.internal,
+    role: r.role
   });
 
   worker
@@ -28,6 +29,19 @@ exports.create = (req, res) => {
 // Retrieve all Workers from the database.
 exports.findAll = (req, res) => {
   Worker.find()
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving Workers."
+      });
+    });
+};
+
+exports.findAllPM = (req, res) => {
+  Worker.find({ 'role': 'PM'})
     .then(data => {
       res.send(data);
     })
