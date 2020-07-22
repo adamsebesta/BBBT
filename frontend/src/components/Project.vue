@@ -1,5 +1,5 @@
 <template lang="html">
-  <div class="project" v-if="project">
+  <div class="project" v-if="selected_project">
     <div class="project_name">
       <h1> <span>Name:</span> {{ project.name }}</h1>
     </div>
@@ -54,73 +54,28 @@ export default {
   components: {
     ProjectTasks
   },
-
   data() {
     return {
-      project: null,
       endpoint: 'http://localhost:8080/api/projects/',
       activetab: 1,
+      selected_project: null
     }
   },
-  // computed: {
-  //   combinedFiltered() {
-  //     if (this.selected_worker && this.selected_cat) {
-  //       return this.tasksFilteredByWorker.filter(task =>
-  //         task.category === this.selected_cat)
-  //   }
-  //
-  //     if (this.selected_worker && !this.selected_cat) {
-  //       return this.tasksFilteredByWorker
-  //
-  //     }
-  //
-  //     if (!this.selected_worker && this.selected_cat) {
-  //       return this.tasksFilteredByCat
-  //
-  //     }
-  //     return this.project.tasks
-  //   }
-  // },
   methods: {
-    async fetchListing(id) {
-      let res = await fetch(`${this.endpoint}${id}`);
-      let data = await res.json()
-      return this.setResults(data);
+    async wrapperProject() {
+      await this.$store.dispatch('fetchProject',this.id);
+      this.setProject();
     },
-    setResults(results) {
-      this.project = results
-      this.tasksFiltered = results.tasks;
-    },
-    // filterByCat() {
-    //   this.tasksFilteredByCat = this.project.tasks.filter(task =>
-    //     task.category === this.selected_cat)
-    // },
-    // filterByWorker() {
-    //   const newList = []
-    //   this.project.tasks.forEach((task) => {
-    //     const wl = this.getWorkerList(task);
-    //     if (wl.includes(this.selected_worker)) {
-    //       newList.push(task);
-    //     }
-    //   })
-    //   this.tasksFilteredByWorker = newList;
-    // },
-    // getWorkerList(t) {
-    //   return t.assigned_workers.map(w => w.worker.last_name)
-    // },
-    // resetFilters() {
-    //   if (this.tasksFiltered) {
-    //   this.selected_worker = null;
-    //   this.selected_cat = null;
-    //   }
-    // }
+    setProject() {
+      this.selected_project = this.$store.getters['selected_project'];
+    }
   },
   created() {
-    this.fetchListing(this.id);
+    this.wrapperProject();
   },
   watch: {
     '$route'() {
-      this.fetchListing(this.id);
+      this.wrapperProject();
     }
   }
 }

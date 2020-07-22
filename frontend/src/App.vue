@@ -75,7 +75,7 @@ export default {
         d.querySelector('.count').style.display = '';
         this.asideShrunk = false;
       }
-    }
+    },
   },
   created() {
     this.wrapperProjects();

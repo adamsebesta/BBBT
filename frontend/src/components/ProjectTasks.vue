@@ -80,18 +80,15 @@ import FilterMixin from '../mixins/FilterMixin';
 
 export default {
   name: 'ProjectTasks',
-  props: {
-    project: Object
-  },
   mixins: [FilterMixin],
   data() {
     return {
       current_workers: null,
       selected_worker: null,
-      current_cats: null,
       selected_cat: null,
       tasksFilteredByCat: null,
-      tasksFilteredByWorker: null
+      tasksFilteredByWorker: null,
+      current_tasks:this.selected_project.tasks
     }
   },
   computed: {
@@ -111,6 +108,9 @@ export default {
 
       }
       return this.project.tasks
+    },
+    selected_project(){
+      return "hi"
     }
   },
   methods: {
@@ -144,12 +144,16 @@ export default {
       if (this.combinedFiltered) {
       this.selected_worker = null;
       this.selected_cat = null;
+      this.tasksFilteredByCat = null;
+      this.tasksFilteredByWorker = null;
       }
     }
   },
   created() {
     this.selected_worker = null;
     this.selected_cat = null;
+    this.tasksFilteredByCat = null;
+    this.tasksFilteredByWorker = null;
     this.wrapperWorkers();
   }
 }
