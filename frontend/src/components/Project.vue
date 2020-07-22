@@ -140,15 +140,9 @@ export default {
   computed: {
     combinedFiltered() {
       if (this.selected_worker && this.selected_cat) {
-        const newList = [];
-        this.tasksFilteredByWorker.forEach((task) => {
-          if (task.category === this.selected_cat) {
-            newList.push(task);
-          }
-        })
-        return newList;
-
-      }
+        return this.tasksFilteredByWorker.filter(task =>
+          task.category === this.selected_cat)
+    }
 
       if (this.selected_worker && !this.selected_cat) {
         return this.tasksFilteredByWorker
@@ -173,13 +167,8 @@ export default {
       this.tasksFiltered = results.tasks;
     },
     filterByCat() {
-      const newList = [];
-      this.project.tasks.forEach((task) => {
-        if (task.category === this.selected_cat) {
-          newList.push(task);
-        }
-      })
-      this.tasksFilteredByCat = newList;
+      this.tasksFilteredByCat = this.project.tasks.filter(task =>
+        task.category === this.selected_cat)
     },
     filterByWorker() {
       const newList = []
@@ -192,11 +181,7 @@ export default {
       this.tasksFilteredByWorker = newList;
     },
     getWorkerList(t) {
-      const wl = [];
-        t.assigned_workers.forEach((w) => {
-          wl.push(w.worker.last_name);
-        })
-      return wl;
+      return t.assigned_workers.map(w => w.worker.last_name)
     },
     resetFilters() {
       if (this.tasksFiltered) {
@@ -207,6 +192,7 @@ export default {
   },
   created() {
     this.selected_worker = null;
+    this.selected_cat = null;
     this.fetchListing(this.id);
     this.wrapperWorkers();
   },
