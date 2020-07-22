@@ -36,24 +36,36 @@
 
       </div>
 
-      <h2>Tasks:</h2>
-      <div
+      <h2> All Tasks:</h2>
+      <table style="width:100%">
+        <tr>
+          <th>Category</th>
+          <th>Description</th>
+          <th>Estimated Hrs.</th>
+          <th>Tracked Hours</th>
+        </tr>
+        <tr
+          class= "task"
+          v-for='(task) in combinedFiltered'
+          v-bind:key='task._id'
+        >
+          <td>{{task.category}}</td>
+          <td>{{task.description}}</td>
+          <td>{{task.estimation.time}} </td>
+          <td>{{calcHours(task)}}</td>
+        </tr>
+      </table>
+      <!-- <div
         class= "task"
         v-for='(task, index) in combinedFiltered'
         v-bind:key='task._id'
       >
-        <div class="task-number">
-        {{index + 1}}.
-        </div>
-          <div class="task-details">
-            <div class="">
-              description: {{task.description}}
-              <br>
-              <br>
-              category: {{task.category}}
-              <br>
-              <br>
-            </div>
+        <div class="task-details">
+          <div class="">
+            category: {{task.category}}
+            <br>
+            <br>
+          </div>
             <h3>Assigned workers:</h3>
             <div
               v-for= '(workerObject, index) in task.assigned_workers'
@@ -66,9 +78,8 @@
                   workerObject.worker.last_name}}
               </p>
             </div>
-          --------------
-          </div>
-      </div>
+          }</div>
+      </div> -->
     </div>
   </div>
 
@@ -137,6 +148,13 @@ export default {
       this.tasksFilteredByCat = null;
       this.tasksFilteredByWorker = null;
       }
+    },
+    calcHours(t) {
+      let sum = 0;
+      t.assigned_workers.forEach((worker) =>{
+        sum += worker.tracked_hours;
+    })
+      return sum
     }
   },
   created() {
@@ -177,5 +195,23 @@ export default {
   margin-right: 2rem;
   margin-top: 0.2rem;
 }
+
+th {
+  text-align: left;
+  margin-bottom: 1.5rem;
+}
+
+td, th {
+  padding: 0.5rem;
+  color: #757575;
+  min-width: 200px;
+}
+
+table { border-collapse: separate; }
+td { border: solid 0.5px #DBDBDB; }
+tr:first-child td:first-child { border-radius: 5px; }
+tr:first-child td:last-child { border-top-right-radius: 5px; }
+tr:last-child td:first-child { border-bottom-left-radius: 5px; }
+tr:last-child td:last-child { border-bottom-right-radius: 5px; }
 
 </style>

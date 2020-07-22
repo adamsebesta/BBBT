@@ -55,6 +55,3 @@ export const store = new Vuex.Store({
     }
   }
 })
-// projectCount () {
-//   return this.$store.getters['projectCount'];
-// }
