@@ -1,7 +1,7 @@
 <template lang="html">
   <div class="project" v-if="selected_project">
     <div class="project_name">
-      <h1> <span>Name:</span> {{ project.name }}</h1>
+      <h1>{{ selected_project.name }}</h1>
     </div>
     <div id="tabs" class="container">
 
@@ -27,7 +27,7 @@
     </div>
     <div class="content">
         <div v-if="activetab === 1" class="tabcontent">
-          <project-tasks :project='this.project'>
+          <project-tasks>
           </project-tasks>
         </div>
         <div v-if="activetab === 2" class="tabcontent">
@@ -63,7 +63,7 @@ export default {
   },
   methods: {
     async wrapperProject() {
-      await this.$store.dispatch('fetchProject',this.id);
+      await this.$store.dispatch('fetchProject', this.id);
       this.setProject();
     },
     setProject() {

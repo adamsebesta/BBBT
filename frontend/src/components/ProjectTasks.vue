@@ -88,7 +88,6 @@ export default {
       selected_cat: null,
       tasksFilteredByCat: null,
       tasksFilteredByWorker: null,
-      current_tasks:this.selected_project.tasks
     }
   },
   computed: {
@@ -107,29 +106,20 @@ export default {
         return this.tasksFilteredByCat
 
       }
-      return this.project.tasks
+      return this.selected_project.tasks
     },
-    selected_project(){
-      return "hi"
+    selected_project() {
+      return this.$store.getters['selected_project'];
     }
   },
   methods: {
-    async fetchListing(id) {
-      let res = await fetch(`${this.endpoint}${id}`);
-      let data = await res.json()
-      return this.setResults(data);
-    },
-    setResults(results) {
-      this.project = results
-      this.tasksFiltered = this.project.tasks;
-    },
     filterByCat() {
-      this.tasksFilteredByCat = this.project.tasks.filter(task =>
+      this.tasksFilteredByCat = this.selected_project.tasks.filter(task =>
         task.category === this.selected_cat)
     },
     filterByWorker() {
       const newList = []
-      this.project.tasks.forEach((task) => {
+      this.selected_project.tasks.forEach((task) => {
         const wl = this.getWorkerList(task);
         if (wl.includes(this.selected_worker)) {
           newList.push(task);
@@ -150,11 +140,12 @@ export default {
     }
   },
   created() {
-    this.selected_worker = null;
-    this.selected_cat = null;
-    this.tasksFilteredByCat = null;
-    this.tasksFilteredByWorker = null;
     this.wrapperWorkers();
+  },
+  watch: {
+    '$route'() {
+      this.resetFilters();
+    }
   }
 }
 </script>

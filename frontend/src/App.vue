@@ -45,7 +45,7 @@ export default {
   },
   computed : {
     projectCount() {
-    return this.$store.getters['projectCount']
+      return this.$store.getters['projectCount']
     }
   },
   methods: {

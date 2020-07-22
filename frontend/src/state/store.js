@@ -46,7 +46,7 @@ export const store = new Vuex.Store({
   async fetchProject({commit}, id) {
     let res = await fetch(`${this.state.endpoint}projects/${id}`);
     let data = await res.json();
-    commit('SET_PROJECTS', data);
+    commit('SET_SELECTED_PROJECT', data);
   },
     async fetchWorkers({commit}) {
       let res = await fetch(`${this.state.endpoint}workers/`)
