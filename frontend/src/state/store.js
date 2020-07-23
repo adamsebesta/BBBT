@@ -27,6 +27,9 @@ export const store = new Vuex.Store({
     },
     SET_SELECTED_PROJECT(state, results) {
       state.selected_project = results
+    },
+    SET_MODAL_OPEN (state, bool) {
+      state.modalOpen = bool
     }
   },
   getters: {
