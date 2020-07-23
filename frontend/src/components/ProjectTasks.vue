@@ -53,7 +53,7 @@
           :content='compileTask(task)'
           v-tippy="{
             theme:'google translucent',
-            delay:['500','0']
+            delay:['300','0']
           }"
           data-html="true"
 
