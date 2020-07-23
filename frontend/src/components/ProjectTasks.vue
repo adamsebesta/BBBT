@@ -5,11 +5,7 @@
 
         <FormulateInput
           v-model="selected_cat"
-          :options="{
-            'Project Management': 'Project Management',
-            'Design': 'Design',
-            'Programming': 'Programming'
-          }"
+          :options="task_categories"
           type="select"
           placeholder="Select a category"
           @change="filterByCat"
@@ -59,15 +55,15 @@
               <div class="task-details-modal"
                 >
                 <FormulateForm
-                  v-model="task_fields"
+
                 >
 
                   <FormulateInput
                     type="select"
                     name="category"
                     label="Category"
+                    :options='task_categories'
                     :value='task.category'
-                    :placeholder='task.category'
                   >
                   </FormulateInput>
 
@@ -75,8 +71,7 @@
                     type="textarea"
                     name="description"
                     label="Description"
-                    :value='task.category'
-                    :placeholder='task.description'
+                    :value='task.description'
                   >
                   </FormulateInput>
 
@@ -84,7 +79,8 @@
                     type="select"
                     name="status"
                     label="Status"
-                    :placeholder='task.status'
+                    :options='task_statuses'
+                    :value='task.status'
                   >
                   </FormulateInput>
 
@@ -97,12 +93,12 @@
                       v-for= 'wkr in task.assigned_workers'
                       v-bind:key='wkr.worker._id'
                     >
-                      <td>{{wkr.worker.first_name + " " +wkr.worker.last_name}}</td>
+                      <td>{{wkr.worker.first_name + " " + wkr.worker.last_name}}</td>
                       <td>
                         <FormulateInput
                           type="text"
                           name="tracked_hours"
-                          :placeholder='wkr.tracked_hours'
+                          :value='wkr.tracked_hours'
                         >
                         </FormulateInput>
                       </td>
@@ -166,6 +162,16 @@ export default {
     },
     modalOpen () {
       return this.$store.getters['modalOpen'];
+    },
+    task_categories() {
+      const ob = {};
+      this.selected_project.task_categories.map(cat => ob[cat] = cat);
+      return ob;
+    },
+    task_statuses() {
+      const ob = {};
+      this.selected_project.task_statuses.map(stat => ob[stat] = stat);
+      return ob;
     }
   },
   methods: {
@@ -215,7 +221,6 @@ export default {
     },
     'modalOpen'() {
       this.task_fields = null
-      console.log('hi')
     }
   }
 }
