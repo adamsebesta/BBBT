@@ -1,6 +1,13 @@
 <template>
   <div id="app">
     <main>
+      <transition id='overlay' appear>
+        <div
+          class='modal-overlay'
+          @click='removeOverlay'
+        >
+        </div>
+      </transition>
       <aside class="sidebar">
         <router-link
           :to="{ name: 'dashboard', params: {} }"
@@ -32,11 +39,13 @@
 </template>
 
 <script>
+import ModalMixin from '../src/mixins/ModalMixin';
 
 export default {
   name: 'App',
   components: {
   },
+  mixins: [ModalMixin],
   data() {
     return {
       projects: null,
@@ -83,7 +92,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
 
 #app {
   font-family: 'Lato', sans-serif;
@@ -184,19 +193,16 @@ aside {
   text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
 }
 
-.modal {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 99;
-  box-shadow: 0.5px 0.5px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 1000px;
-  height: 600px;
-  background-color: #FFF;
-  border-radius: 16px;
 
-  padding: 25px;
+.modal-overlay {
+    display: none;
+    position: absolute;
+    top:0;
+    left:0;
+    right: 0;
+    bottom: 0;
+    z-index: 2;
+    background-color: rgba(0, 0, 0, 0.3);
+    min-height: 2000px;
 }
 </style>
