@@ -154,6 +154,11 @@ aside {
   z-index: auto;
 }
 
+.centered {
+  margin: 0 auto;
+  text-align: center;
+}
+
 .content {
   position: relative;
   flex: 1 1 85%;

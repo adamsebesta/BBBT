@@ -41,7 +41,7 @@
           <th>Tracked Hours</th>
         </tr>
         <tr
-          class= "task"
+          class= "main-tasks"
           v-for='(task) in combinedFiltered'
           v-bind:key='task._id'
           @click='showModal(task._id)'
@@ -55,8 +55,8 @@
               <div class="task-details-modal"
                 >
                 <FormulateForm
-
-                >
+                  :id='buildFormID(task._id)'
+                  >
 
                   <FormulateInput
                     type="select"
@@ -104,11 +104,31 @@
                         </FormulateInput>
                       </td>
                     </tr>
+                    <tr>
+                      <td>
+                        <FormulateInput
+                          type="select"
+                          :options="current_workers"
+                          name="new_worker"
+                          placeholder='Add a new worker to this task'
+                        >
+                        </FormulateInput>
+                      </td>
+                      <td>
+                        <FormulateInput
+                          type="text"
+                          validation='number'
+                          name="new_worker_tracked_hours"
+                          placeholder='Enter hours worked if applicable'
+                        >
+                        </FormulateInput>
+                      </td>
+                    </tr>
                   </table>
                 </FormulateForm>
                 <h4>Created: {{task.createdAt.slice(0,19)}} </h4>
                 <button
-                @click='updateTask'
+                @click='updateTask(task)'
                 class='button centered'
                 >
                   update
@@ -225,6 +245,28 @@ export default {
         sum += worker.tracked_hours;
     })
       return sum
+    },
+    updateTask(t) {
+      const ob = {};
+      document.getElementById(`formulate-${t._id}`).forEach((cld) => {
+        if (cld.name !='' ) {
+        ob[cld.name]  = cld.value
+        } else {
+          //
+        }
+      });
+      ob['estimation'] = t.estimation;
+      ob['project'] = t.project;
+      console.log(ob);
+      //const pl = this.buildWorkerOb(ob);
+
+      //await this.$store.dispatch('updateTask');
+    },
+    buildWorkerOb(ob) {
+      ob
+    },
+    buildFormID(id) {
+      return `formulate-${id}`
     }
   },
   created() {
@@ -249,9 +291,7 @@ export default {
     margin: 0 auto;
     justify-content: space-around;
   }
-  .centered {
-    margin: 0 auto;
-  }
+
 
   .button {
     display: flex;
@@ -268,7 +308,7 @@ export default {
     box-shadow: 0.5px 0.5px rgba(0, 0, 0, 0.1);
     outline: none;
     margin-right: 2rem;
-    margin-top: 0.4rem;
+    padding: 18px;
   }
 
   th {
