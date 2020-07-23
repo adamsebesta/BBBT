@@ -10,6 +10,7 @@ export const store = new Vuex.Store({
     projects: null,
     workers: null,
     endpoint: 'http://localhost:8080/api/',
+    selected_project: null
   },
   mutations: {
     INCREMENT_PROJECT_COUNT(state) {
@@ -24,12 +25,16 @@ export const store = new Vuex.Store({
     SET_WORKERS(state, results) {
       state.workers = results;
     },
+    SET_SELECTED_PROJECT(state, results) {
+      state.selected_project = results
+    }
   },
   getters: {
     projects: state => state.projects,
     projectCount: state => state.projectCount,
     modalOpen: state => state.modalOpen,
-    workers: state => state.workers
+    workers: state => state.workers,
+    selected_project: state => state.selected_project
   },
   actions: {
     async fetchProjects({commit}) {
@@ -38,6 +43,11 @@ export const store = new Vuex.Store({
       commit('SET_PROJECTS', data);
       commit('SET_PROJECT_COUNT', data.length);
   },
+  async fetchProject({commit}, id) {
+    let res = await fetch(`${this.state.endpoint}projects/${id}`);
+    let data = await res.json();
+    commit('SET_SELECTED_PROJECT', data);
+  },
     async fetchWorkers({commit}) {
       let res = await fetch(`${this.state.endpoint}workers/`)
       let data = await res.json();
@@ -45,6 +55,3 @@ export const store = new Vuex.Store({
     }
   }
 })
-// projectCount () {
-//   return this.$store.getters['projectCount'];
-// }

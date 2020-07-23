@@ -11,7 +11,8 @@ exports.create = (req, res) => {
     status: r.status,
     project: r.project,
     assigned_workers: r.assigned_workers,
-    tracked_hours: r.tracked_hours
+    tracked_hours: r.tracked_hours,
+    category: r.category
   });
 
   task

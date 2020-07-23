@@ -1,5 +1,8 @@
 <template lang="html">
-  <div class="project" v-if="project">
+  <div class="project" v-if="selected_project">
+    <div class="project_name">
+      <h1>{{ selected_project.name }}</h1>
+    </div>
     <div id="tabs" class="container">
 
     <div class="tabs">
@@ -22,43 +25,10 @@
           Timeline
         </a>
     </div>
-
     <div class="content">
         <div v-if="activetab === 1" class="tabcontent">
-          <div class="project-details">
-            <h1 class="project_name"> <span>Name:</span> {{ project.name }}</h1>
-            <p class="project_budget"> <span>Budget:</span>${{ project.budget }}</p>
-            <div class="tasks">
-              <h2>Tasks:</h2>
-              <div
-                class= "task"
-                v-for='(task, index) in project.tasks'
-                v-bind:key='task._id'
-              >
-                <div class="task-number">
-                {{index + 1}}.
-                </div>
-                  <div class="task-details">
-                    <div class="">
-                      description: {{task.description}}
-                    </div>
-                    <h3>Assigned workers:</h3>
-                    <div
-                      v-for= '(workerObject, index) in task.assigned_workers'
-                      v-bind:key='workerObject.worker._id'
-                    >
-                    {{index + 1}}.
-                  <p>
-                    {{workerObject.worker.first_name +
-                       " " +
-                       workerObject.worker.last_name}}
-                  </p>
-                    </div>
-                  --------------
-                  </div>
-              </div>
-            </div>
-          </div>
+          <project-tasks>
+          </project-tasks>
         </div>
         <div v-if="activetab === 2" class="tabcontent">
             Content for tab two
@@ -75,39 +45,37 @@
 </template>
 
 <script>
+import ProjectTasks from './ProjectTasks.vue';
+
 export default {
   props: {
     id: String
   },
   components: {
-
+    ProjectTasks
   },
   data() {
     return {
-      project: null,
       endpoint: 'http://localhost:8080/api/projects/',
-      showModal: false,
-      isClicked: false,
-      activetab: 1
+      activetab: 1,
+      selected_project: null
     }
   },
   methods: {
-    async fetchListing(id) {
-      let res = await fetch(`${this.endpoint}${id}`);
-      let data = await res.json()
-      return this.setResults(data);
+    async wrapperProject() {
+      await this.$store.dispatch('fetchProject', this.id);
+      this.setProject();
     },
-
-    setResults(results) {
-      this.project= results
+    setProject() {
+      this.selected_project = this.$store.getters['selected_project'];
     }
   },
   created() {
-    this.fetchListing(this.id);
+    this.wrapperProject();
   },
   watch: {
     '$route'() {
-      this.fetchListing(this.id);
+      this.wrapperProject();
     }
   }
 }
@@ -121,6 +89,7 @@ export default {
     margin: 0 auto;
     padding: 0px 10px 10px;
     height: 100vh;
+
   }
 
   .project-details {
@@ -130,6 +99,8 @@ export default {
     width: 100%;
     flex-direction: column;
   }
+
+
 
   .tasks {
     flex-direction: column;
@@ -149,6 +120,7 @@ export default {
     text-transform: uppercase;
     z-index: 1;
     margin-top: 0;
+    text-align: center;
   }
   .project .project_description {
     position: relative;
@@ -199,7 +171,7 @@ export default {
    border: 1px solid #ccc;
    border-right: none;
    background-color: #f1f1f1;
-   border-radius: 5px 5px 0 0;
+   border-radius: 3px 3px 0 0;
    font-weight: bold;
 }
 .tabs a:last-child {
@@ -225,7 +197,7 @@ export default {
    padding: 30px;
    padding-bottom: 10rem;
    border: 1px solid #ccc;
-   border-radius: 5px;
+   border-radius: 3px;
    box-shadow: 3px 3px 6px #e1e1e1;
    width: 100%;
 

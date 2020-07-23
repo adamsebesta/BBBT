@@ -8,6 +8,10 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import Project from './components/Project.vue';
 import Dashboard from './components/Dashboard.vue';
+import VueTippy, { TippyComponent } from "vue-tippy";
+
+Vue.use(VueTippy);
+Vue.component("tippy", TippyComponent);
 
 Vue.use(VueFormulate);
 library.add(fas);
