@@ -6,6 +6,9 @@ module.exports = app => {
   // Create a new Project
   router.post("/", projects.create);
 
+  // update a field in a project
+  router.put("/update", projects.updateField);
+
   // Add a client to a project
   router.put("/updateClient", projects.updateClient);
 
@@ -20,9 +23,6 @@ module.exports = app => {
 
   // Retrieve a single Project with id
   router.get("/:id", projects.findOne);
-
-  // Update a Project with id
-  router.put("/:id", projects.update);
 
   // Delete a Project with id
   router.delete("/:id", projects.delete);

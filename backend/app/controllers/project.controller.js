@@ -78,7 +78,6 @@ exports.findAllByPM = (req, res) => {
     });
 };
 
-
 // Find one Project by ID
 exports.findOne = (req, res) => {
 const id = req.params.id;
@@ -147,7 +146,7 @@ exports.removeTaskStatus = (req, res) => {
   })  
 }
 
-// add a client to a project
+// update the projects client
 exports.updateClient = (req, res) => {
   Project.findByIdAndUpdate(req.body.projectId, {"client": req.body.clientId}, (err, result) => {
     if(err){
@@ -181,30 +180,18 @@ exports.removeTask = (req, res) => {
 }
 
 // Update a Project by the id in the request
-exports.update = (req, res) => {
-  if (!req.body) {
-  return res.status(400).send({
-    message: "Data to update can not be empty!"
-  });
-}
+exports.updateField = (req, res) => {
+  var updateObj = new Object;
+  updateObj[req.body.fieldToUpdate] = req.body.value;
 
-const id = req.params.id;
-
-Project.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
-  .then(data => {
-    if (!data) {
-      res.status(404).send({
-        message: `Cannot update Project with id=${id}. Maybe Project was not found!`
-      });
-    } else res.send({ message: "Project was updated successfully." });
+  Project.findByIdAndUpdate(req.body.projectId, updateObj, (err, result) => {
+    if(err){
+      res.send(err)
+    } else {
+      res.send('updated')
+    }
   })
-  .catch(err => {
-    res.status(500).send({
-      message: "Error updating Project with id=" + id
-    });
-  });
-
-};
+}
 
 // Delete a Project with the specified id in the request
 exports.delete = (req, res) => {
