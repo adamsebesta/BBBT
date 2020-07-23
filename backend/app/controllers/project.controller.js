@@ -2,7 +2,22 @@ const db = require("../models");
 const Projects = db.projects;
 const Project = require('../models/project.model.js');
 
-// Create and Save a new Tutorial
+const defaultTaskCategories = [
+  "Design",
+  "Frontend dev",
+  "Backend dev",
+  "Project management"
+]
+
+const defaultTaskStatuses = [
+  "Todo",
+  "In progress",
+  "Final stages",
+  "Done",
+  "Ongoing"
+]
+
+// create a new project
 exports.create = (req, res) => {
   const r = req.body;
   const project = new Project({
@@ -16,7 +31,9 @@ exports.create = (req, res) => {
     deadline: r.deadline,
     client: r.client,
     workers: r.workers,
-    tasks: r.tasks
+    tasks: r.tasks,
+    task_categories: defaultTaskCategories,
+    task_statuses: defaultTaskStatuses
   })
 
   project
@@ -46,22 +63,6 @@ exports.findAll = (req, res) => {
     });
 };
 
-// Find all Projects by Project Manager
-exports.findAllByPM = (req, res) => {
-  const id = req.params.worker_id
-  Project.find({'workers.worker._id': id })
-    .then(data => {
-      res.send(data);
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while retrieving Projects."
-      });
-    });
-};
-
-
 // Find one Project by ID
 exports.findOne = (req, res) => {
 const id = req.params.id;
@@ -86,10 +87,78 @@ return Project.findById(id)
   })
 }
 
+// add a task category to a project
+exports.addTaskCategory = (req, res) => {
+  Project.findByIdAndUpdate(req.body.projectId, {$push: {"task_categories": req.body.task_category}}, (err, result) => {
+    if(err){
+      res.send(err)
+    } else {
+      res.send('task category ' + req.body.task_category +  ' added')
+    }
+  })  
+}
 
-// add a client to a project
-exports.updateClient = (req, res) => {
-  Project.findByIdAndUpdate(req.body.projectId, {"client": req.body.clientId}, (err, result) => {
+// remove a task category from a project
+exports.removeTaskCategory = (req, res) => {
+  Project.findByIdAndUpdate(req.body.projectId, {$pull: {"task_categories": req.body.task_category}}, (err, result) => {
+    if(err){
+      res.send(err)
+    } else {
+      res.send('task category ' + req.body.task_category +  ' removed')
+    }
+  })  
+}
+
+// add a task status to a project
+exports.addTaskStatus = (req, res) => {
+  Project.findByIdAndUpdate(req.body.projectId, {$push: {"task_statuses": req.body.task_status}}, (err, result) => {
+    if(err){
+      res.send(err)
+    } else {
+      res.send('task status ' + req.body.task_category +  ' added')
+    }
+  })  
+}
+
+// remove a task status from a project
+exports.removeTaskStatus = (req, res) => {
+  Project.findByIdAndUpdate(req.body.projectId, {$pull: {"task_statuses": req.body.task_status}}, (err, result) => {
+    if(err){
+      res.send(err)
+    } else {
+      res.send('task status ' + req.body.task_category +  ' removed')
+    }
+  })  
+}
+
+// add a task to a project
+exports.addTask = (req, res) => {
+  Project.findByIdAndUpdate(req.body.projectId, {$push: {"tasks": req.body.taskId}}, (err, result) => {
+    if(err){
+      res.send(err)
+    } else {
+      res.send('task ' + req.body.taskId +  ' added')
+    }
+  })
+}
+
+// remove a task from a project
+exports.removeTask = (req, res) => {
+  Project.findByIdAndUpdate(req.body.projectId, {$pull: {"tasks": req.body.taskId}}, (err, result) => {
+    if(err){
+      res.send(err)
+    } else {
+      res.send('task ' + req.body.taskId +  ' removed')
+    }
+  })
+}
+
+// Update a Project by the id in the request
+exports.updateField = (req, res) => {
+  var updateObj = new Object;
+  updateObj[req.body.fieldToUpdate] = req.body.value;
+
+  Project.findByIdAndUpdate(req.body.projectId, updateObj, (err, result) => {
     if(err){
       res.send(err)
     } else {
@@ -97,32 +166,6 @@ exports.updateClient = (req, res) => {
     }
   })
 }
-
-// Update a Project by the id in the request
-exports.update = (req, res) => {
-  if (!req.body) {
-  return res.status(400).send({
-    message: "Data to update can not be empty!"
-  });
-}
-
-const id = req.params.id;
-
-Project.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
-  .then(data => {
-    if (!data) {
-      res.status(404).send({
-        message: `Cannot update Project with id=${id}. Maybe Project was not found!`
-      });
-    } else res.send({ message: "Project was updated successfully." });
-  })
-  .catch(err => {
-    res.status(500).send({
-      message: "Error updating Project with id=" + id
-    });
-  });
-
-};
 
 // Delete a Project with the specified id in the request
 exports.delete = (req, res) => {
