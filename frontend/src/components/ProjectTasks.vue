@@ -16,14 +16,7 @@
         >
         </FormulateInput>
 
-        <button
-          type="button"
-          name="button"
-          @click="resetFilters"
-          class='clear-button'
-        >
-          clear
-        </button>
+
 
         <FormulateInput
           v-model="selected_worker"
@@ -33,6 +26,15 @@
           @change="filterByWorker"
         >
         </FormulateInput>
+
+        <button
+          type="button"
+          name="button"
+          @click="resetFilters"
+          class='clear-button'
+        >
+          clear
+        </button>
 
       </div>
 
@@ -48,6 +50,13 @@
           class= "task"
           v-for='(task) in combinedFiltered'
           v-bind:key='task._id'
+          :content='compileTask(task)'
+          v-tippy="{
+            theme:'google translucent',
+            delay:['500','0']
+          }"
+          data-html="true"
+
         >
           <td>{{task.category}}</td>
           <td>{{task.description}}</td>
@@ -55,38 +64,16 @@
           <td>{{calcHours(task)}}</td>
         </tr>
       </table>
-      <!-- <div
-        class= "task"
-        v-for='(task, index) in combinedFiltered'
-        v-bind:key='task._id'
-      >
-        <div class="task-details">
-          <div class="">
-            category: {{task.category}}
-            <br>
-            <br>
-          </div>
-            <h3>Assigned workers:</h3>
-            <div
-              v-for= '(workerObject, index) in task.assigned_workers'
-              v-bind:key='workerObject.worker._id'
-            >
-            {{index + 1}}.
-              <p>
-                {{workerObject.worker.first_name +
-                  " " +
-                  workerObject.worker.last_name}}
-              </p>
-            </div>
-          }</div>
-      </div> -->
     </div>
   </div>
 
 </template>
 
 <script>
-
+import "tippy.js/themes/light.css";
+import "tippy.js/themes/light-border.css";
+import "tippy.js/themes/google.css";
+import "tippy.js/themes/translucent.css";
 import FilterMixin from '../mixins/FilterMixin';
 
 export default {
@@ -141,6 +128,10 @@ export default {
     getWorkerList(t) {
       return t.assigned_workers.map(w => w.worker.last_name)
     },
+    getWorkerFullName(t) {
+      return t.assigned_workers.map(w =>
+        ` ${w.worker.first_name} ${w.worker.last_name} (${w.tracked_hours}) `)
+    },
     resetFilters() {
       if (this.combinedFiltered) {
       this.selected_worker = null;
@@ -155,7 +146,14 @@ export default {
         sum += worker.tracked_hours;
     })
       return sum
-    }
+    },
+    compileTask(t) {
+        return `Category: ${t.category} </br>
+                Description: ${t.description} </br>
+                Status: ${t.status} </br>
+                Assigned:${this.getWorkerFullName(t)} </br>
+                Created: ${t.createdAt}`
+    },
   },
   created() {
     this.wrapperWorkers();
@@ -193,7 +191,7 @@ export default {
   box-shadow: 0.5px 0.5px rgba(0, 0, 0, 0.1);
   outline: none;
   margin-right: 2rem;
-  margin-top: 0.2rem;
+  margin-top: 0.4rem;
 }
 
 th {
@@ -207,11 +205,16 @@ td, th {
   min-width: 200px;
 }
 
-table { border-collapse: separate; }
-td { border: solid 0.5px #DBDBDB; }
-tr:first-child td:first-child { border-radius: 5px; }
-tr:first-child td:last-child { border-top-right-radius: 5px; }
-tr:last-child td:first-child { border-bottom-left-radius: 5px; }
-tr:last-child td:last-child { border-bottom-right-radius: 5px; }
+table { border-collapse: collapse; }
+td { border-bottom: solid 0.5px #DBDBDB; }
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.tippy-tooltip.honeybee-theme {
+  /* Your styling here. Example: */
+  background-color: yellow;
+  border: 2px solid orange;
+}
 
 </style>
