@@ -93,7 +93,10 @@
                       v-for= 'wkr in task.assigned_workers'
                       v-bind:key='wkr.worker._id'
                     >
-                      <td>{{wkr.worker.first_name + " " + wkr.worker.last_name}}</td>
+                      <td
+
+                      >
+                        {{wkr.worker.first_name + " " + wkr.worker.last_name}}</td>
                       <td>
                         <FormulateInput
                           type="text"
@@ -201,11 +204,9 @@ export default {
     },
     current_workers() {
       const ob = {};
-      this.selected_project.tasks.forEach((t) => {
-        t.assigned_workers.forEach((w) => {
-          ob[w.worker.last_name] = w.worker.last_name
-        });
-      })
+      this.selected_project.workers.forEach((w) => {
+        ob[w.worker.last_name] = w.worker.last_name
+      });
       return ob;
     }
   },
@@ -248,22 +249,38 @@ export default {
     },
     updateTask(t) {
       const ob = {};
+
       document.getElementById(`formulate-${t._id}`).forEach((cld) => {
-        if (cld.name !='' ) {
-        ob[cld.name]  = cld.value
-        } else {
-          //
+        if (cld.name != 'tracked_hours') {
+          ob[cld.name] = cld.value
         }
+        document.getElementById(`${t._id} tr td`).forEach((worker) => {
+          ob[worker.value] = cld.value
+        });
       });
+      //think of way to grab names from assigned workers list 
+      // need to implelement logic to update existing workers hours
       ob['estimation'] = t.estimation;
       ob['project'] = t.project;
-      console.log(ob);
+      this.buildWorkerObForTask(t, ob);
+
       //const pl = this.buildWorkerOb(ob);
 
       //await this.$store.dispatch('updateTask');
     },
-    buildWorkerOb(ob) {
-      ob
+    buildWorkerObForTask(t, ob) {
+      const finalOb = ob
+      const workerOb = this.selected_project.workers.find(w =>
+        w.worker.last_name === ob['new_worker'] ).worker;
+      delete finalOb['new_worker'];
+      delete finalOb['new_worker_tracked_hours'];
+      t.assigned_workers.push({
+        'worker': workerOb,
+        'tracked_hours': ob['new_worker_tracked_hours'] || 0
+      });
+      finalOb['assigned_workers'] = t.assigned_workers;
+      finalOb['_id'] = t._id;
+      console.log(finalOb);
     },
     buildFormID(id) {
       return `formulate-${id}`
