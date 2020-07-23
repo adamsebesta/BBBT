@@ -63,21 +63,6 @@ exports.findAll = (req, res) => {
     });
 };
 
-// Find all Projects by Project Manager
-exports.findAllByPM = (req, res) => {
-  const id = req.params.worker_id
-  Project.find({'workers.worker._id': id })
-    .then(data => {
-      res.send(data);
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while retrieving Projects."
-      });
-    });
-};
-
 // Find one Project by ID
 exports.findOne = (req, res) => {
 const id = req.params.id;
@@ -144,17 +129,6 @@ exports.removeTaskStatus = (req, res) => {
       res.send('task status ' + req.body.task_category +  ' removed')
     }
   })  
-}
-
-// update the projects client
-exports.updateClient = (req, res) => {
-  Project.findByIdAndUpdate(req.body.projectId, {"client": req.body.clientId}, (err, result) => {
-    if(err){
-      res.send(err)
-    } else {
-      res.send('updated')
-    }
-  })
 }
 
 // add a task to a project

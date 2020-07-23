@@ -9,17 +9,26 @@ module.exports = app => {
   // update a field in a project
   router.put("/update", projects.updateField);
 
-  // Add a client to a project
-  router.put("/updateClient", projects.updateClient);
-
-  // Add a task to a project
+  // add a task to a project
   router.put("/addTask", projects.addTask);
+
+  // remove a task from a project
+  router.put("/removeTask", projects.removeTask);
+
+  // add a task status to a project
+  router.put("/addTaskStatus", projects.addTaskStatus);
+
+  // remove a task status from a project
+  router.put("/removeTaskStatus", projects.removeTaskStatus);
+
+  // add a task category to a project
+  router.put("/addTaskStatus", projects.addTaskCategory);
+
+  // remove a task category from a project
+  router.put("/removeTaskStatus", projects.removeTaskCategory);
 
   // Retrieve all Projects
   router.get("/", projects.findAll);
-
-  // Retrieve Project by PM
-  router.get("/filtered/:worker_id", projects.findAllByPM) 
 
   // Retrieve a single Project with id
   router.get("/:id", projects.findOne);
@@ -27,7 +36,7 @@ module.exports = app => {
   // Delete a Project with id
   router.delete("/:id", projects.delete);
 
-  // Create a new Project
+  // Delete all projects from the DB
   router.delete("/", projects.deleteAll);
 
   app.use('/api/projects', router);
