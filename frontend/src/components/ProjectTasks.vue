@@ -25,7 +25,7 @@
           type="button"
           name="button"
           @click="resetFilters"
-          class='clear-button'
+          class='button'
         >
           clear
         </button>
@@ -97,6 +97,7 @@
                       <td>
                         <FormulateInput
                           type="text"
+                          validation='number'
                           name="tracked_hours"
                           :value='wkr.tracked_hours'
                         >
@@ -105,7 +106,13 @@
                     </tr>
                   </table>
                 </FormulateForm>
-                <h4>Created: {{task.createdAt}} </h4>
+                <h4>Created: {{task.createdAt.slice(0,19)}} </h4>
+                <button
+                @click='updateTask'
+                class='button centered'
+                >
+                  update
+                </button>
               </div>
             </div>
           </transition>
@@ -131,7 +138,6 @@ export default {
   mixins: [FilterMixin, ModalMixin],
   data() {
     return {
-      current_workers: null,
       selected_worker: null,
       selected_cat: null,
       tasksFilteredByCat: null,
@@ -171,6 +177,15 @@ export default {
     task_statuses() {
       const ob = {};
       this.selected_project.task_statuses.map(stat => ob[stat] = stat);
+      return ob;
+    },
+    current_workers() {
+      const ob = {};
+      this.selected_project.tasks.forEach((t) => {
+        t.assigned_workers.forEach((w) => {
+          ob[w.worker.last_name] = w.worker.last_name
+        });
+      })
       return ob;
     }
   },
@@ -213,7 +228,7 @@ export default {
     }
   },
   created() {
-    this.wrapperWorkers();
+
   },
   watch: {
     '$route'() {
@@ -234,8 +249,11 @@ export default {
     margin: 0 auto;
     justify-content: space-around;
   }
+  .centered {
+    margin: 0 auto;
+  }
 
-  .clear-button {
+  .button {
     display: flex;
     align-items: center;
     width: 75px;
