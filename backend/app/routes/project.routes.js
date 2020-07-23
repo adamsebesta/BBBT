@@ -7,7 +7,10 @@ module.exports = app => {
   router.post("/", projects.create);
 
   // Add a client to a project
-  router.put("/updateClientInProject", projects.updateClient);
+  router.put("/updateClient", projects.updateClient);
+
+  // Add a task to a project
+  router.put("/addTask", projects.addTask);
 
   // Retrieve all Projects
   router.get("/", projects.findAll);

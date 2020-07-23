@@ -2,7 +2,22 @@ const db = require("../models");
 const Projects = db.projects;
 const Project = require('../models/project.model.js');
 
-// Create and Save a new Tutorial
+const defaultTaskCategories = [
+  "Design",
+  "Frontend dev",
+  "Backend dev",
+  "Project management"
+]
+
+const defaultTaskStatuses = [
+  "Todo",
+  "In progress",
+  "Final stages",
+  "Done",
+  "Ongoing"
+]
+
+// create a new project
 exports.create = (req, res) => {
   const r = req.body;
   const project = new Project({
@@ -16,7 +31,9 @@ exports.create = (req, res) => {
     deadline: r.deadline,
     client: r.client,
     workers: r.workers,
-    tasks: r.tasks
+    tasks: r.tasks,
+    task_categories: defaultTaskCategories,
+    task_statuses: defaultTaskStatuses
   })
 
   project
@@ -86,6 +103,49 @@ return Project.findById(id)
   })
 }
 
+// add a task category to a project
+exports.addTaskCategory = (req, res) => {
+  Project.findByIdAndUpdate(req.body.projectId, {$push: {"task_categories": req.body.task_category}}, (err, result) => {
+    if(err){
+      res.send(err)
+    } else {
+      res.send('task category ' + req.body.task_category +  ' added')
+    }
+  })  
+}
+
+// remove a task category from a project
+exports.removeTaskCategory = (req, res) => {
+  Project.findByIdAndUpdate(req.body.projectId, {$pull: {"task_categories": req.body.task_category}}, (err, result) => {
+    if(err){
+      res.send(err)
+    } else {
+      res.send('task category ' + req.body.task_category +  ' removed')
+    }
+  })  
+}
+
+// add a task status to a project
+exports.addTaskStatus = (req, res) => {
+  Project.findByIdAndUpdate(req.body.projectId, {$push: {"task_statuses": req.body.task_status}}, (err, result) => {
+    if(err){
+      res.send(err)
+    } else {
+      res.send('task status ' + req.body.task_category +  ' added')
+    }
+  })  
+}
+
+// remove a task status from a project
+exports.removeTaskStatus = (req, res) => {
+  Project.findByIdAndUpdate(req.body.projectId, {$pull: {"task_statuses": req.body.task_status}}, (err, result) => {
+    if(err){
+      res.send(err)
+    } else {
+      res.send('task status ' + req.body.task_category +  ' removed')
+    }
+  })  
+}
 
 // add a client to a project
 exports.updateClient = (req, res) => {
@@ -94,6 +154,28 @@ exports.updateClient = (req, res) => {
       res.send(err)
     } else {
       res.send('updated')
+    }
+  })
+}
+
+// add a task to a project
+exports.addTask = (req, res) => {
+  Project.findByIdAndUpdate(req.body.projectId, {$push: {"tasks": req.body.taskId}}, (err, result) => {
+    if(err){
+      res.send(err)
+    } else {
+      res.send('task ' + req.body.taskId +  ' added')
+    }
+  })
+}
+
+// remove a task from a project
+exports.removeTask = (req, res) => {
+  Project.findByIdAndUpdate(req.body.projectId, {$pull: {"tasks": req.body.taskId}}, (err, result) => {
+    if(err){
+      res.send(err)
+    } else {
+      res.send('task ' + req.body.taskId +  ' removed')
     }
   })
 }

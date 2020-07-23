@@ -18,9 +18,11 @@ const ProjectSchema = mongoose.Schema({
       hours_planned: Number
     }
   ],
-  tasks: [{ type: Schema.Types.ObjectId, ref: 'Task' }]
+  tasks: [{ type: Schema.Types.ObjectId, ref: 'Task' }],
+  task_categories: [String],
+  task_statuses: [String]
 }, {
     timestamps: true
 });
 
-module.exports = mongoose.model('Project', ProjectSchema, 'Projects');
+module.exports = mongoose.model('Project', ProjectSchema, 'projects');
