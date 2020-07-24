@@ -1,5 +1,98 @@
 <template lang="html">
   <div class="project-details">
+    <transition name="slide" appear>
+      <div
+        class="modal"
+        :id='this.selected_task._id'
+        :style='{display: "none"}'
+        v-if='this.selected_task'
+      >
+        <div class="task-details-modal"
+          >
+          <FormulateForm
+            :id='buildFormID(this.selected_task._id)'
+            >
+
+            <FormulateInput
+              type="select"
+              name="category"
+              label="Category"
+              :options='task_categories'
+              :value='this.selected_task.category'
+            >
+            </FormulateInput>
+
+            <FormulateInput
+              type="textarea"
+              name="description"
+              label="Description"
+              :value='this.selected_task.description'
+            >
+            </FormulateInput>
+
+            <FormulateInput
+              type="select"
+              name="status"
+              label="Status"
+              :options='task_statuses'
+              :value='this.selected_task.status'
+            >
+            </FormulateInput>
+
+            <table
+              class='worker-table'
+              style='width:100%'>
+              <th>Name</th>
+              <th>Tracked Hours</th>
+              <tr
+                v-for= 'wkr in this.selected_task.assigned_workers'
+                v-bind:key='wkr.worker._id'
+              >
+                <td>
+                  {{wkr.worker.first_name + " " + wkr.worker.last_name}}
+                </td>
+                <td>
+                  <FormulateInput
+                    type="text"
+                    validation='number'
+                    name="tracked_hours"
+                    :value='wkr.tracked_hours'
+                  >
+                  </FormulateInput>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <FormulateInput
+                    type="select"
+                    :options="current_workers_not_assigned"
+                    name="new_worker"
+                    placeholder='Add a new worker to this task'
+                  >
+                  </FormulateInput>
+                </td>
+                <td>
+                  <FormulateInput
+                    type="text"
+                    validation='number'
+                    name="new_worker_tracked_hours"
+                    placeholder='Enter hours worked (if applicable)'
+                  >
+                  </FormulateInput>
+                </td>
+              </tr>
+            </table>
+          </FormulateForm>
+          <h4>Created: {{this.selected_task.createdAt.slice(0,19)}} </h4>
+          <button
+          @click='updateTask(this.selected_task)'
+          class='button centered'
+          >
+            update
+          </button>
+        </div>
+      </div>
+    </transition>
     <div class="tasks">
       <div class="filters">
 
@@ -46,98 +139,7 @@
           v-bind:key='task._id'
           @click='taskModalWrapper(task._id, task)'
         >
-          <transition name="slide" appear>
-            <div
-              class="modal"
-              :id='task._id'
-              :style='{display: "none"}'
-            >
-              <div class="task-details-modal"
-                >
-                <FormulateForm
-                  :id='buildFormID(task._id)'
-                  >
 
-                  <FormulateInput
-                    type="select"
-                    name="category"
-                    label="Category"
-                    :options='task_categories'
-                    :value='task.category'
-                  >
-                  </FormulateInput>
-
-                  <FormulateInput
-                    type="textarea"
-                    name="description"
-                    label="Description"
-                    :value='task.description'
-                  >
-                  </FormulateInput>
-
-                  <FormulateInput
-                    type="select"
-                    name="status"
-                    label="Status"
-                    :options='task_statuses'
-                    :value='task.status'
-                  >
-                  </FormulateInput>
-
-                  <table
-                    class='worker-table'
-                    style='width:100%'>
-                    <th>Name</th>
-                    <th>Tracked Hours</th>
-                    <tr
-                      v-for= 'wkr in task.assigned_workers'
-                      v-bind:key='wkr.worker._id'
-                    >
-                      <td>
-                        {{wkr.worker.first_name + " " + wkr.worker.last_name}}
-                      </td>
-                      <td>
-                        <FormulateInput
-                          type="text"
-                          validation='number'
-                          name="tracked_hours"
-                          :value='wkr.tracked_hours'
-                        >
-                        </FormulateInput>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <FormulateInput
-                          type="select"
-                          :options="current_workers_not_assigned"
-                          name="new_worker"
-                          placeholder='Add a new worker to this task'
-                        >
-                        </FormulateInput>
-                      </td>
-                      <td>
-                        <FormulateInput
-                          type="text"
-                          validation='number'
-                          name="new_worker_tracked_hours"
-                          placeholder='Enter hours worked (if applicable)'
-                        >
-                        </FormulateInput>
-                      </td>
-                    </tr>
-                  </table>
-                </FormulateForm>
-                <h4>Created: {{task.createdAt.slice(0,19)}} </h4>
-                <button
-                @click='updateTask(task)'
-                class='button centered'
-                >
-                  update
-                </button>
-              </div>
-            </div>
-          </transition>
           <td>{{task.category}}</td>
           <td>{{task.description}}</td>
           <td>{{task.estimation.time}} </td>
@@ -164,7 +166,6 @@ export default {
       selected_cat: null,
       tasksFilteredByCat: null,
       tasksFilteredByWorker: null,
-      task_fields: null,
     }
   },
   computed: {
@@ -191,6 +192,9 @@ export default {
     modalOpen () {
       return this.$store.getters['modalOpen'];
     },
+    selected_task() {
+      return this.$store.getters['selected_task'];
+    },
     task_categories() {
       const ob = {};
       this.selected_project.task_categories.map(cat => ob[cat] = cat);
@@ -210,7 +214,7 @@ export default {
     },
     current_workers_not_assigned() {
       const ob = {};
-      const t = this.$store.getters['selected_task'];
+      const t = this.selected_task;
       if (t) {
         const tl = t.assigned_workers.map(w => w.worker);
         const wl = this.selected_project.workers.map(w => w.worker);
@@ -267,14 +271,10 @@ export default {
         }
       })
       ob['newHours'] = newHours;
-      //think of way to grab names from assigned workers list
-      // need to implelement logic to update existing workers hours
       ob['estimation'] = t.estimation;
       ob['project'] = t.project;
-      this.buildWorkerObForTask(t, ob);
-
-      //const pl = this.buildWorkerOb(ob);
-
+      const finalOb = this.buildWorkerObForTask(t, ob);
+      console.log(finalOb);
       //await this.$store.dispatch('updateTask');
     },
     buildWorkerObForTask(t, ob) {
@@ -293,9 +293,11 @@ export default {
         finalOb['assigned_workers'][i].tracked_hours = ob['newHours'][i];
       })
       finalOb['_id'] = t._id;
-      delete finalOb['new_worker'];
-      delete finalOb['new_worker_tracked_hours'];
-      console.log(finalOb);
+      //clean up object to be sent to API
+      ['new_worker', 'new_worker_tracked_hours', 'tracked_hours', 'newHours']
+      .forEach(e =>
+         delete finalOb[e]);
+      return finalOb;
     },
     buildFormID(id) {
       return `formulate-${id}`
@@ -308,9 +310,6 @@ export default {
     '$route'() {
       this.resetFilters();
     },
-    'modalOpen'() {
-      this.task_fields = null
-    }
   }
 }
 </script>
