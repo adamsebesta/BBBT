@@ -51,15 +51,36 @@ export const store = new Vuex.Store({
       commit('SET_PROJECTS', data);
       commit('SET_PROJECT_COUNT', data.length);
   },
-  async fetchProject({commit}, id) {
-    let res = await fetch(`${this.state.endpoint}projects/${id}`);
-    let data = await res.json();
-    commit('SET_SELECTED_PROJECT', data);
+    async fetchProject({commit}, id) {
+      let res = await fetch(`${this.state.endpoint}projects/${id}`);
+      let data = await res.json();
+      commit('SET_SELECTED_PROJECT', data);
   },
     async fetchWorkers({commit}) {
       let res = await fetch(`${this.state.endpoint}workers/`)
       let data = await res.json();
       commit('SET_WORKERS', data);
-    }
+    },
+    async updateTask({commit}, t) {
+      t['assigned_workers'].forEach((w, i) => {
+        w.tracked_hours = t['newHours'][i];
+      });
+      t['assigned_workers'].push(t['new_worker']);
+      ['new_worker_tracked_hours', 'tracked_hours', 'newHours'].forEach(e =>
+        delete t[e]);
+      console.log(t);
+
+      let res = await fetch(`${this.state.endpoint}tasksa/${t._id}`, {
+
+      })
+      let data = await res.json();
+      commit('SET_SELECTED_TASK', data);
+    },
   }
 })
+// const finalizeTaskObject = (ob) => {
+//   //clean up object to be sent to API
+//   ['new_worker_tracked_hours', 'tracked_hours', 'newHours']
+//   .forEach(e =>
+//      delete ob[e]);
+// }

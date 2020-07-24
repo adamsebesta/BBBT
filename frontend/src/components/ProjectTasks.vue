@@ -85,7 +85,7 @@
           </FormulateForm>
           <h4>Created: {{this.selected_task.createdAt.slice(0,19)}} </h4>
           <button
-          @click='updateTask(this.selected_task)'
+          @click='updateTask(selected_task)'
           class='button centered'
           >
             update
@@ -274,29 +274,20 @@ export default {
       ob['estimation'] = t.estimation;
       ob['project'] = t.project;
       const finalOb = this.buildWorkerObForTask(t, ob);
-      console.log(finalOb);
-      //await this.$store.dispatch('updateTask');
+      this.$store.dispatch('updateTask', finalOb);
     },
     buildWorkerObForTask(t, ob) {
       const finalOb = ob
+      finalOb['assigned_workers'] = t.assigned_workers;
+      finalOb['_id'] = t._id;
       if (ob['new_worker']) {
-      const workerOb = this.selected_project.workers.find(w =>
-        w.worker._id === ob['new_worker'] ).worker;
-        t.assigned_workers.push({
+        const workerOb = this.selected_project.workers.find(w =>
+          w.worker._id === ob['new_worker'] ).worker;
+          finalOb['new_worker'] = {
           'worker': workerOb,
           'tracked_hours': ob['new_worker_tracked_hours'] || 0
-        });
+        };
       }
-      finalOb['assigned_workers'] = t.assigned_workers;
-      // update previous assigned workers with new hours
-      finalOb['assigned_workers'].forEach((worker, i) => {
-        finalOb['assigned_workers'][i].tracked_hours = ob['newHours'][i];
-      })
-      finalOb['_id'] = t._id;
-      //clean up object to be sent to API
-      ['new_worker', 'new_worker_tracked_hours', 'tracked_hours', 'newHours']
-      .forEach(e =>
-         delete finalOb[e]);
       return finalOb;
     },
     buildFormID(id) {
