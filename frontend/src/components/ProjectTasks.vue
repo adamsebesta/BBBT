@@ -83,12 +83,28 @@
               </tr>
             </table>
           </FormulateForm>
-          <h4>Created: {{this.selected_task.createdAt.slice(0,19)}} </h4>
+          <h4
+            v-if='this.selected_task.createdAt'
+          >
+            Created: {{this.selected_task.createdAt.slice(0,19)}}
+          </h4>
+
           <button
           @click='updateTask(selected_task)'
           class='button centered'
           >
+            <span
+              v-if='this.selected_task._id'
+            >
             update
+          </span>
+
+          <span
+            v-if='!this.selected_task._id'
+          >
+          create
+        </span>
+
           </button>
         </div>
       </div>
@@ -121,6 +137,15 @@
           class='button'
         >
           clear
+        </button>
+
+        <button
+          type="button"
+          name="button"
+          @click="taskModalWrapper()"
+          class='button'
+        >
+          +
         </button>
 
       </div>

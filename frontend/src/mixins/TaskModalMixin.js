@@ -1,7 +1,9 @@
 export default {
   methods: {
     async taskModalWrapper(t) {
-      await this.$store.commit('SET_SELECTED_TASK', t);
+      if (t) {
+        await this.$store.commit('SET_SELECTED_TASK', t);
+      }
       this.showModal();
       },
       showModal () {

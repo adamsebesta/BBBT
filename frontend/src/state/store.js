@@ -11,7 +11,14 @@ export const store = new Vuex.Store({
     workers: null,
     endpoint: 'http://localhost:8080/api/',
     selected_project: null,
-    selected_task: null
+    selected_task: {
+      assigned_workers: [],
+      description: '',
+      category: '',
+      status: '',
+      project: '',
+      estimation: {},
+    }
   },
   mutations: {
     INCREMENT_PROJECT_COUNT(state) {
