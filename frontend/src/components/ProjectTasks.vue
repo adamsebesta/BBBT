@@ -205,7 +205,7 @@ export default {
     current_workers() {
       const ob = {};
       this.selected_project.workers.forEach((w) => {
-        ob[w.worker.last_name] = w.worker.last_name
+        ob[w.worker._id] = `${w.worker.first_name} ${w.worker.last_name}`;
       });
       return ob;
     }
@@ -219,6 +219,7 @@ export default {
       const newList = []
       this.selected_project.tasks.forEach((task) => {
         const wl = this.getWorkerList(task);
+        console.log(wl);
         if (wl.includes(this.selected_worker)) {
           newList.push(task);
         }
@@ -226,7 +227,7 @@ export default {
       this.tasksFilteredByWorker = newList;
     },
     getWorkerList(t) {
-      return t.assigned_workers.map(w => w.worker.last_name)
+      return t.assigned_workers.map(w => w.worker._id);
     },
     getWorkersFullNames(wl) {
       return wl.map(w =>
@@ -258,7 +259,7 @@ export default {
           ob[worker.value] = cld.value
         });
       });
-      //think of way to grab names from assigned workers list 
+      //think of way to grab names from assigned workers list
       // need to implelement logic to update existing workers hours
       ob['estimation'] = t.estimation;
       ob['project'] = t.project;
