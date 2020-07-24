@@ -39,13 +39,13 @@
 </template>
 
 <script>
-import ModalMixin from '../src/mixins/ModalMixin';
+import TaskModalMixin from '../src/mixins/TaskModalMixin';
 
 export default {
   name: 'App',
   components: {
   },
-  mixins: [ModalMixin],
+  mixins: [TaskModalMixin],
   data() {
     return {
       projects: null,
@@ -152,6 +152,11 @@ aside {
   cursor: pointer;
   padding: 2px;
   z-index: auto;
+}
+
+.centered {
+  margin: 0 auto;
+  text-align: center;
 }
 
 .content {

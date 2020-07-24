@@ -1,5 +1,98 @@
 <template lang="html">
   <div class="project-details">
+    <transition name="slide" appear>
+      <div
+        class="modal"
+        :id='this.selected_task._id'
+        :style='{display: "none"}'
+        v-if='this.selected_task'
+      >
+        <div class="task-details-modal"
+          >
+          <FormulateForm
+            :id='buildFormID(this.selected_task._id)'
+            >
+
+            <FormulateInput
+              type="select"
+              name="category"
+              label="Category"
+              :options='task_categories'
+              :value='this.selected_task.category'
+            >
+            </FormulateInput>
+
+            <FormulateInput
+              type="textarea"
+              name="description"
+              label="Description"
+              :value='this.selected_task.description'
+            >
+            </FormulateInput>
+
+            <FormulateInput
+              type="select"
+              name="status"
+              label="Status"
+              :options='task_statuses'
+              :value='this.selected_task.status'
+            >
+            </FormulateInput>
+
+            <table
+              class='worker-table'
+              style='width:100%'>
+              <th>Name</th>
+              <th>Tracked Hours</th>
+              <tr
+                v-for= 'wkr in this.selected_task.assigned_workers'
+                v-bind:key='wkr.worker._id'
+              >
+                <td>
+                  {{wkr.worker.first_name + " " + wkr.worker.last_name}}
+                </td>
+                <td>
+                  <FormulateInput
+                    type="text"
+                    validation='number'
+                    name="tracked_hours"
+                    :value='wkr.tracked_hours'
+                  >
+                  </FormulateInput>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <FormulateInput
+                    type="select"
+                    :options="current_workers_not_assigned"
+                    name="new_worker"
+                    placeholder='Add a new worker to this task'
+                  >
+                  </FormulateInput>
+                </td>
+                <td>
+                  <FormulateInput
+                    type="text"
+                    validation='number'
+                    name="new_worker_tracked_hours"
+                    placeholder='Enter hours worked (if applicable)'
+                  >
+                  </FormulateInput>
+                </td>
+              </tr>
+            </table>
+          </FormulateForm>
+          <h4>Created: {{this.selected_task.createdAt.slice(0,19)}} </h4>
+          <button
+          @click='updateTask(selected_task)'
+          class='button centered'
+          >
+            update
+          </button>
+        </div>
+      </div>
+    </transition>
     <div class="tasks">
       <div class="filters">
 
@@ -41,81 +134,12 @@
           <th>Tracked Hours</th>
         </tr>
         <tr
-          class= "task"
-          v-for='(task) in combinedFiltered'
+          class= "main-tasks"
+          v-for='task in combinedFiltered'
           v-bind:key='task._id'
-          @click='showModal(task._id)'
+          @click='taskModalWrapper(task._id, task)'
         >
-          <transition name="slide" appear>
-            <div
-              class="modal"
-              :id='task._id'
-              :style='{display: "none"}'
-            >
-              <div class="task-details-modal"
-                >
-                <FormulateForm
 
-                >
-
-                  <FormulateInput
-                    type="select"
-                    name="category"
-                    label="Category"
-                    :options='task_categories'
-                    :value='task.category'
-                  >
-                  </FormulateInput>
-
-                  <FormulateInput
-                    type="textarea"
-                    name="description"
-                    label="Description"
-                    :value='task.description'
-                  >
-                  </FormulateInput>
-
-                  <FormulateInput
-                    type="select"
-                    name="status"
-                    label="Status"
-                    :options='task_statuses'
-                    :value='task.status'
-                  >
-                  </FormulateInput>
-
-                  <table
-                    class='worker-table'
-                    style='width:100%'>
-                    <th>Name</th>
-                    <th>Tracked Hours</th>
-                    <tr
-                      v-for= 'wkr in task.assigned_workers'
-                      v-bind:key='wkr.worker._id'
-                    >
-                      <td>{{wkr.worker.first_name + " " + wkr.worker.last_name}}</td>
-                      <td>
-                        <FormulateInput
-                          type="text"
-                          validation='number'
-                          name="tracked_hours"
-                          :value='wkr.tracked_hours'
-                        >
-                        </FormulateInput>
-                      </td>
-                    </tr>
-                  </table>
-                </FormulateForm>
-                <h4>Created: {{task.createdAt.slice(0,19)}} </h4>
-                <button
-                @click='updateTask'
-                class='button centered'
-                >
-                  update
-                </button>
-              </div>
-            </div>
-          </transition>
           <td>{{task.category}}</td>
           <td>{{task.description}}</td>
           <td>{{task.estimation.time}} </td>
@@ -131,18 +155,17 @@
 import "tippy.js/themes/google.css";
 import "tippy.js/themes/translucent.css";
 import FilterMixin from '../mixins/FilterMixin';
-import ModalMixin from '..//mixins/ModalMixin';
+import TaskModalMixin  from '..//mixins/TaskModalMixin';
 
 export default {
   name: 'ProjectTasks',
-  mixins: [FilterMixin, ModalMixin],
+  mixins: [FilterMixin, TaskModalMixin],
   data() {
     return {
       selected_worker: null,
       selected_cat: null,
       tasksFilteredByCat: null,
       tasksFilteredByWorker: null,
-      task_fields: null
     }
   },
   computed: {
@@ -169,6 +192,9 @@ export default {
     modalOpen () {
       return this.$store.getters['modalOpen'];
     },
+    selected_task() {
+      return this.$store.getters['selected_task'];
+    },
     task_categories() {
       const ob = {};
       this.selected_project.task_categories.map(cat => ob[cat] = cat);
@@ -181,12 +207,24 @@ export default {
     },
     current_workers() {
       const ob = {};
-      this.selected_project.tasks.forEach((t) => {
-        t.assigned_workers.forEach((w) => {
-          ob[w.worker.last_name] = w.worker.last_name
-        });
-      })
+      this.selected_project.workers.forEach((w) => {
+        ob[w.worker._id] = `${w.worker.first_name} ${w.worker.last_name}`;
+      });
       return ob;
+    },
+    current_workers_not_assigned() {
+      const ob = {};
+      const t = this.selected_task;
+      if (t) {
+        const tl = t.assigned_workers.map(w => w.worker);
+        const wl = this.selected_project.workers.map(w => w.worker);
+        wl.forEach((w) => {
+          if (!tl.some(x => x._id === w._id)) {
+            ob[w._id] = `${w.first_name} ${w.last_name}`;
+          }
+        });
+      }
+    return ob;
     }
   },
   methods: {
@@ -205,11 +243,7 @@ export default {
       this.tasksFilteredByWorker = newList;
     },
     getWorkerList(t) {
-      return t.assigned_workers.map(w => w.worker.last_name)
-    },
-    getWorkersFullNames(wl) {
-      return wl.map(w =>
-        ` ${w.worker.first_name} ${w.worker.last_name} `)
+      return t.assigned_workers.map(w => w.worker._id);
     },
     resetFilters() {
       if (this.combinedFiltered) {
@@ -222,9 +256,43 @@ export default {
     calcHours(t) {
       let sum = 0;
       t.assigned_workers.forEach((worker) =>{
-        sum += worker.tracked_hours;
+        sum += parseFloat(worker.tracked_hours);
     })
       return sum
+    },
+    updateTask(t) {
+      const ob = {};
+      const newHours = [];
+      document.getElementById(`formulate-${t._id}`).forEach((cld) => {
+        if (cld.name != 'tracked_hours') {
+          ob[cld.name] = cld.value
+        } else {
+        newHours.push(cld.value)
+        }
+      })
+      ob['newHours'] = newHours;
+      ob['estimation'] = t.estimation;
+      ob['project'] = t.project;
+      const finalOb = this.buildWorkerObForTask(t, ob);
+      this.$store.dispatch('updateTask', finalOb);
+
+    },
+    buildWorkerObForTask(t, ob) {
+      const finalOb = ob
+      finalOb['assigned_workers'] = t.assigned_workers;
+      finalOb['_id'] = t._id;
+      if (ob['new_worker']) {
+        const workerOb = this.selected_project.workers.find(w =>
+          w.worker._id === ob['new_worker'] ).worker;
+          finalOb['new_worker'] = {
+          'worker': workerOb,
+          'tracked_hours': ob['new_worker_tracked_hours'] || 0
+        };
+      }
+      return finalOb;
+    },
+    buildFormID(id) {
+      return `formulate-${id}`
     }
   },
   created() {
@@ -234,9 +302,6 @@ export default {
     '$route'() {
       this.resetFilters();
     },
-    'modalOpen'() {
-      this.task_fields = null
-    }
   }
 }
 </script>
@@ -249,9 +314,7 @@ export default {
     margin: 0 auto;
     justify-content: space-around;
   }
-  .centered {
-    margin: 0 auto;
-  }
+
 
   .button {
     display: flex;
@@ -268,7 +331,7 @@ export default {
     box-shadow: 0.5px 0.5px rgba(0, 0, 0, 0.1);
     outline: none;
     margin-right: 2rem;
-    margin-top: 0.4rem;
+    padding: 18px;
   }
 
   th {
