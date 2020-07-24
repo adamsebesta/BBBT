@@ -170,10 +170,10 @@ export default {
   },
   computed: {
     combinedFiltered() {
-      if (this.selected_worker && this.selected_cat) {
-        return this.tasksFilteredByWorker.filter(task =>
-          task.category === this.selected_cat)
-    }
+        if (this.selected_worker && this.selected_cat) {
+          return this.tasksFilteredByWorker.filter(task =>
+            task.category === this.selected_cat)
+      }
 
       if (this.selected_worker && !this.selected_cat) {
         return this.tasksFilteredByWorker
@@ -186,25 +186,31 @@ export default {
       }
       return this.selected_project.tasks
     },
+
     selected_project() {
       return this.$store.getters['selected_project'];
     },
+
     modalOpen () {
       return this.$store.getters['modalOpen'];
     },
+
     selected_task() {
       return this.$store.getters['selected_task'];
     },
+
     task_categories() {
       const ob = {};
       this.selected_project.task_categories.map(cat => ob[cat] = cat);
       return ob;
     },
+
     task_statuses() {
       const ob = {};
       this.selected_project.task_statuses.map(stat => ob[stat] = stat);
       return ob;
     },
+
     current_workers() {
       const ob = {};
       this.selected_project.workers.forEach((w) => {
@@ -212,6 +218,7 @@ export default {
       });
       return ob;
     },
+
     current_workers_not_assigned() {
       const ob = {};
       const t = this.selected_task;
@@ -224,7 +231,7 @@ export default {
           }
         });
       }
-    return ob;
+      return ob;
     }
   },
   methods: {
@@ -266,11 +273,23 @@ export default {
     },
 
     updateTask(t) {
-      console.log(t);
-    //   const obj = {};
-    //   document.getElementById('task-formulate').forEach((child) => {
-        
-    //   }) 
+      // initialise findByIdAndUpdate payload
+      const updateObj = {};
+      // find formulate by ID and iterate through childen
+      document.getElementById('task-formulate').forEach((child) => {
+        // compare values of form inputs to those with the same name in task
+        if (child.value != t[child.name]) {
+            var value;
+            // convert values to float in case of number field
+            if (child.name == 'tracked_hours' || child.name == 'estimated_hours'){
+              value = parseFloat(child.value);
+            } else {value = child.value}
+          // add field with different value to the payload
+          updateObj[child.name] = value;
+        }
+      })
+      // call API from store
+      this.$store.dispatch('updateTask', updateObj);
     },
 
     createTask(t) {
