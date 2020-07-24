@@ -2,8 +2,7 @@
   <div class="project-details">
     <transition name="slide" appear>
       <div
-        class="modal"
-        :id='this.selected_task._id'
+        id="task-modal"
         :style='{display: "none"}'
         v-if='this.selected_task'
       >
@@ -20,6 +19,7 @@
               :options='task_categories'
               :value='this.selected_task.category'
             >
+
             </FormulateInput>
 
             <FormulateInput
@@ -137,7 +137,7 @@
           class= "main-tasks"
           v-for='task in combinedFiltered'
           v-bind:key='task._id'
-          @click='taskModalWrapper(task._id, task)'
+          @click='taskModalWrapper(task)'
         >
 
           <td>{{task.category}}</td>
@@ -232,6 +232,7 @@ export default {
       this.tasksFilteredByCat = this.selected_project.tasks.filter(task =>
         task.category === this.selected_cat)
     },
+
     filterByWorker() {
       const newList = []
       this.selected_project.tasks.forEach((task) => {
@@ -242,9 +243,11 @@ export default {
       })
       this.tasksFilteredByWorker = newList;
     },
+
     getWorkerList(t) {
       return t.assigned_workers.map(w => w.worker._id);
     },
+
     resetFilters() {
       if (this.combinedFiltered) {
       this.selected_worker = null;
@@ -253,6 +256,7 @@ export default {
       this.tasksFilteredByWorker = null;
       }
     },
+
     calcHours(t) {
       let sum = 0;
       t.assigned_workers.forEach((worker) =>{
@@ -260,7 +264,8 @@ export default {
     })
       return sum
     },
-    updateTask(t) {
+
+    createTask(t) {
       const ob = {};
       const newHours = [];
       document.getElementById(`formulate-${t._id}`).forEach((cld) => {
@@ -275,8 +280,9 @@ export default {
       ob['project'] = t.project;
       const finalOb = this.buildWorkerObForTask(t, ob);
       this.$store.dispatch('updateTask', finalOb);
-
     },
+
+
     buildWorkerObForTask(t, ob) {
       const finalOb = ob
       finalOb['assigned_workers'] = t.assigned_workers;
@@ -291,6 +297,7 @@ export default {
       }
       return finalOb;
     },
+
     buildFormID(id) {
       return `formulate-${id}`
     }
@@ -354,7 +361,7 @@ export default {
     cursor: pointer
   }
 
-  .modal {
+  #task-modal {
     position: fixed;
     top: 50%;
     left: 50%;

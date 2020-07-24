@@ -1,22 +1,21 @@
 export default {
   methods: {
-    async taskModalWrapper(id, t) {
+    async taskModalWrapper(t) {
       await this.$store.commit('SET_SELECTED_TASK', t);
-      this.showModal(id);
+      this.showModal();
       },
-      showModal (id) {
+      showModal () {
         this.$store.commit('SET_MODAL_OPEN', true);
         if (this.modalOpen) {
           document.querySelector('.modal-overlay').style.display = "block";
-          document.getElementById(id).style.display = "";
+          document.getElementById('task-modal').style.display = "";
         }
       },
-    removeOverlay() {
+    async removeOverlay() {
+      await this.$store.commit('SET_SELECTED_TASK', null);
       this.$store.commit('SET_MODAL_OPEN', false);
       document.querySelector('.modal-overlay').style.display = 'none';
-      document.querySelectorAll('.modal').forEach((modal) => {
-        modal.style.display = 'none';
-      });
+      document.getElementById('task-modal').style.display = 'none';
     }
   }
 }
