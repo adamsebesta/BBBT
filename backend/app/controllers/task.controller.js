@@ -53,17 +53,17 @@ return Task.findById(id).
 
 // Update a Task by the id in the request
 exports.update = (req, res) => {
-  Task.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
+  Task.findByIdAndUpdate(req.params.id, req.body, { useFindAndModify: false })
     .then(data => {
       if (!data) {
         res.status(404).send({
-          message: `Cannot update Task with id=${id}. Maybe Task was not found!`
+          message: `No task with _id=${id} found.`
         });
-      } else res.send({ message: "Task was updated successfully." });
+      } else res.send({ message: `Task updated successfully using the following values: ${req.body}` });
     })
     .catch(err => {
       res.status(500).send({
-        message: "Error updating Task with id=" + id
+        message: "Error updating Task with id=" + id + ": " + err.message
       });
     });
 };
