@@ -256,7 +256,7 @@ export default {
     calcHours(t) {
       let sum = 0;
       t.assigned_workers.forEach((worker) =>{
-        sum += worker.tracked_hours;
+        sum += parseFloat(worker.tracked_hours);
     })
       return sum
     },
@@ -275,6 +275,7 @@ export default {
       ob['project'] = t.project;
       const finalOb = this.buildWorkerObForTask(t, ob);
       this.$store.dispatch('updateTask', finalOb);
+
     },
     buildWorkerObForTask(t, ob) {
       const finalOb = ob

@@ -70,11 +70,13 @@ export const store = new Vuex.Store({
         delete t[e]);
       console.log(t);
 
+
       let res = await fetch(`${this.state.endpoint}tasksa/${t._id}`, {
 
       })
       let data = await res.json();
       commit('SET_SELECTED_TASK', data);
+      // commit('SET_MODAL_OPEN', false);
     },
   }
 })
