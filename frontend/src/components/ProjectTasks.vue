@@ -42,9 +42,9 @@
         </tr>
         <tr
           class= "main-tasks"
-          v-for='(task) in combinedFiltered'
+          v-for='task in combinedFiltered'
           v-bind:key='task._id'
-          @click='showModal(task._id)'
+          @click='taskModalWrapper(task._id, task)'
         >
           <transition name="slide" appear>
             <div
@@ -93,10 +93,9 @@
                       v-for= 'wkr in task.assigned_workers'
                       v-bind:key='wkr.worker._id'
                     >
-                      <td
-
-                      >
-                        {{wkr.worker.first_name + " " + wkr.worker.last_name}}</td>
+                      <td>
+                        {{wkr.worker.first_name + " " + wkr.worker.last_name}}
+                      </td>
                       <td>
                         <FormulateInput
                           type="text"
@@ -111,7 +110,7 @@
                       <td>
                         <FormulateInput
                           type="select"
-                          :options="current_workers"
+                          :options="current_workers_not_assigned"
                           name="new_worker"
                           placeholder='Add a new worker to this task'
                         >
@@ -122,7 +121,7 @@
                           type="text"
                           validation='number'
                           name="new_worker_tracked_hours"
-                          placeholder='Enter hours worked if applicable'
+                          placeholder='Enter hours worked (if applicable)'
                         >
                         </FormulateInput>
                       </td>
@@ -154,18 +153,18 @@
 import "tippy.js/themes/google.css";
 import "tippy.js/themes/translucent.css";
 import FilterMixin from '../mixins/FilterMixin';
-import ModalMixin from '..//mixins/ModalMixin';
+import TaskModalMixin  from '..//mixins/TaskModalMixin';
 
 export default {
   name: 'ProjectTasks',
-  mixins: [FilterMixin, ModalMixin],
+  mixins: [FilterMixin, TaskModalMixin],
   data() {
     return {
       selected_worker: null,
       selected_cat: null,
       tasksFilteredByCat: null,
       tasksFilteredByWorker: null,
-      task_fields: null
+      task_fields: null,
     }
   },
   computed: {
@@ -208,6 +207,20 @@ export default {
         ob[w.worker._id] = `${w.worker.first_name} ${w.worker.last_name}`;
       });
       return ob;
+    },
+    current_workers_not_assigned() {
+      const ob = {};
+      const t = this.$store.getters['selected_task'];
+      if (t) {
+        const tl = t.assigned_workers.map(w => w.worker);
+        const wl = this.selected_project.workers.map(w => w.worker);
+        wl.forEach((w) => {
+          if (!tl.some(x => x._id === w._id)) {
+            ob[w._id] = `${w.first_name} ${w.last_name}`;
+          }
+        });
+      }
+    return ob;
     }
   },
   methods: {
@@ -219,7 +232,6 @@ export default {
       const newList = []
       this.selected_project.tasks.forEach((task) => {
         const wl = this.getWorkerList(task);
-        console.log(wl);
         if (wl.includes(this.selected_worker)) {
           newList.push(task);
         }
@@ -228,10 +240,6 @@ export default {
     },
     getWorkerList(t) {
       return t.assigned_workers.map(w => w.worker._id);
-    },
-    getWorkersFullNames(wl) {
-      return wl.map(w =>
-        ` ${w.worker.first_name} ${w.worker.last_name} `)
     },
     resetFilters() {
       if (this.combinedFiltered) {
@@ -250,15 +258,15 @@ export default {
     },
     updateTask(t) {
       const ob = {};
-
+      const newHours = [];
       document.getElementById(`formulate-${t._id}`).forEach((cld) => {
         if (cld.name != 'tracked_hours') {
           ob[cld.name] = cld.value
+        } else {
+        newHours.push(cld.value)
         }
-        document.getElementById(`${t._id} tr td`).forEach((worker) => {
-          ob[worker.value] = cld.value
-        });
-      });
+      })
+      ob['newHours'] = newHours;
       //think of way to grab names from assigned workers list
       // need to implelement logic to update existing workers hours
       ob['estimation'] = t.estimation;
@@ -271,16 +279,22 @@ export default {
     },
     buildWorkerObForTask(t, ob) {
       const finalOb = ob
+      if (ob['new_worker']) {
       const workerOb = this.selected_project.workers.find(w =>
-        w.worker.last_name === ob['new_worker'] ).worker;
+        w.worker._id === ob['new_worker'] ).worker;
+        t.assigned_workers.push({
+          'worker': workerOb,
+          'tracked_hours': ob['new_worker_tracked_hours'] || 0
+        });
+      }
+      finalOb['assigned_workers'] = t.assigned_workers;
+      // update previous assigned workers with new hours
+      finalOb['assigned_workers'].forEach((worker, i) => {
+        finalOb['assigned_workers'][i].tracked_hours = ob['newHours'][i];
+      })
+      finalOb['_id'] = t._id;
       delete finalOb['new_worker'];
       delete finalOb['new_worker_tracked_hours'];
-      t.assigned_workers.push({
-        'worker': workerOb,
-        'tracked_hours': ob['new_worker_tracked_hours'] || 0
-      });
-      finalOb['assigned_workers'] = t.assigned_workers;
-      finalOb['_id'] = t._id;
       console.log(finalOb);
     },
     buildFormID(id) {

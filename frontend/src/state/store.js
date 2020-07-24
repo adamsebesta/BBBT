@@ -10,7 +10,8 @@ export const store = new Vuex.Store({
     projects: null,
     workers: null,
     endpoint: 'http://localhost:8080/api/',
-    selected_project: null
+    selected_project: null,
+    selected_task: null
   },
   mutations: {
     INCREMENT_PROJECT_COUNT(state) {
@@ -30,6 +31,9 @@ export const store = new Vuex.Store({
     },
     SET_MODAL_OPEN (state, bool) {
       state.modalOpen = bool
+    },
+    SET_SELECTED_TASK(state, results) {
+      state.selected_task = results
     }
   },
   getters: {
@@ -37,7 +41,8 @@ export const store = new Vuex.Store({
     projectCount: state => state.projectCount,
     modalOpen: state => state.modalOpen,
     workers: state => state.workers,
-    selected_project: state => state.selected_project
+    selected_project: state => state.selected_project,
+    selected_task: state => state.selected_task
   },
   actions: {
     async fetchProjects({commit}) {

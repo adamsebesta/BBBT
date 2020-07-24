@@ -39,13 +39,13 @@
 </template>
 
 <script>
-import ModalMixin from '../src/mixins/ModalMixin';
+import TaskModalMixin from '../src/mixins/TaskModalMixin';
 
 export default {
   name: 'App',
   components: {
   },
-  mixins: [ModalMixin],
+  mixins: [TaskModalMixin],
   data() {
     return {
       projects: null,
