@@ -9,7 +9,7 @@
         <div class="task-details-modal"
           >
           <FormulateForm
-            :id='buildFormID(this.selected_task._id)'
+            id='task-formulate'
             >
 
             <FormulateInput
@@ -265,10 +265,18 @@ export default {
       return sum
     },
 
+    updateTask(t) {
+      console.log(t);
+    //   const obj = {};
+    //   document.getElementById('task-formulate').forEach((child) => {
+        
+    //   }) 
+    },
+
     createTask(t) {
       const ob = {};
       const newHours = [];
-      document.getElementById(`formulate-${t._id}`).forEach((cld) => {
+      document.getElementById('task-formulate').forEach((cld) => {
         if (cld.name != 'tracked_hours') {
           ob[cld.name] = cld.value
         } else {
@@ -279,9 +287,8 @@ export default {
       ob['estimation'] = t.estimation;
       ob['project'] = t.project;
       const finalOb = this.buildWorkerObForTask(t, ob);
-      this.$store.dispatch('updateTask', finalOb);
+      this.$store.dispatch('createTask', finalOb);
     },
-
 
     buildWorkerObForTask(t, ob) {
       const finalOb = ob
@@ -297,10 +304,6 @@ export default {
       }
       return finalOb;
     },
-
-    buildFormID(id) {
-      return `formulate-${id}`
-    }
   },
   created() {
 
