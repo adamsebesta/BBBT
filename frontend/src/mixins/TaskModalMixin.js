@@ -38,8 +38,8 @@ export default {
         'Content-Type': 'application/json'
         }
       })
-      let data = await res.json();
-      console.log(data);
+      await res.json();
+      this.$store.dispatch('fetchProject', t.project);
     },
 
     async postTask(t) {

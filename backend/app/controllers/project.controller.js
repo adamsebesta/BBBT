@@ -131,10 +131,14 @@ exports.removeTaskStatus = (req, res) => {
   })
 }
 
-// { useFindAndModify: false }
 // add a task to a project
 exports.addTask = (req, res) => {
-  Project.findByIdAndUpdate(req.body.projectId, {$push: {"tasks": req.body.taskId}}, (err, result) => {
+  Project.findByIdAndUpdate(req.body.projectId, {
+    $push: {
+      "tasks": req.body.taskId
+    },
+    useFindAndModify: false
+  }, (err, result) => {
     if(err){
       res.send(err)
     } else {
