@@ -4,7 +4,7 @@
       <transition id='overlay' appear>
         <div
           class='modal-overlay'
-          @click='removeOverlay'
+          @click='removeOverlay()'
         >
         </div>
       </transition>

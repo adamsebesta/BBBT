@@ -5,11 +5,13 @@
         id="task-modal"
         :style='{display: "none"}'
         v-if='this.selected_task'
+        class='modal'
       >
         <div class="task-details-modal"
           >
           <FormulateForm
             id='task-formulate'
+            name='update-task'
             >
 
             <FormulateInput
@@ -96,12 +98,88 @@
             <span
               v-if='this.selected_task._id'
             >
-            update
-          </span>
+              update
+            </span>
+          </button>
+        </div>
+      </div>
 
-          <span
-            v-if='!this.selected_task._id'
+      <div
+        id="task-modal-new"
+        :style='{display: "none"}'
+        v-if='!this.selected_task'
+        class='modal'
+      >
+        <div class="task-details-modal"
           >
+          <FormulateForm
+            id='task-formulate-new'
+            name='new-task'
+            >
+
+            <FormulateInput
+              type="select"
+              name="category"
+              label="Category"
+              :options='task_categories'
+              placeholder='select task category'
+              :key='this'
+            >
+
+            </FormulateInput>
+
+            <FormulateInput
+              type="textarea"
+              name="description"
+              label="Description"
+              placeholder='enter description'
+              :key='this'
+            >
+            </FormulateInput>
+
+            <FormulateInput
+              type="select"
+              name="status"
+              label="Status"
+              :options='task_statuses'
+              placeholder='select task status'
+              :key='this'
+            >
+            </FormulateInput>
+
+            <table
+              class='worker-table'
+              style='width:100%'>
+              <th>Name</th>
+              <th>Tracked Hours</th>
+              <tr>
+                <td>
+                  <FormulateInput
+                    type="select"
+                    :options="current_workers"
+                    name="new_worker"
+                    placeholder='Add a new worker to this task'
+                  >
+                  </FormulateInput>
+                </td>
+                <td>
+                  <FormulateInput
+                    type="text"
+                    validation='number'
+                    name="new_worker_tracked_hours"
+                    placeholder='Enter hours worked (if applicable)'
+                  >
+                  </FormulateInput>
+                </td>
+              </tr>
+            </table>
+          </FormulateForm>
+
+          <button
+          @click='createTask()'
+          class='button centered'
+          >
+          <span>
           create
         </span>
 
@@ -142,7 +220,7 @@
         <button
           type="button"
           name="button"
-          @click="taskModalWrapper()"
+          @click="taskModalWrapper('task-modal-new')"
           class='button'
         >
           +
@@ -162,9 +240,8 @@
           class= "main-tasks"
           v-for='task in combinedFiltered'
           v-bind:key='task._id'
-          @click='taskModalWrapper(task)'
+          @click="taskModalWrapper('task-modal', task)"
         >
-
           <td>{{task.category}}</td>
           <td>{{task.description}}</td>
           <td>{{task.estimation.time}} </td>
@@ -177,8 +254,6 @@
 </template>
 
 <script>
-import "tippy.js/themes/google.css";
-import "tippy.js/themes/translucent.css";
 import FilterMixin from '../mixins/FilterMixin';
 import TaskModalMixin  from '..//mixins/TaskModalMixin';
 
@@ -409,6 +484,26 @@ export default {
   }
 
   #task-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    box-shadow: 0.5px 0.5px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 700px;
+    height: 600px;
+    background-color: #FFF;
+    border-radius: 3px;
+    cursor: default;
+    padding: 5px;
+    overflow-y: scroll;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+  }
+
+  #task-modal-new {
     position: fixed;
     top: 50%;
     left: 50%;
