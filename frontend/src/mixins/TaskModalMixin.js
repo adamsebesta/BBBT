@@ -20,6 +20,39 @@ export default {
       document.querySelectorAll('.modal').forEach((modal) =>{
         modal.style.display = 'none';
       });
-    }
+    },
+    async addTaskToProject(t) {
+      // const p = this.selected_project;
+      // const taskList = p.tasks;
+      // const final = taskList.concat([t]).map(t => t._id);
+      // console.log(JSON.stringify({
+      //   'tasks': final
+      // }))
+      let res = await fetch(`http://localhost:8080/api/projects/addTask`, {
+        method: 'PUT',
+        body: JSON.stringify({
+          'projectId': t.project,
+          'taskId': t._id
+        }),
+        headers: {
+        'Content-Type': 'application/json'
+        }
+      })
+      let data = await res.json();
+      console.log(data);
+    },
+
+    async postTask(t) {
+      let res = await fetch(`http://localhost:8080/api/tasks`, {
+        method: 'POST',
+        body: t,
+        headers: {
+        'Content-Type': 'application/json'
+        }
+      })
+      let data = await res.json();
+      console.log(data);
+      await this.addTaskToProject(data);
+    },
   }
 }
