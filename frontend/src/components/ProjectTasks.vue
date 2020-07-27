@@ -123,7 +123,7 @@
               label="Category"
               :options='task_categories'
               placeholder='select task category'
-              :key='this'
+              :key='this.selected_project._id'
             >
 
             </FormulateInput>
@@ -133,7 +133,7 @@
               name="description"
               label="Description"
               placeholder='enter description'
-              :key='this'
+              :key='this.selected_project.code'
             >
             </FormulateInput>
 
@@ -143,7 +143,7 @@
               label="Status"
               :options='task_statuses'
               placeholder='select task status'
-              :key='this'
+              :key='this.selected_project.createdAt'
             >
             </FormulateInput>
 
