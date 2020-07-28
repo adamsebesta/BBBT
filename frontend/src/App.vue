@@ -83,6 +83,7 @@ export default {
   },
   created() {
     this.wrapperProjects();
+    this.$store.dispatch('fetchWorkers');
   },
 }
 </script>

@@ -1,19 +1,28 @@
 <template lang="html">
   <div class="container">
-    <div class="">
+    <div class="filters">
       <FormulateInput
         v-model="selected_worker"
         :options="current_workers"
         type="select"
         placeholder="Select a worker"
-        @click='filterByWorker'
+        @change='filterByWorker'
       >
       </FormulateInput>
+
+      <button
+        type="button"
+        name="button"
+        @click="resetFilters"
+        class='button'
+      >
+        clear
+      </button>
     </div>
     <br>
     <div class="cards">
       <div class="card box-shadow"
-        v-for="(project) in projects"
+        v-for='project in combinedFiltered'
         :key="project.code"
       >
         <router-link
@@ -51,34 +60,29 @@
 <script>
 import '../assets/scss/main.scss';
 import ProjectMixin  from '..//mixins/ProjectMixin';
-import FilterMixin  from '..//mixins/FilterMixin';
 
 export default {
   components: {
   },
-  mixins: [ProjectMixin, FilterMixin],
+  mixins: [ProjectMixin],
   data() {
     return {
-      current_workers: null,
       selected_worker: null,
+      current_workers: null,
+      projectsFilteredByWorker: null
     }
   },
   methods: {
-    async wrapperWorkers() {
+    async workerWrapper() {
       await this.$store.dispatch('fetchWorkers');
-      this.setWorkers();
-    },
-    setWorkers() {
-      const w = this.$store.getters['workers'];
+      const w = await this.$store.getters['workers'];
       const ob = {};
-      w.forEach((pm, index) => {
-        ob[String(index)] = pm.last_name
-      })
+      w.forEach((w) => {
+        ob[w._id] = `${w.first_name} ${w.last_name}`;
+      });
       this.current_workers = ob;
     },
-    filterByWorker() {
 
-    },
     budgetRemaining(tasks, b, br) {
       // tasks, budget, and billing_rate given
       // iterate through project tasks and sum the total amount of tracked_hours
@@ -95,7 +99,25 @@ export default {
       const date = new Date(a.slice(0,10));
       const c = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
       return Math.floor( (now - c) / _MS_PER_DAY)
-    }
+    },
+
+    filterByWorker() {
+      //iterates through all projects and checks workers
+      const newList = []
+      this.projects.forEach((p) => {
+        const wl = p.workers.map(w => w.worker._id)
+        if (wl.includes(this.selected_worker)) {
+          newList.push(p);
+        }
+      })
+      this.projectsFilteredByWorker = newList;
+    },
+    resetFilters() {
+      if (this.combinedFiltered) {
+      this.selected_worker = null;
+      this.projectsFilteredByWorker = null;
+      }
+    },
   },
   computed: {
     projectCount() {
@@ -104,10 +126,16 @@ export default {
     projects() {
       return this.$store.getters['projects'];
     },
+    combinedFiltered() {
+      if (this.projectsFilteredByWorker) {
+        return this.projectsFilteredByWorker
+      } else {
+        return this.projects
+      }
+    }
   },
   created() {
-    this.wrapperWorkers();
-    this.$store.dispatch('fetchProjects');
+    this.workerWrapper();
   },
 }
 
@@ -117,6 +145,13 @@ export default {
 
   .container {
     width: 95%;
+    height: 100%;
+  }
+
+  .filters {
+      display: flex;
+      width: 50%;
+      justify-content:  flex-start;
   }
 
   .link {
@@ -179,6 +214,25 @@ export default {
 
   .box-shadow {
     box-shadow: -2px 0px 5px rgba(7, 23, 79, 0.5) !important;
+  }
+
+  .button {
+    display: flex;
+    align-items: center;
+    width: 75px;
+    height: 25px;
+    font-size: 12px;
+    font-weight: bold;
+    opacity: .7;
+    border: none;
+    border-radius: 3px;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0.5px 0.5px rgba(0, 0, 0, 0.1);
+    outline: none;
+    margin-left: 2rem;
+    margin-top: .1rem;
+    padding: 18px;
   }
 
 </style>

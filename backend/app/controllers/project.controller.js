@@ -52,6 +52,7 @@ exports.create = (req, res) => {
 // Find all Projects
 exports.findAll = (req, res) => {
   Project.find()
+  .populate('workers.worker')
   .populate('client')
   .populate({
     path: 'tasks',
