@@ -12,35 +12,65 @@
           <FormulateForm
             id='task-formulate'
             name='update-task'
-            >
+          >
+            <div class="upper-fields">
+              <div class="">
 
-            <FormulateInput
-              type="select"
-              name="category"
-              label="Category"
-              :options='task_categories'
-              :value='this.selected_task.category'
-            >
+                <FormulateInput
+                  type="select"
+                  name="category"
+                  label="Category"
+                  validation='required'
+                  :options='task_categories'
+                  :value='this.selected_task.category'
+                >
 
-            </FormulateInput>
+                </FormulateInput>
 
-            <FormulateInput
-              type="textarea"
-              name="description"
-              label="Description"
-              :value='this.selected_task.description'
-            >
-            </FormulateInput>
+                <FormulateInput
+                  type="textarea"
+                  name="description"
+                  label="Description"
+                  :value='this.selected_task.description'
+                >
+                </FormulateInput>
 
-            <FormulateInput
-              type="select"
-              name="status"
-              label="Status"
-              :options='task_statuses'
-              :value='this.selected_task.status'
-            >
-            </FormulateInput>
+                <FormulateInput
+                  type="select"
+                  name="status"
+                  label="Status"
+                  validation='required'
+                  :options='task_statuses'
+                  :value='this.selected_task.status'
+                >
+                </FormulateInput>
+              </div>
+              <div class="">
+                <FormulateInput
+                  type="text"
+                  name="estimation"
+                  label="Estimation"
+                  placeholder='Enter time estimation (hrs)'
+                  validation='number|required'
+                >
+                </FormulateInput>
 
+                <FormulateInput
+                  type="select"
+                  name="approval"
+                  :options="{
+                    'david': 'David',
+                    'teams': 'Teams',
+                    'bene': 'Bene'
+                  }"
+                  label="Approved By:"
+                  placeholder='Select approval'
+                  validation='required'
+
+                >
+                </FormulateInput>
+              </div>
+            </div>
             <table
               class='worker-table'
               style='width:100%'>
@@ -90,6 +120,7 @@
           >
             Created: {{this.selected_task.createdAt.slice(0,19)}}
           </h4>
+          <div class="ctr-justify">
 
           <button
           @click='updateTask(selected_task)'
@@ -101,6 +132,19 @@
               update
             </span>
           </button>
+
+          <button
+            type="button"
+            name="button"
+            @click="addOrDeleteTaskOnProject(
+              selected_task,
+              'removeTask',
+              'PUT')"
+            class='button'
+          >
+            Delete task
+          </button>
+          </div>
         </div>
       </div>
 
@@ -126,9 +170,9 @@
               type="select"
               name="category"
               label="Category"
+              validation='required'
               :options='task_categories'
               placeholder='Select task category'
-
             >
 
             </FormulateInput>
@@ -138,7 +182,6 @@
               name="description"
               label="Description"
               placeholder='Enter description'
-
             >
             </FormulateInput>
 
@@ -148,7 +191,7 @@
               label="Status"
               :options='task_statuses'
               placeholder='Select task status'
-
+              validation='required'
             >
             </FormulateInput>
               </div>
@@ -158,7 +201,7 @@
                   name="estimation"
                   label="Estimation"
                   placeholder='Enter time estimation (hrs)'
-                  validation='number'
+                  validation='number|required'
                 >
                 </FormulateInput>
 
@@ -172,6 +215,7 @@
                   }"
                   label="Approved By:"
                   placeholder='Select approval'
+                  validation='required'
 
                 >
                 </FormulateInput>
@@ -247,14 +291,14 @@
             </table>
             <FormulateInput
               type="submit"
-              label="Submit this form"
+              label="Submit task"
             />
           </FormulateForm>
         </div>
       </div>
     </transition>
     <div class="tasks">
-      <div class="filters">
+      <div class="ctr-justify">
 
         <FormulateInput
           v-model="selected_cat"
@@ -321,11 +365,11 @@
 
 <script>
 import FilterMixin from '../mixins/FilterMixin';
-import TaskModalMixin  from '..//mixins/TaskModalMixin';
+import TaskMixin  from '..//mixins/TaskMixin';
 
 export default {
   name: 'ProjectTasks',
-  mixins: [FilterMixin, TaskModalMixin],
+  mixins: [FilterMixin, TaskMixin],
   data() {
     return {
       selected_worker: null,
@@ -400,94 +444,6 @@ export default {
       return ob;
     }
   },
-  methods: {
-    filterByCat() {
-      this.tasksFilteredByCat = this.selected_project.tasks.filter(task =>
-        task.category === this.selected_cat)
-    },
-
-    filterByWorker() {
-      const newList = []
-      this.selected_project.tasks.forEach((task) => {
-        const wl = this.getWorkerList(task);
-        if (wl.includes(this.selected_worker)) {
-          newList.push(task);
-        }
-      })
-      this.tasksFilteredByWorker = newList;
-    },
-
-    getWorkerList(t) {
-      return t.assigned_workers.map(w => w.worker._id);
-    },
-
-    resetFilters() {
-      if (this.combinedFiltered) {
-      this.selected_worker = null;
-      this.selected_cat = null;
-      this.tasksFilteredByCat = null;
-      this.tasksFilteredByWorker = null;
-      }
-    },
-
-    calcHours(t) {
-      let sum = 0;
-      t.assigned_workers.forEach((worker) =>{
-        sum += parseFloat(worker.tracked_hours);
-    })
-      return sum
-    },
-
-    updateTask(t) {
-      // initialise findByIdAndUpdate payload
-      const updateObj = {};
-      // find formulate by ID and iterate through childen
-      document.getElementById('task-formulate').forEach((child) => {
-        // compare values of form inputs to those with the same name in task
-        if (child.value != t[child.name]) {
-            var value;
-            // convert values to float in case of number field
-            if (child.name == 'tracked_hours' || child.name == 'estimated_hours'){
-              value = parseFloat(child.value);
-            } else {value = child.value}
-          // add field with different value to the payload
-          updateObj[child.name] = value;
-        }
-      })
-      // call API from store
-      this.$store.dispatch('updateTask', updateObj);
-    },
-
-    createTask() {
-      const ob = {};
-      ob['assigned_workers'] = [];
-      const fields = document.getElementById('task-formulate-new');
-      fields.forEach((cld, i) => {
-        // build new workers
-        if (cld.name == 'new_worker' && cld.value)  {
-          ob['assigned_workers'].push({
-            'worker': cld.value,
-            'tracked_hours': parseFloat(fields[i + 1].value)  || 0
-          });
-        }
-        // build estimation
-        if (cld.name == 'estimation') {
-          ob['estimation'] = {
-            'time': parseFloat(cld.value),
-            'approved_via': fields[i + 1].value,
-            'approved_date': new Date()
-          }
-        }
-        // build rest of task
-        if (['category', 'description', 'status'].includes(cld.name)) {
-          ob[cld.name] = cld.value;
-        }
-      });
-      // set project ID and dispatch to store
-      ob['project'] = this.selected_project._id;
-      this.postTask(JSON.stringify(ob))
-    }
-  },
   created() {
 
   },
@@ -501,7 +457,7 @@ export default {
 
 <style lang="scss" scoped>
 
-  .filters {
+  .ctr-justify {
     display: flex;
     width: 50%;
     margin: 0 auto;
@@ -547,27 +503,7 @@ export default {
     cursor: pointer
   }
 
-  #task-modal {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 2;
-    box-shadow: 0.5px 0.5px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 700px;
-    height: 600px;
-    background-color: #FFF;
-    border-radius: 3px;
-    cursor: default;
-    padding: 5px;
-    overflow-y: scroll;
-    align-items: center;
-    display: flex;
-    justify-content: center;
-  }
-
-  #task-modal-new {
+  .modal {
     position: fixed;
     top: 50%;
     left: 50%;
