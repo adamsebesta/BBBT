@@ -46,11 +46,13 @@
 
 <script>
 import ProjectTasks from './ProjectTasks.vue';
+import ProjectMixin from '../mixins/ProjectMixin';
 
 export default {
   props: {
     id: String
   },
+  mixins: [ProjectMixin],
   components: {
     ProjectTasks
   },
@@ -59,15 +61,6 @@ export default {
       endpoint: 'http://localhost:8080/api/projects/',
       activetab: 1,
       selected_project: null
-    }
-  },
-  methods: {
-    async wrapperProject() {
-      await this.$store.dispatch('fetchProject', this.id);
-      this.setProject();
-    },
-    setProject() {
-      this.selected_project = this.$store.getters['selected_project'];
     }
   },
   created() {

@@ -364,12 +364,11 @@
 </template>
 
 <script>
-import FilterMixin from '../mixins/FilterMixin';
-import TaskMixin  from '..//mixins/TaskMixin';
+import TaskMixin  from '../mixins/TaskMixin';
 
 export default {
   name: 'ProjectTasks',
-  mixins: [FilterMixin, TaskMixin],
+  mixins: [TaskMixin],
   data() {
     return {
       selected_worker: null,
