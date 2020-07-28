@@ -90,6 +90,7 @@
           >
             Created: {{this.selected_task.createdAt.slice(0,19)}}
           </h4>
+          <div class="ctr-justify">
 
           <button
           @click='updateTask(selected_task)'
@@ -101,6 +102,19 @@
               update
             </span>
           </button>
+
+          <button
+            type="button"
+            name="button"
+            @click="addOrDeleteTaskOnProject(
+              selected_task,
+              'removeTask',
+              'PUT')"
+            class='button'
+          >
+            Delete task
+          </button>
+          </div>
         </div>
       </div>
 
@@ -247,14 +261,14 @@
             </table>
             <FormulateInput
               type="submit"
-              label="Submit this form"
+              label="Submit task"
             />
           </FormulateForm>
         </div>
       </div>
     </transition>
     <div class="tasks">
-      <div class="filters">
+      <div class="ctr-justify">
 
         <FormulateInput
           v-model="selected_cat"
@@ -501,7 +515,7 @@ export default {
 
 <style lang="scss" scoped>
 
-  .filters {
+  .ctr-justify {
     display: flex;
     width: 50%;
     margin: 0 auto;

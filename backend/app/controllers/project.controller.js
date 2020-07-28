@@ -137,7 +137,6 @@ exports.addTask = (req, res) => {
     $push: {
       "tasks": req.body.taskId
     },
-    useFindAndModify: false
   }, (err, result) => {
     if(err){
       res.send(err)

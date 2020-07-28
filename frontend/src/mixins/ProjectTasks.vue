@@ -456,36 +456,6 @@ export default {
       })
       // call API from store
       this.$store.dispatch('updateTask', updateObj);
-    },
-
-    createTask() {
-      const ob = {};
-      ob['assigned_workers'] = [];
-      const fields = document.getElementById('task-formulate-new');
-      fields.forEach((cld, i) => {
-        // build new workers
-        if (cld.name == 'new_worker' && cld.value)  {
-          ob['assigned_workers'].push({
-            'worker': cld.value,
-            'tracked_hours': parseFloat(fields[i + 1].value)  || 0
-          });
-        }
-        // build estimation
-        if (cld.name == 'estimation') {
-          ob['estimation'] = {
-            'time': parseFloat(cld.value),
-            'approved_via': fields[i + 1].value,
-            'approved_date': new Date()
-          }
-        }
-        // build rest of task
-        if (['category', 'description', 'status'].includes(cld.name)) {
-          ob[cld.name] = cld.value;
-        }
-      });
-      // set project ID and dispatch to store
-      ob['project'] = this.selected_project._id;
-      this.postTask(JSON.stringify(ob))
     }
   },
   created() {
