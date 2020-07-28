@@ -48,7 +48,7 @@
                   project.budget * (1 - (project.buffer_percentage / 100)),
                   project.billing_rate)}}
               </p>
-              <p>Duration: {{dateDiffInDays(project.createdAt)}} days</p>
+              <p>Duration: {{dateDiffInDays(project.createdAt)}}</p>
               <p>Deadline: {{project.deadline.slice(0,10)}}</p>
             </div>
           </router-link>
@@ -92,19 +92,21 @@ export default {
       const hoursRem = Math.floor(b / br) - sum;
       return `€${b - (sum * br)} / ${hoursRem} hours`;
     },
-    dateDiffInDays(a) {
+    dateDiffInDays(d) {
+      // d is date in "2020-02-10 format"
       // Discard the time and time-zone information.
       const _MS_PER_DAY = 1000 * 60 * 60 * 24;
-      const now = new Date;
-      const date = new Date(a.slice(0,10));
+      const date = new Date(d.slice(0,10));
+      // change given date to UTC format
       const c = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
-      return Math.floor( (now - c) / _MS_PER_DAY)
+      const days = Math.floor( (new Date - c) / _MS_PER_DAY)
+      return (days <= 1 ? `1 day` : `${days} days`);
     },
-
     filterByWorker() {
       //iterates through all projects and checks workers
       const newList = []
       this.projects.forEach((p) => {
+        //maps workers objects to their IDs
         const wl = p.workers.map(w => w.worker._id)
         if (wl.includes(this.selected_worker)) {
           newList.push(p);
