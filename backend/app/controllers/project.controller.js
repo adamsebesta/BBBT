@@ -52,15 +52,13 @@ exports.create = (req, res) => {
 // Find all Projects
 exports.findAll = (req, res) => {
   Project.find()
-    .then(data => {
-      res.send(data);
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while retrieving Projects."
-      });
-    });
+  .populate('client')
+  .exec((err, project) => {
+    if (!project) {
+      res.status(404).send({ message: "Error fetching projects" });
+    }
+    else res.send(project);
+  })
 };
 
 // Find one Project by ID
