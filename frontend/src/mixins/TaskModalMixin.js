@@ -38,7 +38,13 @@ export default {
         'Content-Type': 'application/json'
         }
       })
-      await res.json();
+      const text = await res.text();
+      this.$notify({
+          group: 'foo',
+          title: 'Important message',
+          text: text
+      });
+      this.removeOverlay();
       this.$store.dispatch('fetchProject', t.project);
     },
 
@@ -51,7 +57,6 @@ export default {
         }
       })
       let data = await res.json();
-      console.log(data);
       await this.addTaskToProject(data);
     },
   }

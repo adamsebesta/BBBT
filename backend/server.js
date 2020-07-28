@@ -26,6 +26,7 @@ db.mongoose
     process.exit();
   });
 
+
 app.use(cors(corsOptions));
 
 // parse requests of content-type - application/json

@@ -294,7 +294,7 @@
 
       </div>
 
-      <h2> All Tasks:</h2>
+      <h2> Tasks: {{this.selected_project.tasks.length}}</h2>
       <table style="width:100%">
         <tr>
           <th>Category</th>
