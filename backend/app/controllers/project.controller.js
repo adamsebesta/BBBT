@@ -57,7 +57,10 @@ exports.findAll = (req, res) => {
     path: 'tasks',
     populate: {
       path: 'assigned_workers',
-      model: 'Worker'}
+      populate: {
+        path: 'worker',
+        model: 'Worker'}
+    }
    })
   .exec((err, project) => {
     if (!project) {

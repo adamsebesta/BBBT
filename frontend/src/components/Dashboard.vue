@@ -32,8 +32,13 @@
               </div>
             </div>
             <div class="low-row">
-              <p>Rate: {{project.rate}}</p>
-              <p>Budget Remaining:</p>
+              <p>Rate:€ {{project.billing_rate}}</p>
+              <p :v-if='project.fixed'>
+                Budget Remaining: {{budgetRemaining(
+                  project.tasks,
+                  project.budget * (1 - (project.buffer_percentage / 100)),
+                  project.billing_rate)}}
+              </p>
               <p>Duration: {{dateDiffInDays(project.createdAt)}} days</p>
               <p>Deadline: {{project.deadline.slice(0,10)}}</p>
             </div>
@@ -45,10 +50,13 @@
 
 <script>
 import '../assets/scss/main.scss';
+import ProjectMixin  from '..//mixins/ProjectMixin';
+import FilterMixin  from '..//mixins/FilterMixin';
 
 export default {
   components: {
   },
+  mixins: [ProjectMixin, FilterMixin],
   data() {
     return {
       current_workers: null,
@@ -71,12 +79,20 @@ export default {
     filterByWorker() {
 
     },
+    budgetRemaining(tasks, b, br) {
+      // tasks, budget, and billing_rate given
+      // iterate through project tasks and sum the total amount of tracked_hours
+      const sum = tasks.map(t =>
+        t.assigned_workers.map(w =>
+          w.tracked_hours).reduce((a,b) => a + b, 0)).reduce((a,b) => a + b, 0);
+      const hoursRem = Math.floor(b / br) - sum;
+      return `€${b - (sum * br)}/${hoursRem} hours`;
+    },
     dateDiffInDays(a) {
       // Discard the time and time-zone information.
       const _MS_PER_DAY = 1000 * 60 * 60 * 24;
       const now = new Date;
       const date = new Date(a.slice(0,10));
-      console.log(date);
       const c = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
       return Math.floor( (now - c) / _MS_PER_DAY)
     }
@@ -88,14 +104,11 @@ export default {
     projects() {
       return this.$store.getters['projects'];
     },
-
-    budgetRemaining() {
-      return 'a'
-    }
   },
   created() {
     this.wrapperWorkers();
-  }
+    this.$store.dispatch('fetchProjects');
+  },
 }
 
 </script>

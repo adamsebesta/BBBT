@@ -41,12 +41,13 @@
 
 <script>
 import TaskMixin from '../src/mixins/TaskMixin';
+import ProjectMixin from '../src/mixins/ProjectMixin';
 
 export default {
   name: 'App',
   components: {
   },
-  mixins: [TaskMixin],
+  mixins: [TaskMixin, ProjectMixin],
   data() {
     return {
       projects: null,
@@ -59,13 +60,6 @@ export default {
     }
   },
   methods: {
-    async wrapperProjects() {
-      await this.$store.dispatch('fetchProjects');
-      this.setProjects();
-    },
-    setProjects() {
-      this.projects = this.$store.getters['projects'];
-    },
     toggleCollapse() {
       const d = document;
       if (!this.asideShrunk) {
