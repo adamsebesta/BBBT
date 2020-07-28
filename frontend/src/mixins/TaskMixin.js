@@ -85,5 +85,61 @@ export default {
       ob['project'] = this.selected_project._id;
       this.postTask(JSON.stringify(ob))
     },
+      filterByCat() {
+        this.tasksFilteredByCat = this.selected_project.tasks.filter(task =>
+          task.category === this.selected_cat)
+      },
+
+      filterByWorker() {
+        const newList = []
+        this.selected_project.tasks.forEach((task) => {
+          const wl = this.getWorkerList(task);
+          if (wl.includes(this.selected_worker)) {
+            newList.push(task);
+          }
+        })
+        this.tasksFilteredByWorker = newList;
+      },
+
+      getWorkerList(t) {
+        return t.assigned_workers.map(w => w.worker._id);
+      },
+
+      resetFilters() {
+        if (this.combinedFiltered) {
+        this.selected_worker = null;
+        this.selected_cat = null;
+        this.tasksFilteredByCat = null;
+        this.tasksFilteredByWorker = null;
+        }
+      },
+
+      calcHours(t) {
+        let sum = 0;
+        t.assigned_workers.forEach((worker) =>{
+          sum += parseFloat(worker.tracked_hours);
+      })
+        return sum
+      },
+
+      updateTask(t) {
+        // initialise findByIdAndUpdate payload
+        const updateObj = {};
+        // find formulate by ID and iterate through childen
+        document.getElementById('task-formulate').forEach((child) => {
+          // compare values of form inputs to those with the same name in task
+          if (child.value != t[child.name]) {
+              var value;
+              // convert values to float in case of number field
+              if (child.name == 'tracked_hours' || child.name == 'estimated_hours'){
+                value = parseFloat(child.value);
+              } else {value = child.value}
+            // add field with different value to the payload
+            updateObj[child.name] = value;
+          }
+        })
+        // call API from store
+        this.$store.dispatch('updateTask', updateObj);
+      },
+    }
   }
-}
