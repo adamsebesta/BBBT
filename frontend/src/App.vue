@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <main>
+      <notifications group="foo" />
       <transition id='overlay' appear>
         <div
           class='modal-overlay'

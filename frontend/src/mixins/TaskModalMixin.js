@@ -41,7 +41,7 @@ export default {
       const text = await res.text();
       this.$notify({
           group: 'foo',
-          title: 'Important message',
+          title: 'Project Update:',
           text: text
       });
       this.removeOverlay();
