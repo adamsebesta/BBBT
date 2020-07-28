@@ -34,7 +34,7 @@
             <div class="low-row">
               <p>Rate: {{project.rate}}</p>
               <p>Budget Remaining:</p>
-              <p>Duration:</p>
+              <p>Duration: {{dateDiffInDays(project.createdAt)}} days</p>
               <p>Deadline: {{project.deadline.slice(0,10)}}</p>
             </div>
           </router-link>
@@ -70,6 +70,15 @@ export default {
     },
     filterByWorker() {
 
+    },
+    dateDiffInDays(a) {
+      // Discard the time and time-zone information.
+      const _MS_PER_DAY = 1000 * 60 * 60 * 24;
+      const now = new Date;
+      const date = new Date(a.slice(0,10));
+      console.log(date);
+      const c = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
+      return Math.floor( (now - c) / _MS_PER_DAY)
     }
   },
   computed: {
@@ -79,6 +88,10 @@ export default {
     projects() {
       return this.$store.getters['projects'];
     },
+
+    budgetRemaining() {
+      return 'a'
+    }
   },
   created() {
     this.wrapperWorkers();
@@ -90,7 +103,7 @@ export default {
 <style lang="scss" scoped>
 
   .container {
-    width: 98%;
+    width: 95%;
   }
 
   .link {
@@ -104,7 +117,7 @@ export default {
     margin: 0 auto;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    grid-gap: 1rem;
+    grid-gap: 3.5rem;
   }
   .card {
     width: 100%;

@@ -53,6 +53,12 @@ exports.create = (req, res) => {
 exports.findAll = (req, res) => {
   Project.find()
   .populate('client')
+  .populate({
+    path: 'tasks',
+    populate: {
+      path: 'assigned_workers',
+      model: 'Worker'}
+   })
   .exec((err, project) => {
     if (!project) {
       res.status(404).send({ message: "Error fetching projects" });
