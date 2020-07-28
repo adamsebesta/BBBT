@@ -41,7 +41,7 @@
               </div>
             </div>
             <div class="low-row">
-              <p>Rate:€ {{project.billing_rate}}</p>
+              <p>Rate: €{{project.billing_rate}}</p>
               <p :v-if='project.fixed'>
                 Budget Remaining: {{budgetRemaining(
                   project.tasks,
@@ -90,7 +90,7 @@ export default {
         t.assigned_workers.map(w =>
           w.tracked_hours).reduce((a,b) => a + b, 0)).reduce((a,b) => a + b, 0);
       const hoursRem = Math.floor(b / br) - sum;
-      return `€${b - (sum * br)}/${hoursRem} hours`;
+      return `€${b - (sum * br)} / ${hoursRem} hours`;
     },
     dateDiffInDays(a) {
       // Discard the time and time-zone information.
