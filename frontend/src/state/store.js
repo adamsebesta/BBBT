@@ -11,7 +11,7 @@ export const store = new Vuex.Store({
     workers: null,
     endpoint: 'http://localhost:8080/api/',
     selected_project: null,
-    selected_task: null
+    selected_task: null,
   },
   mutations: {
     INCREMENT_PROJECT_COUNT(state) {
@@ -42,7 +42,8 @@ export const store = new Vuex.Store({
     modalOpen: state => state.modalOpen,
     workers: state => state.workers,
     selected_project: state => state.selected_project,
-    selected_task: state => state.selected_task
+    selected_task: state => state.selected_task,
+    endpoint: state => state.selected_task
   },
   actions: {
     async fetchProjects({commit}) {
@@ -61,28 +62,5 @@ export const store = new Vuex.Store({
       let data = await res.json();
       commit('SET_WORKERS', data);
     },
-    async updateTask({commit}, t) {
-      t['assigned_workers'].forEach((w, i) => {
-        w.tracked_hours = t['newHours'][i];
-      });
-      t['assigned_workers'].push(t['new_worker']);
-      ['new_worker_tracked_hours', 'tracked_hours', 'newHours'].forEach(e =>
-        delete t[e]);
-      console.log(t);
-
-
-      let res = await fetch(`${this.state.endpoint}tasksa/${t._id}`, {
-
-      })
-      let data = await res.json();
-      commit('SET_SELECTED_TASK', data);
-      // commit('SET_MODAL_OPEN', false);
-    },
   }
 })
-// const finalizeTaskObject = (ob) => {
-//   //clean up object to be sent to API
-//   ['new_worker_tracked_hours', 'tracked_hours', 'newHours']
-//   .forEach(e =>
-//      delete ob[e]);
-// }

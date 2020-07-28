@@ -95,7 +95,7 @@ exports.addTaskCategory = (req, res) => {
     } else {
       res.send('task category ' + req.body.task_category +  ' added')
     }
-  })  
+  })
 }
 
 // remove a task category from a project
@@ -106,7 +106,7 @@ exports.removeTaskCategory = (req, res) => {
     } else {
       res.send('task category ' + req.body.task_category +  ' removed')
     }
-  })  
+  })
 }
 
 // add a task status to a project
@@ -117,7 +117,7 @@ exports.addTaskStatus = (req, res) => {
     } else {
       res.send('task status ' + req.body.task_category +  ' added')
     }
-  })  
+  })
 }
 
 // remove a task status from a project
@@ -128,12 +128,17 @@ exports.removeTaskStatus = (req, res) => {
     } else {
       res.send('task status ' + req.body.task_category +  ' removed')
     }
-  })  
+  })
 }
 
 // add a task to a project
 exports.addTask = (req, res) => {
-  Project.findByIdAndUpdate(req.body.projectId, {$push: {"tasks": req.body.taskId}}, (err, result) => {
+  Project.findByIdAndUpdate(req.body.projectId, {
+    $push: {
+      "tasks": req.body.taskId
+    },
+    useFindAndModify: false
+  }, (err, result) => {
     if(err){
       res.send(err)
     } else {
