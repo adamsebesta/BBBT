@@ -53,11 +53,12 @@
             </div>
             <div class="low-row">
               <p>Rate: €{{project.billing_rate}}</p>
-              <p :v-if='project.fixed'>
+              <p v-if='project.fixed_budget'>
                 Budget Remaining: {{budgetRemaining(
                   project.tasks,
                   project.budget * (1 - (project.buffer_percentage / 100)),
-                  project.billing_rate)}}
+                  project.billing_rate,
+                  project.workers)}}
               </p>
               <p>Duration: {{dateDiffInDays(project.createdAt)}}</p>
               <p>Deadline: {{project.deadline.slice(0,10)}}</p>
@@ -89,14 +90,21 @@ export default {
     }
   },
   methods: {
-    budgetRemaining(tasks, b, br) {
-      // tasks, budget, and billing_rate given
+    budgetRemaining(tasks, b, br, wl) {
+      // tasks, budget, billing_rate, and workerList given
       // iterate through project tasks and sum the total amount of tracked_hours
       const sum = tasks.map(t =>
         t.assigned_workers.map(w =>
-          w.tracked_hours).reduce((a,b) => a + b, 0)).reduce((a,b) => a + b, 0);
-      const hoursRem = Math.floor(b / br) - sum;
-      return `€${b - (sum * br)} / ${hoursRem} hours`;
+          // for each worker, divide tracked hours, by their factor
+          //find function searches the given worker list and return factor
+          w.tracked_hours / wl.find(pw => pw.worker._id == w.worker._id).factor)
+          //sum individial task
+          .reduce((a,b) => a + b, 0))
+          //sum all hours for all tasks
+        .reduce((a,b) => a + b, 0);
+      const hoursRem = Math.floor((b / br) - sum);
+      // subtract the sum of (hours * billing rate) from total budget
+      return `€${Math.floor(b - (sum * br))} / ${hoursRem} hours`;
     },
     dateDiffInDays(d) {
       // d is date in "2020-02-10 format"

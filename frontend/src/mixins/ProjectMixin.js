@@ -16,15 +16,22 @@ export default {
       this.projects = this.$store.getters['projects'];
     },
     async postProject(p) {
-      let res = await fetch(`http://localhost:8080/api/projects`, {
+      await fetch(`http://localhost:8080/api/projects`, {
         method: 'POST',
-        body: p,
+        body: JSON.stringify(p),
         headers: {
         'Content-Type': 'application/json'
         }
       })
-      let data = await res.json();
-      await this.addOrDeleteTaskOnProject(data, 'addTask', 'PUT');
+      //notify with server response
+      this.$notify({
+          group: 'foo',
+          title: 'Project Update:',
+          text: `project ${p['name']} successfully added `
+      });
+      this.removeOverlay();
+      // refetch project to refresh tasks list
+      this.$store.dispatch('fetchProjects');
     },
     createProject() {
       const ob = this.newProject;
@@ -34,15 +41,17 @@ export default {
           ob[k] = Number(ob[k])
         }
         //parse worker values to number
-        if (k == 'worker') {
-          ob[k].forEach((w) => {
-            w.factor = Number(ob['worker'].factor);
-            w.hours_planned = Number(ob['worker'].hours_planned);
+        if (k == 'workers') {
+          ob[k].forEach((w, i) => {
+            ob[k][i].factor = parseFloat(w.factor);
+            ob[k][i].hours_planned = parseFloat(w.hours_planned);
           });
         }
+        // change fixed budget value to boolean
+        ob['fixed_budget'] = ob['fixed_budget'] == 'false';
+        ob['tasks'] = [];
       });
-      console.log(ob)
-      //this.postProject(JSON.stringify(ob))
+      this.postProject(ob)
     },
     showModal () {
       this.$store.commit('SET_MODAL_OPEN', true);

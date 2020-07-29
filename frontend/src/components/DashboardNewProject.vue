@@ -66,6 +66,7 @@
         </div>
         <div class="">
           <FormulateInput
+            v-if="newProject.fixed_budget == 'true'"
             type="number"
             name="buffer_percentage"
             label="Buffer percentage"
@@ -103,7 +104,7 @@
 
         <FormulateInput
           type='group'
-          name='worker'
+          name='workers'
           :repeatable='true'
         >
               <FormulateInput

@@ -52,6 +52,7 @@
                   label="Estimation"
                   placeholder='Enter time estimation (hrs)'
                   validation='number|required'
+                  :value='this.selected_task.estimation.time'
                 >
                 </FormulateInput>
 
@@ -66,6 +67,7 @@
                   label="Approved By:"
                   placeholder='Select approval'
                   validation='required'
+                  :value='this.selected_task.estimation.approved_via'
 
                 >
                 </FormulateInput>
