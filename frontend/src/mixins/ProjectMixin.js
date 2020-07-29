@@ -27,33 +27,22 @@ export default {
       await this.addOrDeleteTaskOnProject(data, 'addTask', 'PUT');
     },
     createProject() {
-      const ob = {};
-      ob['assigned_workers'] = [];
-      const fields = document.getElementById('task-formulate-new');
-      fields.forEach((cld, i) => {
-        // build new workers
-        if (cld.name == 'new_worker' && cld.value)  {
-          ob['assigned_workers'].push({
-            'worker': cld.value,
-            'tracked_hours': parseFloat(fields[i + 1].value)  || 0
+      const ob = this.newProject;
+      //parse initial values to numbers
+      Object.keys(ob).forEach((k) => {
+        if (['billing_rate', 'buffer_percentage', 'budget'].includes(k)) {
+          ob[k] = Number(ob[k])
+        }
+        //parse worker values to number
+        if (k == 'worker') {
+          ob[k].forEach((w) => {
+            w.factor = Number(ob['worker'].factor);
+            w.hours_planned = Number(ob['worker'].hours_planned);
           });
         }
-        // build estimation
-        if (cld.name == 'estimation') {
-          ob['estimation'] = {
-            'time': parseFloat(cld.value),
-            'approved_via': fields[i + 1].value,
-            'approved_date': new Date()
-          }
-        }
-        // build rest of task
-        if (['category', 'description', 'status'].includes(cld.name)) {
-          ob[cld.name] = cld.value;
-        }
       });
-      // set project ID and dispatch to store
-      ob['project'] = this.selected_project._id;
-      this.postProject(JSON.stringify(ob))
+      console.log(ob)
+      //this.postProject(JSON.stringify(ob))
     },
     showModal () {
       this.$store.commit('SET_MODAL_OPEN', true);

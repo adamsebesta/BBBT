@@ -49,11 +49,13 @@
               'true': 'Yes',
               'false': 'No'
             }"
+            placeholder='select budget type'
             validation='required'
           >
           </FormulateInput>
 
           <FormulateInput
+            v-if="newProject.fixed_budget == 'true'"
             type="number"
             name="budget"
             label="Budget"
@@ -92,11 +94,12 @@
             type="date"
             name="deadline"
             label='Deadline'
-            validation='required'
+            :validation='deadlineFunc()'
           >
           </FormulateInput>
         </div>
       </div>
+      <div class="double-wide">
 
         <FormulateInput
           type='group'
@@ -112,26 +115,28 @@
               </FormulateInput>
 
               <FormulateInput
-                type="number"
-                validation='number'
+                type="text"
+                validation='number|required'
                 name="factor"
                 placeholder='Enter factor'
               >
               </FormulateInput>
 
               <FormulateInput
-                type="number"
-                validation='number'
+                type="text"
+                validation='number|required'
                 name="hours_planned"
                 placeholder='Enter planned hours'
               >
               </FormulateInput>
             </FormulateInput>
+          </div>
         <FormulateInput
           type="submit"
           label="Submit project"
         />
-        </FormulateForm>
+
+      </FormulateForm>
     </div>
   </div>
 </template>
@@ -149,7 +154,15 @@ export default {
     return {
       current_workers: null,
       current_clients: {},
-      newProject: null
+      newProject: {}
+    }
+  },
+  computed: {
+
+  },
+  methods: {
+    deadlineFunc() {
+      return `required|after:${this.newProject.start_date}`
     }
   },
   created() {
@@ -161,7 +174,17 @@ export default {
 
 <style lang="scss" scoped>
 
-.project-details-modal {
-  width: 95%;
-}
+  .project-details-modal {
+    width: 95%;
+  }
+
+  .double-wide {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .formulate-input-group-repeatable {
+    display: flex;
+    width: 100%;
+  }
 </style>
