@@ -2,7 +2,15 @@
   <div class="project" v-if="selected_project">
     <div class="project_name">
       <h1>{{ selected_project.name }}</h1>
+      <button
+        type="button"
+        @click='deleteProject(selected_project._id)'
+        class='button'
+      >
+        Delete Project
+      </button>
     </div>
+
     <div id="tabs" class="container">
 
     <div class="tabs">
@@ -129,10 +137,10 @@ export default {
   }
 
   * {
- box-sizing: border-box;
- margin: 0;
- padding: 0;
-}
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
 
 .container {
    max-width: 95%;

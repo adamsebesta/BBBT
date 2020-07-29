@@ -155,7 +155,9 @@ export default {
     return {
       current_workers: null,
       current_clients: {},
-      newProject: {}
+      newProject: {
+        fixed_budget: 'true'
+      }
     }
   },
   computed: {

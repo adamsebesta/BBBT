@@ -465,25 +465,6 @@ export default {
     justify-content: space-around;
   }
 
-
-  .button {
-    display: flex;
-    align-items: center;
-    width: 75px;
-    height: 25px;
-    font-size: 12px;
-    font-weight: bold;
-    opacity: .7;
-    border: none;
-    border-radius: 3px;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: 0.5px 0.5px rgba(0, 0, 0, 0.1);
-    outline: none;
-    margin-right: 2rem;
-    padding: 18px;
-  }
-
   th {
     text-align: left;
     margin-bottom: 1.5rem;

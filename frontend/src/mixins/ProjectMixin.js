@@ -33,6 +33,21 @@ export default {
       // refetch project to refresh tasks list
       this.$store.dispatch('fetchProjects');
     },
+
+    async deleteProject(id) {
+      let res = await fetch(`http://localhost:8080/api/projects/${id}`, {
+        method: 'DELETE',
+      })
+      //notify with server response
+      const text = await res.text();
+      //notify with server response
+      this.$notify({
+          group: 'foo',
+          title: 'Project Update:',
+          text: text
+      });
+      this.$router = 'dashboard';
+    },
     createProject() {
       const ob = this.newProject;
       //parse initial values to numbers
@@ -47,11 +62,11 @@ export default {
             ob[k][i].hours_planned = parseFloat(w.hours_planned);
           });
         }
-        // change fixed budget value to boolean
-        ob['fixed_budget'] = ob['fixed_budget'] == 'false';
-        ob['tasks'] = [];
       });
-      this.postProject(ob)
+      // change fixed budget value to boolean, and set default tasks
+      ob['fixed_budget'] = ob['fixed_budget'] == 'true';
+      ob['tasks'] = [];
+      this.postProject(ob);
     },
     showModal () {
       this.$store.commit('SET_MODAL_OPEN', true);

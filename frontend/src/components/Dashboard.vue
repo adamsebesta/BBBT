@@ -96,12 +96,12 @@ export default {
       const sum = tasks.map(t =>
         t.assigned_workers.map(w =>
           // for each worker, divide tracked hours, by their factor
-          //find function searches the given worker list and return factor
+          // find function searches the given worker list and return factor
           w.tracked_hours / wl.find(pw => pw.worker._id == w.worker._id).factor)
-          //sum individial task
-          .reduce((a,b) => a + b, 0))
-          //sum all hours for all tasks
-        .reduce((a,b) => a + b, 0);
+        // sum individial task
+        .reduce((a,b) => a + b, 0))
+      // sum all hours for all tasks
+      .reduce((a,b) => a + b, 0);
       const hoursRem = Math.floor((b / br) - sum);
       // subtract the sum of (hours * billing rate) from total budget
       return `€${Math.floor(b - (sum * br))} / ${hoursRem} hours`;
@@ -155,6 +155,7 @@ export default {
   },
   created() {
     this.workerWrapper();
+    this.$store.dispatch('fetchProjects');
   },
 }
 

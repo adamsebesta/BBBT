@@ -171,25 +171,24 @@ aside {
   color: #2c3e50;
 }
 
-
-.close-button {
+.button {
   display: flex;
   align-items: center;
-  width: 25px;
+  width: 75px;
   height: 25px;
-  font-family: 'Lato', sans-serif;
   font-size: 12px;
   font-weight: bold;
   opacity: .7;
   border: none;
-  padding: 1rem;
   border-radius: 3px;
   justify-content: center;
   cursor: pointer;
-  text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
   box-shadow: 0.5px 0.5px rgba(0, 0, 0, 0.1);
   outline: none;
+  margin-right: 2rem;
+  padding: 18px;
 }
+
 .shadowed {
   text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
 }
