@@ -501,37 +501,10 @@ export default {
   tr {
     cursor: pointer
   }
-
-  .modal {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 2;
-    box-shadow: 0.5px 0.5px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 1000px;
-    height: 600px;
-    background-color: #FFF;
-    border-radius: 3px;
-    cursor: default;
-    padding: 5px;
-    overflow-y: scroll;
-    align-items: center;
-    display: flex;
-    justify-content: center;
-  }
-
   .task-details-modal {
     width: 90%;
   }
 
-  .upper-fields {
-    display: flex;
-    justify-content: space-between;
-    div {
-      width: 100%;
-    }
-  }
+
 
 </style>

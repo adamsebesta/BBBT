@@ -10,6 +10,7 @@
       >
       </FormulateInput>
 
+
       <button
         type="button"
         name="button"
@@ -18,7 +19,17 @@
       >
         clear
       </button>
+      <button
+        type="button"
+        name="button"
+        @click="showModal"
+        class='button'
+      >
+        +
+      </button>
     </div>
+    <dashboard-new-project>
+    </dashboard-new-project>
     <br>
     <div class="cards">
       <div class="card box-shadow"
@@ -60,29 +71,24 @@
 <script>
 import '../assets/scss/main.scss';
 import ProjectMixin  from '..//mixins/ProjectMixin';
+import WorkerMixin  from '..//mixins/WorkerMixin';
+import ClientMixin  from '../mixins/ClientMixin';
+import DashboardNewProject from './DashboardNewProject.vue';
 
 export default {
   components: {
+    DashboardNewProject
   },
-  mixins: [ProjectMixin],
+  mixins: [ProjectMixin, WorkerMixin, ClientMixin],
   data() {
     return {
       selected_worker: null,
       current_workers: null,
-      projectsFilteredByWorker: null
+      current_clients: null,
+      projectsFilteredByWorker: null,
     }
   },
   methods: {
-    async workerWrapper() {
-      await this.$store.dispatch('fetchWorkers');
-      const w = await this.$store.getters['workers'];
-      const ob = {};
-      w.forEach((w) => {
-        ob[w._id] = `${w.first_name} ${w.last_name}`;
-      });
-      this.current_workers = ob;
-    },
-
     budgetRemaining(tasks, b, br) {
       // tasks, budget, and billing_rate given
       // iterate through project tasks and sum the total amount of tracked_hours
@@ -134,6 +140,9 @@ export default {
       } else {
         return this.projects
       }
+    },
+    modalOpen () {
+      return this.$store.getters['modalOpen'];
     }
   },
   created() {
@@ -236,5 +245,8 @@ export default {
     margin-top: .1rem;
     padding: 18px;
   }
+
+
+
 
 </style>
