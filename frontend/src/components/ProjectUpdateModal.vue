@@ -61,7 +61,7 @@
             </FormulateInput>
 
             <FormulateInput
-              :v-if="selected_project.fixed_budget == 'true'"
+              v-if="selected_project.fixed_budget == 'true'"
               type="number"
               name="budget"
               label="Budget"
@@ -121,6 +121,10 @@
               v-for='(wkr, i) in selected_project.workers'
               v-bind:key='wkr.worker._id'
             >
+            <FormulateInput
+              type='group'
+              name='W'
+            >
               <FormulateInput
                 type="select"
                 :options="current_workers"
@@ -144,6 +148,7 @@
                 :value='wkr.hours_planned'
               >
               </FormulateInput>
+              </FormulateInput>
             </div>
           </FormulateInput>
           <FormulateInput
@@ -155,7 +160,7 @@
               <FormulateInput
                 type="select"
                 :options="current_workers_not_assigned"
-                :name='worker'
+                name='worker'
                 placeholder='Add a new worker to this project'
               >
               </FormulateInput>
