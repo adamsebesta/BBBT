@@ -169,9 +169,7 @@ export default {
 
 <style lang="scss" scoped>
 
-  .project-details-modal {
-    width: 95%;
-  }
+
 
   .double-wide {
     display: flex;

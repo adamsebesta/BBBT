@@ -69,24 +69,9 @@ export default {
       this.postProject(ob);
     },
     updateProject() {
-      // const ob = this.newProject;
-      // //parse initial values to numbers
-      // Object.keys(ob).forEach((k) => {
-      //   if (['billing_rate', 'buffer_percentage', 'budget'].includes(k)) {
-      //     ob[k] = Number(ob[k])
-      //   }
-      //   //parse worker values to number
-      //   if (k == 'workers') {
-      //     ob[k].forEach((w, i) => {
-      //       ob[k][i].factor = parseFloat(w.factor);
-      //       ob[k][i].hours_planned = parseFloat(w.hours_planned);
-      //     });
-      //   }
-      // });
-      // // change fixed budget value to boolean, and set default tasks
-      // ob['fixed_budget'] = ob['fixed_budget'] == 'true';
-      // ob['tasks'] = [];
-      // this.postProject(ob);
+      // const ob = {};
+      //const fields = this.$formulate('update-project');
+      //console.log(fields);
     },
     showModal (id) {
       this.$store.commit('SET_MODAL_OPEN', true);
