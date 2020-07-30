@@ -7,9 +7,20 @@
         @click='deleteProject(selected_project._id)'
         class='button'
       >
-        Delete Project
+        delete Project
+      </button>
+      <br>
+      <br>
+      <button
+        type="button"
+        @click="showModal('project-modal-update')"
+        class='button'
+      >
+        update project
       </button>
     </div>
+    <project-update-modal>
+    </project-update-modal>
 
     <div id="tabs" class="container">
 
@@ -54,6 +65,7 @@
 
 <script>
 import ProjectTasks from './ProjectTasks.vue';
+import ProjectUpdateModal from './ProjectUpdateModal.vue';
 import ProjectMixin from '../mixins/ProjectMixin';
 
 export default {
@@ -62,7 +74,8 @@ export default {
   },
   mixins: [ProjectMixin],
   components: {
-    ProjectTasks
+    ProjectTasks,
+    ProjectUpdateModal
   },
   data() {
     return {

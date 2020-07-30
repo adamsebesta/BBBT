@@ -95,7 +95,7 @@
             type="date"
             name="deadline"
             label='Deadline'
-            :validation='deadlineFunc()'
+            :validation='deadlineFunc(newProject)'
           >
           </FormulateInput>
         </div>
@@ -158,14 +158,6 @@ export default {
       newProject: {
         fixed_budget: 'true'
       }
-    }
-  },
-  computed: {
-
-  },
-  methods: {
-    deadlineFunc() {
-      return `required|after:${this.newProject.start_date}`
     }
   },
   created() {

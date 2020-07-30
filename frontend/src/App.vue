@@ -234,6 +234,11 @@ aside {
     }
   }
 
+  .project-details-modal {
+    width: 95%;
+    margin-left: 10rem
+  }
+
   .worker {
     display: flex;
   }

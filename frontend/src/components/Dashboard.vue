@@ -22,7 +22,7 @@
       <button
         type="button"
         name="button"
-        @click="showModal"
+        @click="showModal('project-modal-new')"
         class='button'
       >
         +

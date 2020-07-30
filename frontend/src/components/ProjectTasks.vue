@@ -367,10 +367,11 @@
 
 <script>
 import TaskMixin  from '../mixins/TaskMixin';
+import ProjectMixin  from '../mixins/ProjectMixin';
 
 export default {
   name: 'ProjectTasks',
-  mixins: [TaskMixin],
+  mixins: [TaskMixin, ProjectMixin],
   data() {
     return {
       selected_worker: null,
@@ -397,15 +398,12 @@ export default {
       }
       return this.selected_project.tasks
     },
-
     selected_project() {
       return this.$store.getters['selected_project'];
     },
-
-    modalOpen () {
+    modalOpen() {
       return this.$store.getters['modalOpen'];
     },
-
     selected_task() {
       return this.$store.getters['selected_task'];
     },
