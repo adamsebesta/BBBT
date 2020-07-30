@@ -69,20 +69,28 @@ export default {
       this.postProject(ob);
     },
     updateProject() {
-      // const ob = {};
+      const ob = {};
       const workers = [];
       const fields = document.getElementById('project-formulate-update');
       fields.forEach((f, i) => {
         //create worker object
-        if (f.name == 'worker') {
+        if (f.name == 'worker' && f.value) {
           workers.push({
             "worker": f.value,
             "factor": parseFloat(fields[i + 1].value) || 1,
             "hours_planned": parseFloat(fields[i + 2].value) || 0,
           })
         }
+        if (f.value && !['factor','hours_planned','worker'].includes(f.name)) {
+          if (['buffer_percentage','budget','billing_rate'].includes(f.name)) {
+            ob[f.name] = parseFloat(f.value);
+          } else {
+          ob[f.name] = f.value;
+          }
+        }
       });
-      console.log(workers);
+      ob['workers'] = workers;
+      console.log(ob);
     },
     showModal (id) {
       this.$store.commit('SET_MODAL_OPEN', true);

@@ -59,7 +59,7 @@
             </FormulateInput>
 
             <FormulateInput
-              v-if="selected_project.fixed_budget == 'true'"
+              :v-if="selected_project.fixed_budget == 'true'"
               type="number"
               name="budget"
               label="Budget"
@@ -71,7 +71,7 @@
           </div>
           <div class="">
             <FormulateInput
-              v-if="selected_project.fixed_budget == 'true'"
+              :v-if="selected_project.fixed_budget == 'true'"
               type="number"
               name="buffer_percentage"
               label="Buffer percentage"
@@ -109,43 +109,41 @@
             </FormulateInput>
           </div>
         </div>
-        <div class="">
-          <div class="worker-wrapper">
-        <table
-          class='worker-table'
-          style='width:100%'
-        >
-          <th>Name</th>
-          <th>Factor</th>
-          <th>Hours planned</th>
-          <tr
+        <div class="worker-wrapper">
+          <FormulateInput
+            type='group'
+            name='workers'
+            label="Workers:"
+            v-model='oldWorkers'
             v-for='wkr in selected_project.workers'
             v-bind:key='wkr.worker._id'
           >
-            <td>
-              {{wkr.worker.first_name + " " + wkr.worker.last_name}}
-            </td>
-            <td>
+            <div class="worker">
+              <FormulateInput
+                type="select"
+                :options="current_workers"
+                name="worker"
+                :value='wkr.worker._id'
+              >
+              </FormulateInput>
+
               <FormulateInput
                 type="text"
-                validation='required|number'
+                validation='number'
                 name="factor"
                 :value='wkr.factor'
               >
               </FormulateInput>
-            </td>
-            <td>
+
               <FormulateInput
                 type="text"
-                validation='required|number'
+                validation='number'
                 name="hours_planned"
                 :value='wkr.hours_planned'
               >
               </FormulateInput>
-            </td>
-          </tr>
-        </table>
-
+            </div>
+          </FormulateInput>
           <FormulateInput
             type='group'
             name='workers'
@@ -179,7 +177,6 @@
             </div>
           </FormulateInput>
         </div>
-        </div>
         <FormulateInput
           type="submit"
           label="Update project"
@@ -202,7 +199,8 @@ export default {
     return {
       current_clients: {},
       current_workers: {},
-      newWorkers: {}
+      newWorkers: {},
+      oldWorkers: {}
     }
   },
   computed: {
@@ -243,7 +241,6 @@ export default {
 .worker-wrapper {
   padding: 1.5em 0em;
   max-width: 85%;
-
 
 }
 
