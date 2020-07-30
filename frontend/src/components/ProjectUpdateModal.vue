@@ -10,6 +10,8 @@
         id='project-formulate-update'
         name='update-project'
         @submit='updateProject'
+        v-bind:key='this.selected_project._id'
+        v-model='updateForm'
         >
         <div class="upper-fields">
 
@@ -110,19 +112,19 @@
           </div>
         </div>
         <div class="worker-wrapper">
+          <h5>Workers:</h5>
           <FormulateInput
             type='group'
-            name='workers'
-            label="Workers:"
-            v-model='oldWorkers'
-            v-for='wkr in selected_project.workers'
-            v-bind:key='wkr.worker._id'
+            name='workersOld'
           >
-            <div class="worker">
+            <div class="worker"
+              v-for='(wkr, i) in selected_project.workers'
+              v-bind:key='wkr.worker._id'
+            >
               <FormulateInput
                 type="select"
                 :options="current_workers"
-                name="worker"
+                :name="buildName(i, 'worker')"
                 :value='wkr.worker._id'
               >
               </FormulateInput>
@@ -130,7 +132,7 @@
               <FormulateInput
                 type="text"
                 validation='number'
-                name="factor"
+                :name="buildName(i, 'factor')"
                 :value='wkr.factor'
               >
               </FormulateInput>
@@ -138,7 +140,7 @@
               <FormulateInput
                 type="text"
                 validation='number'
-                name="hours_planned"
+                :name="buildName(i, 'hours_planned')"
                 :value='wkr.hours_planned'
               >
               </FormulateInput>
@@ -146,15 +148,14 @@
           </FormulateInput>
           <FormulateInput
             type='group'
-            name='workers'
+            name='newWorkers'
             :repeatable='true'
-            v-model='newWorkers'
           >
             <div class="worker">
               <FormulateInput
                 type="select"
                 :options="current_workers_not_assigned"
-                name="worker"
+                :name='worker'
                 placeholder='Add a new worker to this project'
               >
               </FormulateInput>
@@ -199,8 +200,12 @@ export default {
     return {
       current_clients: {},
       current_workers: {},
-      newWorkers: {},
-      oldWorkers: {}
+      updateForm: {}
+    }
+  },
+  methods: {
+    buildName(n, t) {
+      return t + n;
     }
   },
   computed: {
@@ -210,8 +215,12 @@ export default {
     modalOpen() {
       return this.$store.getters['modalOpen'];
     },
+
     assigned_workers() {
       const ob = {};
+      // .filter(w =>
+      //    w.name == 'worker');
+         // console.log(wl);
       this.selected_project.workers.forEach((w) => {
         ob[w.worker._id] = `${w.worker.first_name} ${w.worker.last_name}`;
       });
