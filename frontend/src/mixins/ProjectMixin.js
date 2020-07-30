@@ -70,8 +70,19 @@ export default {
     },
     updateProject() {
       // const ob = {};
-      //const fields = this.$formulate('update-project');
-      //console.log(fields);
+      const workers = [];
+      const fields = document.getElementById('project-formulate-update');
+      fields.forEach((f, i) => {
+        //create worker object
+        if (f.name == 'worker') {
+          workers.push({
+            "worker": f.value,
+            "factor": parseFloat(fields[i + 1].value) || 1,
+            "hours_planned": parseFloat(fields[i + 2].value) || 0,
+          })
+        }
+      });
+      console.log(workers);
     },
     showModal (id) {
       this.$store.commit('SET_MODAL_OPEN', true);

@@ -109,6 +109,8 @@
             </FormulateInput>
           </div>
         </div>
+        <div class="">
+          <div class="worker-wrapper">
         <table
           class='worker-table'
           style='width:100%'
@@ -143,7 +145,7 @@
             </td>
           </tr>
         </table>
-        <div class="worker-wrapper">
+
           <FormulateInput
             type='group'
             name='workers'
@@ -176,6 +178,7 @@
               </FormulateInput>
             </div>
           </FormulateInput>
+        </div>
         </div>
         <FormulateInput
           type="submit"
@@ -239,6 +242,8 @@ export default {
 
 .worker-wrapper {
   padding: 1.5em 0em;
+  max-width: 85%;
+
 
 }
 
