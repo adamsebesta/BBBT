@@ -9,6 +9,8 @@ module.exports = app => {
   // update a field in a project
   router.put("/update", projects.updateField);
 
+
+
   // add a task to a project
   router.put("/addTask", projects.addTask);
 
@@ -32,6 +34,9 @@ module.exports = app => {
 
   // Retrieve a single Project with id
   router.get("/:id", projects.findOne);
+
+  // update a whole  project
+  router.put("/:id", projects.update);
 
   // Delete a Project with id
   router.delete("/:id", projects.delete);

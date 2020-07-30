@@ -68,6 +68,24 @@ export default {
       ob['tasks'] = [];
       this.postProject(ob);
     },
+    async postUpdatedProject(p) {
+      await fetch(`http://localhost:8080/api/projects/${p._id}`, {
+        method: 'PUT',
+        body: JSON.stringify(p),
+        headers: {
+        'Content-Type': 'application/json'
+        }
+      });
+      //notify with server response
+      this.$notify({
+          group: 'foo',
+          title: 'Project Update:',
+          text: `project ${p['name']} successfully updated `
+      });
+      this.removeOverlay();
+      // refetch project to refresh tasks list
+      this.$store.dispatch('fetchProject', p._id);
+    },
     updateProject() {
       const ob = {};
       const workers = [];
@@ -90,7 +108,9 @@ export default {
         }
       });
       ob['workers'] = workers;
-      console.log(ob);
+      ob['fixed_budget'] = ob['fixed_budget'] == 'true';
+      ob['_id'] = this.selected_project._id;
+      this.postUpdatedProject(ob);
     },
     showModal (id) {
       this.$store.commit('SET_MODAL_OPEN', true);
