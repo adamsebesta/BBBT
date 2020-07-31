@@ -144,6 +144,7 @@
               </FormulateInput>
 
               <FormulateInput
+                v-if='!checkTasks(wkr)'
                 type="checkbox"
                 label="Remove from project"
               >
@@ -154,6 +155,7 @@
             name='newWorkers'
             :repeatable='true'
           >
+          <h5>Add workers to the project:</h5>
             <div class="worker">
               <FormulateInput
                 type="select"
@@ -234,6 +236,23 @@ export default {
         }
       });
       return ob;
+    }
+  },
+  methods: {
+    checkTasks(w) {
+      let found;
+      this.selected_project.tasks.forEach((task) => {
+        const wl = this.getWorkerList(task);
+        console.log(w.worker._id)
+        console.log(wl)
+        if (wl.includes(w.worker._id)) {
+           found = true
+        }
+      })
+      return found;
+    },
+    getWorkerList(t) {
+      return t.assigned_workers.map(w => w.worker._id);
     }
   },
   created() {

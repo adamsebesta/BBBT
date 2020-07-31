@@ -83,7 +83,7 @@ export default {
           text: `project ${p['name']} successfully updated `
       });
       this.removeOverlay();
-      // refetch project to refresh tasks list
+      // refetch project to refresh tabs list
       this.$store.dispatch('fetchProject', p._id);
     },
     updateProject() {
@@ -92,20 +92,20 @@ export default {
       const fields = document.getElementById('project-formulate-update');
       fields.forEach((f, i) => {
         //create worker object
-        // if field has value and checkbox is not clicked
+        // if existing worker field checkbox is not clicked keep in worker array
         if (f.name == 'worker' && f.value)  {
           if (!fields[i + 3].checked) {
             workers.push(this.buildWorkerOb(f, i, fields))
-            console.log(fields[i + 3].value, f.name, f.value)
           }
         }
-        // if newWorker has name selected
+        // if newWorker has name selected push to worker array
         if (f.name == 'newWorker' && f.value) {
           workers.push(this.buildWorkerOb(f, i, fields))
         }
 
-        //build remainder of object
+        //build remainder of object ommiting uncessesary keys
         if (f.value && !['factor','hours_planned','worker'].includes(f.name)) {
+          // parse to floats for the below keys
           if (['buffer_percentage','budget','billing_rate'].includes(f.name)) {
             ob[f.name] = parseFloat(f.value);
           } else {
@@ -114,6 +114,7 @@ export default {
         }
       });
       ob['workers'] = workers;
+      // change fixed_budget to boolean for DB
       ob['fixed_budget'] = ob['fixed_budget'] == 'true';
       ob['_id'] = this.selected_project._id;
       this.postUpdatedProject(ob);

@@ -9,8 +9,6 @@ module.exports = app => {
   // update a field in a project
   router.put("/update", projects.updateField);
 
-
-
   // add a task to a project
   router.put("/addTask", projects.addTask);
 
@@ -24,10 +22,10 @@ module.exports = app => {
   router.put("/removeTaskStatus", projects.removeTaskStatus);
 
   // add a task category to a project
-  router.put("/addTaskStatus", projects.addTaskCategory);
+  router.put("/addTaskCategory", projects.addTaskCategory);
 
   // remove a task category from a project
-  router.put("/removeTaskStatus", projects.removeTaskCategory);
+  router.put("/removeTaskCategory", projects.removeTaskCategory);
 
   // Retrieve all Projects
   router.get("/", projects.findAll);
