@@ -56,28 +56,28 @@
               }"
               placeholder='select budget type'
               validation='required'
-              :value='selected_project.fixed_budget'
+              :value='String(selected_project.fixed_budget)'
             >
             </FormulateInput>
 
             <FormulateInput
-              v-if="selected_project.fixed_budget == 'true'"
+              v-if="updateForm.fixed_budget == 'true'"
               type="number"
               name="budget"
               label="Budget"
               placeholder='0'
-              validation='required|number'
+              validation='number'
               :value='selected_project.budget'
             >
             </FormulateInput>
           </div>
           <div class="">
             <FormulateInput
-              :v-if="selected_project.fixed_budget == 'true'"
+              v-if="updateForm.fixed_budget == 'true'"
               type="number"
               name="buffer_percentage"
               label="Buffer percentage"
-              validation='required|number'
+              validation='number'
               :value='selected_project.buffer_percentage'
             >
             </FormulateInput>
@@ -113,30 +113,24 @@
         </div>
         <div class="worker-wrapper">
           <h5>Workers:</h5>
-          <FormulateInput
-            type='group'
-            name='workersOld'
-          >
             <div class="worker"
-              v-for='(wkr, i) in selected_project.workers'
+              v-for='wkr in selected_project.workers'
               v-bind:key='wkr.worker._id'
             >
+
             <FormulateInput
-              type='group'
-              name='W'
+              type="select"
+              :options='current_workers'
+              name="worker"
+              :value='wkr.worker._id'
+              disabled='disabled'
             >
-              <FormulateInput
-                type="select"
-                :options="current_workers"
-                :name="buildName(i, 'worker')"
-                :value='wkr.worker._id'
-              >
-              </FormulateInput>
+            </FormulateInput>
 
               <FormulateInput
                 type="text"
                 validation='number'
-                :name="buildName(i, 'factor')"
+                name="factor"
                 :value='wkr.factor'
               >
               </FormulateInput>
@@ -144,13 +138,17 @@
               <FormulateInput
                 type="text"
                 validation='number'
-                :name="buildName(i, 'hours_planned')"
+                name="hours_planned"
                 :value='wkr.hours_planned'
               >
               </FormulateInput>
+
+              <FormulateInput
+                type="checkbox"
+                label="Remove from project"
+              >
               </FormulateInput>
             </div>
-          </FormulateInput>
           <FormulateInput
             type='group'
             name='newWorkers'
@@ -160,7 +158,7 @@
               <FormulateInput
                 type="select"
                 :options="current_workers_not_assigned"
-                name='worker'
+                name="newWorker"
                 placeholder='Add a new worker to this project'
               >
               </FormulateInput>
@@ -205,12 +203,8 @@ export default {
     return {
       current_clients: {},
       current_workers: {},
-      updateForm: {}
-    }
-  },
-  methods: {
-    buildName(n, t) {
-      return t + n;
+      workers: [],
+      updateForm: {},
     }
   },
   computed: {
@@ -252,14 +246,20 @@ export default {
 
 <style lang="scss" scoped>
 
-.worker-wrapper {
-  padding: 1.5em 0em;
-  max-width: 85%;
+  .worker-wrapper {
+    padding: 1.5em 0em;
+    max-width: 85%;
 
-}
+  }
+
+  .wkr-name {
+    margin-right: 5rem;
+    margin-left: 1rem;
+  }
 
 .worker-wrapper::v-deep .formulate-input-element {
   max-width: 56rem;
+
 }
 
 @media (min-width: 650px) {
@@ -277,6 +277,7 @@ export default {
 @media (min-width: 850px) {
   .worker {
     display: flex;
+    align-items: baseline;
   }
   .worker .formulate-input {
     margin-right: 1.5em;

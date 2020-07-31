@@ -92,13 +92,19 @@ export default {
       const fields = document.getElementById('project-formulate-update');
       fields.forEach((f, i) => {
         //create worker object
-        if (f.name == 'worker' && f.value) {
-          workers.push({
-            "worker": f.value,
-            "factor": parseFloat(fields[i + 1].value) || 1,
-            "hours_planned": parseFloat(fields[i + 2].value) || 0,
-          })
+        // if field has value and checkbox is not clicked
+        if (f.name == 'worker' && f.value)  {
+          if (!fields[i + 3].checked) {
+            workers.push(this.buildWorkerOb(f, i, fields))
+            console.log(fields[i + 3].value, f.name, f.value)
+          }
         }
+        // if newWorker has name selected
+        if (f.name == 'newWorker' && f.value) {
+          workers.push(this.buildWorkerOb(f, i, fields))
+        }
+
+        //build remainder of object
         if (f.value && !['factor','hours_planned','worker'].includes(f.name)) {
           if (['buffer_percentage','budget','billing_rate'].includes(f.name)) {
             ob[f.name] = parseFloat(f.value);
@@ -111,6 +117,13 @@ export default {
       ob['fixed_budget'] = ob['fixed_budget'] == 'true';
       ob['_id'] = this.selected_project._id;
       this.postUpdatedProject(ob);
+    },
+    buildWorkerOb(f, i, arr) {
+      return {
+        "worker": f.value,
+        "factor": parseFloat(arr[i + 1].value) || 1,
+        "hours_planned": parseFloat(arr[i + 2].value) || 0,
+      }
     },
     showModal (id) {
       this.$store.commit('SET_MODAL_OPEN', true);
