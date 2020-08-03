@@ -166,138 +166,98 @@
             >
             <div class="upper-fields">
 
-              <div class="">
+            <div class="">
 
+              <FormulateInput
+                type="select"
+                name="category"
+                label="Category"
+                validation='required'
+                :options='task_categories'
+                placeholder='Select task category'
+              >
+
+              </FormulateInput>
+
+              <FormulateInput
+                type="textarea"
+                name="description"
+                label="Description"
+                placeholder='Enter description'
+              >
+              </FormulateInput>
+
+              <FormulateInput
+                type="select"
+                name="status"
+                label="Status"
+                :options='task_statuses'
+                placeholder='Select task status'
+                validation='required'
+              >
+              </FormulateInput>
+            </div>
+            <div class="">
+              <FormulateInput
+                type="text"
+                name="estimation"
+                label="Estimation"
+                placeholder='Enter time estimation (hrs)'
+                validation='number|required'
+              >
+              </FormulateInput>
+
+              <FormulateInput
+                type="select"
+                name="approval"
+                :options="{
+                  'david': 'David',
+                  'teams': 'Teams',
+                  'bene': 'Bene'
+                }"
+                label="Approved By:"
+                placeholder='Select approval'
+                validation='required'
+
+              >
+              </FormulateInput>
+            </div>
+          </div>
+
+          <div class="worker-wrapper">
             <FormulateInput
-              type="select"
-              name="category"
-              label="Category"
-              validation='required'
-              :options='task_categories'
-              placeholder='Select task category'
+              type='group'
+              name='workers'
+              :repeatable='true'
+              label='Assigned workers:'
             >
 
-            </FormulateInput>
-
-            <FormulateInput
-              type="textarea"
-              name="description"
-              label="Description"
-              placeholder='Enter description'
-            >
-            </FormulateInput>
-
-            <FormulateInput
-              type="select"
-              name="status"
-              label="Status"
-              :options='task_statuses'
-              placeholder='Select task status'
-              validation='required'
-            >
-            </FormulateInput>
-              </div>
-              <div class="">
-                <FormulateInput
-                  type="text"
-                  name="estimation"
-                  label="Estimation"
-                  placeholder='Enter time estimation (hrs)'
-                  validation='number|required'
-                >
-                </FormulateInput>
-
+              <div class="worker">
                 <FormulateInput
                   type="select"
-                  name="approval"
-                  :options="{
-                    'david': 'David',
-                    'teams': 'Teams',
-                    'bene': 'Bene'
-                  }"
-                  label="Approved By:"
-                  placeholder='Select approval'
-                  validation='required'
+                  :options="current_workers"
+                  name="new_worker"
+                  placeholder='Add a new worker to this task'
+                >
+                </FormulateInput>
 
+                <FormulateInput
+                  type="text"
+                  validation='number'
+                  name="tracked_hours"
+                  placeholder='Enter tracked hours'
                 >
                 </FormulateInput>
               </div>
-
-            </div>
-
-            <table
-              class='worker-table'
-              style='width:100%'>
-              <th>Name</th>
-              <th>Tracked Hours</th>
-              <tr>
-                <td>
-                  <FormulateInput
-                    type="select"
-                    :options="current_workers"
-                    name="new_worker"
-                    placeholder='Add a new worker to this task'
-                  >
-                  </FormulateInput>
-                </td>
-                <td>
-                  <FormulateInput
-                    type="text"
-                    validation='number'
-                    name="new_worker_tracked_hours"
-                    placeholder='Enter hours worked (if applicable)'
-                  >
-                  </FormulateInput>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <FormulateInput
-                    type="select"
-                    :options="current_workers"
-                    name="new_worker"
-                    placeholder='Add a new worker to this task'
-                  >
-                  </FormulateInput>
-                </td>
-                <td>
-                  <FormulateInput
-                    type="text"
-                    validation='number'
-                    name="new_worker_tracked_hours"
-                    placeholder='Enter hours worked (if applicable)'
-                  >
-                  </FormulateInput>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <FormulateInput
-                    type="select"
-                    :options="current_workers"
-                    name="new_worker"
-                    placeholder='Add a new worker to this task'
-                  >
-                  </FormulateInput>
-                </td>
-                <td>
-                  <FormulateInput
-                    type="text"
-                    validation='number'
-                    name="new_worker_tracked_hours"
-                    placeholder='Enter hours worked (if applicable)'
-                  >
-                  </FormulateInput>
-                </td>
-              </tr>
-            </table>
-            <FormulateInput
-              type="submit"
-              label="Submit task"
-            />
-          </FormulateForm>
-        </div>
+            </FormulateInput>
+          </div>
+          <FormulateInput
+            type="submit"
+            label="Submit task"
+          />
+        </FormulateForm>
       </div>
+    </div>
     </transition>
     <div class="tasks">
       <div class="ctr-justify">
@@ -486,6 +446,10 @@ export default {
     width: 90%;
   }
 
+  .worker-wrapper::v-deep .formulate-input-element {
+    max-width: 56rem;
+
+  }
 
 
 </style>

@@ -149,6 +149,14 @@
                 label="Remove from project"
               >
               </FormulateInput>
+
+              <span
+                v-if='checkTasks(wkr)'
+                content='Worker cannot be deleted, currently assigned to project task'
+                v-tippy= "{theme: 'google'}"
+              >
+                <strong>?</strong>
+              </span>
             </div>
           <FormulateInput
             type='group'
@@ -243,8 +251,7 @@ export default {
       let found;
       this.selected_project.tasks.forEach((task) => {
         const wl = this.getWorkerList(task);
-        console.log(w.worker._id)
-        console.log(wl)
+
         if (wl.includes(w.worker._id)) {
            found = true
         }
@@ -265,43 +272,8 @@ export default {
 
 <style lang="scss" scoped>
 
-  .worker-wrapper {
-    padding: 1.5em 0em;
-    max-width: 85%;
 
-  }
 
-  .wkr-name {
-    margin-right: 5rem;
-    margin-left: 1rem;
-  }
-
-.worker-wrapper::v-deep .formulate-input-element {
-  max-width: 56rem;
-
-}
-
-@media (min-width: 650px) {
-  .worker {
-    display: flex;
-  }
-}
-
-@media (min-width: 720px) {
-  .worker {
-    display: block;
-  }
-}
-
-@media (min-width: 850px) {
-  .worker {
-    display: flex;
-    align-items: baseline;
-  }
-  .worker .formulate-input {
-    margin-right: 1.5em;
-  }
-}
 
 th {
   text-align: left;

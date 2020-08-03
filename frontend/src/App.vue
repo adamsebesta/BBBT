@@ -42,6 +42,7 @@
 <script>
 import TaskMixin from '../src/mixins/TaskMixin';
 import ProjectMixin from '../src/mixins/ProjectMixin';
+import "tippy.js/themes/google.css";
 
 export default {
   name: 'App',
@@ -242,5 +243,43 @@ aside {
   .worker {
     display: flex;
   }
+
+  .worker-wrapper {
+    padding: 1.5em 0em;
+    max-width: 85%;
+
+  }
+
+  .wkr-name {
+    margin-right: 5rem;
+    margin-left: 1rem;
+  }
+
+.worker-wrapper::v-deep .formulate-input-element {
+  max-width: 56rem;
+
+}
+
+@media (min-width: 650px) {
+  .worker {
+    display: flex;
+  }
+}
+
+@media (min-width: 720px) {
+  .worker {
+    display: block;
+  }
+}
+
+@media (min-width: 850px) {
+  .worker {
+    display: flex;
+    align-items: baseline;
+  }
+  .worker .formulate-input {
+    margin-right: 1.5em;
+  }
+}
 
 </style>

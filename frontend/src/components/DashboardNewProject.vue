@@ -180,4 +180,9 @@ export default {
     display: flex;
     width: 100%;
   }
+
+  .worker-wrapper::v-deep .formulate-input-element {
+    max-width: 56rem;
+
+  }
 </style>

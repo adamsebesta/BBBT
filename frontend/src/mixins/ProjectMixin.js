@@ -83,6 +83,8 @@ export default {
           text: `project ${p['name']} successfully updated `
       });
       this.removeOverlay();
+      //clear newWorker fields
+      this.newWorkers = null;
       // refetch project to refresh tabs list
       this.$store.dispatch('fetchProject', p._id);
     },
