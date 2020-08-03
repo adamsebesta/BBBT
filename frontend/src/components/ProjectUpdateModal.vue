@@ -272,19 +272,19 @@ export default {
 
 <style lang="scss" scoped>
 
+  th {
+    text-align: left;
+  }
 
+  td, th {
+    padding: 0.5rem;
+    color: #757575;
+    min-width: 200px;
+  }
 
+  .worker-wrapper::v-deep .formulate-input-element {
+  max-width: 56rem;
 
-th {
-  text-align: left;
 }
-
-td, th {
-  padding: 0.5rem;
-  color: #757575;
-  min-width: 200px;
-}
-
-
 
 </style>
