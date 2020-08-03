@@ -141,5 +141,67 @@ export default {
         // call API from store
         this.$store.dispatch('updateTask', updateObj);
       },
+    },
+    computed: {
+      selected_project() {
+        return this.$store.getters['selected_project'];
+      },
+      modalOpen() {
+        return this.$store.getters['modalOpen'];
+      },
+      selected_task() {
+        return this.$store.getters['selected_task'];
+      },
+
+      task_categories() {
+        const ob = {};
+        this.selected_project.task_categories.map(cat => ob[cat] = cat);
+        return ob;
+      },
+
+      task_statuses() {
+        const ob = {};
+        this.selected_project.task_statuses.map(stat => ob[stat] = stat);
+        return ob;
+      },
+
+      current_workers() {
+        const ob = {};
+        this.selected_project.workers.forEach((w) => {
+          ob[w.worker._id] = `${w.worker.first_name} ${w.worker.last_name}`;
+        });
+        return ob;
+      },
+      combinedFiltered() {
+          if (this.selected_worker && this.selected_cat) {
+            return this.tasksFilteredByWorker.filter(task =>
+              task.category === this.selected_cat)
+        }
+
+        if (this.selected_worker && !this.selected_cat) {
+          return this.tasksFilteredByWorker
+
+        }
+
+        if (!this.selected_worker && this.selected_cat) {
+          return this.tasksFilteredByCat
+
+        }
+        return this.selected_project.tasks
+      },
+      current_workers_not_assigned() {
+        const ob = {};
+        const t = this.selected_task;
+        if (t) {
+          const tl = t.assigned_workers.map(w => w.worker);
+          const wl = this.selected_project.workers.map(w => w.worker);
+          wl.forEach((w) => {
+            if (!tl.some(x => x._id === w._id)) {
+              ob[w._id] = `${w.first_name} ${w.last_name}`;
+            }
+          });
+        }
+        return ob;
+      }
     }
   }
