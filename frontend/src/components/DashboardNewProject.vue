@@ -100,43 +100,44 @@
           </FormulateInput>
         </div>
       </div>
-      <div class="double-wide">
+      <div class="worker-wrapper">
 
         <FormulateInput
           type='group'
           name='workers'
           :repeatable='true'
         >
-              <FormulateInput
-                type="select"
-                :options="current_workers"
-                name="worker"
-                placeholder='Add a new worker to this project'
-              >
-              </FormulateInput>
-
-              <FormulateInput
-                type="text"
-                validation='number|required'
-                name="factor"
-                placeholder='Enter factor'
-              >
-              </FormulateInput>
-
-              <FormulateInput
-                type="text"
-                validation='number|required'
-                name="hours_planned"
-                placeholder='Enter planned hours'
-              >
-              </FormulateInput>
+          <div class="worker">
+            <FormulateInput
+              type="select"
+              :options="current_workers"
+              name="worker"
+              placeholder='Add a new worker to this project'
+            >
             </FormulateInput>
-          </div>
+
+            <FormulateInput
+              type="text"
+              validation='number|required'
+              name="factor"
+              placeholder='Enter factor'
+            >
+            </FormulateInput>
+
+            <FormulateInput
+              type="text"
+              validation='number|required'
+              name="hours_planned"
+              placeholder='Enter planned hours'
+            >
+            </FormulateInput>
+            </div>
+          </FormulateInput>
+        </div>
         <FormulateInput
           type="submit"
           label="Submit project"
         />
-
       </FormulateForm>
     </div>
   </div>
@@ -185,4 +186,5 @@ export default {
     max-width: 56rem;
 
   }
+
 </style>
