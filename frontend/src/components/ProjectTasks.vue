@@ -52,6 +52,7 @@
                   label="Estimation"
                   placeholder='Enter time estimation (hrs)'
                   validation='number|required'
+                  :value='this.selected_task.estimation.time'
                 >
                 </FormulateInput>
 
@@ -66,6 +67,7 @@
                   label="Approved By:"
                   placeholder='Select approval'
                   validation='required'
+                  :value='this.selected_task.estimation.approved_via'
 
                 >
                 </FormulateInput>
@@ -164,138 +166,98 @@
             >
             <div class="upper-fields">
 
-              <div class="">
+            <div class="">
 
+              <FormulateInput
+                type="select"
+                name="category"
+                label="Category"
+                validation='required'
+                :options='task_categories'
+                placeholder='Select task category'
+              >
+
+              </FormulateInput>
+
+              <FormulateInput
+                type="textarea"
+                name="description"
+                label="Description"
+                placeholder='Enter description'
+              >
+              </FormulateInput>
+
+              <FormulateInput
+                type="select"
+                name="status"
+                label="Status"
+                :options='task_statuses'
+                placeholder='Select task status'
+                validation='required'
+              >
+              </FormulateInput>
+            </div>
+            <div class="">
+              <FormulateInput
+                type="text"
+                name="estimation"
+                label="Estimation"
+                placeholder='Enter time estimation (hrs)'
+                validation='number|required'
+              >
+              </FormulateInput>
+
+              <FormulateInput
+                type="select"
+                name="approval"
+                :options="{
+                  'david': 'David',
+                  'teams': 'Teams',
+                  'bene': 'Bene'
+                }"
+                label="Approved By:"
+                placeholder='Select approval'
+                validation='required'
+
+              >
+              </FormulateInput>
+            </div>
+          </div>
+
+          <div class="worker-wrapper">
             <FormulateInput
-              type="select"
-              name="category"
-              label="Category"
-              validation='required'
-              :options='task_categories'
-              placeholder='Select task category'
+              type='group'
+              name='workers'
+              :repeatable='true'
+              label='Assigned workers:'
             >
 
-            </FormulateInput>
-
-            <FormulateInput
-              type="textarea"
-              name="description"
-              label="Description"
-              placeholder='Enter description'
-            >
-            </FormulateInput>
-
-            <FormulateInput
-              type="select"
-              name="status"
-              label="Status"
-              :options='task_statuses'
-              placeholder='Select task status'
-              validation='required'
-            >
-            </FormulateInput>
-              </div>
-              <div class="">
-                <FormulateInput
-                  type="text"
-                  name="estimation"
-                  label="Estimation"
-                  placeholder='Enter time estimation (hrs)'
-                  validation='number|required'
-                >
-                </FormulateInput>
-
+              <div class="worker">
                 <FormulateInput
                   type="select"
-                  name="approval"
-                  :options="{
-                    'david': 'David',
-                    'teams': 'Teams',
-                    'bene': 'Bene'
-                  }"
-                  label="Approved By:"
-                  placeholder='Select approval'
-                  validation='required'
+                  :options="current_workers"
+                  name="new_worker"
+                  placeholder='Add a new worker to this task'
+                >
+                </FormulateInput>
 
+                <FormulateInput
+                  type="text"
+                  validation='number'
+                  name="tracked_hours"
+                  placeholder='Enter tracked hours'
                 >
                 </FormulateInput>
               </div>
-
-            </div>
-
-            <table
-              class='worker-table'
-              style='width:100%'>
-              <th>Name</th>
-              <th>Tracked Hours</th>
-              <tr>
-                <td>
-                  <FormulateInput
-                    type="select"
-                    :options="current_workers"
-                    name="new_worker"
-                    placeholder='Add a new worker to this task'
-                  >
-                  </FormulateInput>
-                </td>
-                <td>
-                  <FormulateInput
-                    type="text"
-                    validation='number'
-                    name="new_worker_tracked_hours"
-                    placeholder='Enter hours worked (if applicable)'
-                  >
-                  </FormulateInput>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <FormulateInput
-                    type="select"
-                    :options="current_workers"
-                    name="new_worker"
-                    placeholder='Add a new worker to this task'
-                  >
-                  </FormulateInput>
-                </td>
-                <td>
-                  <FormulateInput
-                    type="text"
-                    validation='number'
-                    name="new_worker_tracked_hours"
-                    placeholder='Enter hours worked (if applicable)'
-                  >
-                  </FormulateInput>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <FormulateInput
-                    type="select"
-                    :options="current_workers"
-                    name="new_worker"
-                    placeholder='Add a new worker to this task'
-                  >
-                  </FormulateInput>
-                </td>
-                <td>
-                  <FormulateInput
-                    type="text"
-                    validation='number'
-                    name="new_worker_tracked_hours"
-                    placeholder='Enter hours worked (if applicable)'
-                  >
-                  </FormulateInput>
-                </td>
-              </tr>
-            </table>
-            <FormulateInput
-              type="submit"
-              label="Submit task"
-            />
-          </FormulateForm>
-        </div>
+            </FormulateInput>
+          </div>
+          <FormulateInput
+            type="submit"
+            label="Submit task"
+          />
+        </FormulateForm>
       </div>
+    </div>
     </transition>
     <div class="tasks">
       <div class="ctr-justify">
@@ -365,10 +327,11 @@
 
 <script>
 import TaskMixin  from '../mixins/TaskMixin';
+import ProjectMixin  from '../mixins/ProjectMixin';
 
 export default {
   name: 'ProjectTasks',
-  mixins: [TaskMixin],
+  mixins: [TaskMixin, ProjectMixin],
   data() {
     return {
       selected_worker: null,
@@ -395,15 +358,12 @@ export default {
       }
       return this.selected_project.tasks
     },
-
     selected_project() {
       return this.$store.getters['selected_project'];
     },
-
-    modalOpen () {
+    modalOpen() {
       return this.$store.getters['modalOpen'];
     },
-
     selected_task() {
       return this.$store.getters['selected_task'];
     },
@@ -463,25 +423,6 @@ export default {
     justify-content: space-around;
   }
 
-
-  .button {
-    display: flex;
-    align-items: center;
-    width: 75px;
-    height: 25px;
-    font-size: 12px;
-    font-weight: bold;
-    opacity: .7;
-    border: none;
-    border-radius: 3px;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: 0.5px 0.5px rgba(0, 0, 0, 0.1);
-    outline: none;
-    margin-right: 2rem;
-    padding: 18px;
-  }
-
   th {
     text-align: left;
     margin-bottom: 1.5rem;
@@ -501,37 +442,14 @@ export default {
   tr {
     cursor: pointer
   }
-
-  .modal {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 2;
-    box-shadow: 0.5px 0.5px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 1000px;
-    height: 600px;
-    background-color: #FFF;
-    border-radius: 3px;
-    cursor: default;
-    padding: 5px;
-    overflow-y: scroll;
-    align-items: center;
-    display: flex;
-    justify-content: center;
-  }
-
   .task-details-modal {
     width: 90%;
   }
 
-  .upper-fields {
-    display: flex;
-    justify-content: space-between;
-    div {
-      width: 100%;
-    }
+  .worker-wrapper::v-deep .formulate-input-element {
+    max-width: 56rem;
+
   }
+
 
 </style>

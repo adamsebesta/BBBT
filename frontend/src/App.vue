@@ -42,6 +42,7 @@
 <script>
 import TaskMixin from '../src/mixins/TaskMixin';
 import ProjectMixin from '../src/mixins/ProjectMixin';
+import "tippy.js/themes/google.css";
 
 export default {
   name: 'App',
@@ -171,25 +172,24 @@ aside {
   color: #2c3e50;
 }
 
-
-.close-button {
+.button {
   display: flex;
   align-items: center;
-  width: 25px;
+  width: 75px;
   height: 25px;
-  font-family: 'Lato', sans-serif;
   font-size: 12px;
   font-weight: bold;
   opacity: .7;
   border: none;
-  padding: 1rem;
   border-radius: 3px;
   justify-content: center;
   cursor: pointer;
-  text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
   box-shadow: 0.5px 0.5px rgba(0, 0, 0, 0.1);
   outline: none;
+  margin-right: 2rem;
+  padding: 18px;
 }
+
 .shadowed {
   text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
 }
@@ -206,4 +206,80 @@ aside {
     background-color: rgba(0, 0, 0, 0.3);
     min-height: 2000px;
 }
+
+  .modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    box-shadow: 0.5px 0.5px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 1200px;
+    height: 900px;
+    background-color: #FFF;
+    border-radius: 3px;
+    cursor: default;
+    padding: 5px;
+    overflow-y: scroll;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+  }
+
+  .upper-fields {
+    display: flex;
+    justify-content: space-between;
+    div {
+      width: 100%;
+    }
+  }
+
+  .project-details-modal {
+    width: 95%;
+    margin-left: 10rem
+  }
+
+  .worker {
+    display: flex;
+  }
+
+  .worker-wrapper {
+    padding: 1.5em 0em;
+    max-width: 85%;
+
+  }
+
+  .wkr-name {
+    margin-right: 5rem;
+    margin-left: 1rem;
+  }
+
+.worker-wrapper::v-deep .formulate-input-element {
+  max-width: 56rem;
+
+}
+
+@media (min-width: 650px) {
+  .worker {
+    display: flex;
+  }
+}
+
+@media (min-width: 720px) {
+  .worker {
+    display: block;
+  }
+}
+
+@media (min-width: 850px) {
+  .worker {
+    display: flex;
+    align-items: baseline;
+  }
+  .worker .formulate-input {
+    margin-right: 1.5em;
+  }
+}
+
 </style>

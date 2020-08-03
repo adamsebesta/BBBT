@@ -2,7 +2,26 @@
   <div class="project" v-if="selected_project">
     <div class="project_name">
       <h1>{{ selected_project.name }}</h1>
+      <button
+        type="button"
+        @click='deleteProject(selected_project._id)'
+        class='button'
+      >
+        delete Project
+      </button>
+      <br>
+      <br>
+      <button
+        type="button"
+        @click="showModal('project-modal-update')"
+        class='button'
+      >
+        update project
+      </button>
     </div>
+    <project-update-modal>
+    </project-update-modal>
+
     <div id="tabs" class="container">
 
     <div class="tabs">
@@ -46,6 +65,7 @@
 
 <script>
 import ProjectTasks from './ProjectTasks.vue';
+import ProjectUpdateModal from './ProjectUpdateModal.vue';
 import ProjectMixin from '../mixins/ProjectMixin';
 
 export default {
@@ -54,7 +74,8 @@ export default {
   },
   mixins: [ProjectMixin],
   components: {
-    ProjectTasks
+    ProjectTasks,
+    ProjectUpdateModal
   },
   data() {
     return {
@@ -129,10 +150,10 @@ export default {
   }
 
   * {
- box-sizing: border-box;
- margin: 0;
- padding: 0;
-}
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
 
 .container {
    max-width: 95%;

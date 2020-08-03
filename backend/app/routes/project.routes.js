@@ -22,16 +22,19 @@ module.exports = app => {
   router.put("/removeTaskStatus", projects.removeTaskStatus);
 
   // add a task category to a project
-  router.put("/addTaskStatus", projects.addTaskCategory);
+  router.put("/addTaskCategory", projects.addTaskCategory);
 
   // remove a task category from a project
-  router.put("/removeTaskStatus", projects.removeTaskCategory);
+  router.put("/removeTaskCategory", projects.removeTaskCategory);
 
   // Retrieve all Projects
   router.get("/", projects.findAll);
 
   // Retrieve a single Project with id
   router.get("/:id", projects.findOne);
+
+  // update a whole  project
+  router.put("/:id", projects.update);
 
   // Delete a Project with id
   router.delete("/:id", projects.delete);

@@ -179,6 +179,24 @@ exports.updateField = (req, res) => {
   })
 }
 
+// Update a Project by the id in the request (many fields)
+exports.update = (req, res) => {
+  const id = req.params.id;
+  Project.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
+    .then(data => {
+      if (!data) {
+        res.status(404).send({
+          message: `Cannot update Project with id=${id}. Maybe Task was not found!`
+        });
+      } else res.send({ message: "Project was updated successfully." });
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: "Error updating Project with id=" + id
+      });
+    });
+};
+
 // Delete a Project with the specified id in the request
 exports.delete = (req, res) => {
   const id = req.params.id;

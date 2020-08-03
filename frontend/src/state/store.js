@@ -26,6 +26,9 @@ export const store = new Vuex.Store({
     SET_WORKERS(state, results) {
       state.workers = results;
     },
+    SET_CLIENTS(state, results) {
+      state.clients = results;
+    },
     SET_SELECTED_PROJECT(state, results) {
       state.selected_project = results
     },
@@ -43,7 +46,8 @@ export const store = new Vuex.Store({
     workers: state => state.workers,
     selected_project: state => state.selected_project,
     selected_task: state => state.selected_task,
-    endpoint: state => state.selected_task
+    endpoint: state => state.selected_task,
+    clients: state => state.clients,
   },
   actions: {
     async fetchProjects({commit}) {
@@ -61,6 +65,11 @@ export const store = new Vuex.Store({
       let res = await fetch(`${this.state.endpoint}workers/`)
       let data = await res.json();
       commit('SET_WORKERS', data);
+    },
+    async fetchClients({commit}) {
+      let res = await fetch(`${this.state.endpoint}clients/`)
+      let data = await res.json();
+      commit('SET_CLIENTS', data);
     },
   }
 })
