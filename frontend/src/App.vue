@@ -140,7 +140,7 @@ export default {
     overflow-y: auto;
     overflow-x: hidden;
     width: 15%;
-    transition: 0.2s;
+    transition: 0.3s;
     box-sizing: border-box;
     border-bottom: 2px solid rgba(246, 246, 246, 1);
     border-right: 2px solid rgba(246, 246, 246, 1);
