@@ -12,26 +12,29 @@
       <div class="fixed-sidebar"
         @mouseover='growSidebar'
       >
-        <button
-          class='button button-sqr'
+        <router-link
+          :to="{ name: 'dashboard', params: {} }"
         >
-        <font-awesome-icon :icon="['fas', 'home']"/>
-        </button>
+          <button
+            class='button button-sqr'
+          >
+          <font-awesome-icon :icon="['fas', 'home']"/>
+          </button>
+        </router-link>
         <br>
-        <button
-          class='button button-sqr'
+        <router-link
+          :to="{ name: 'workers', params: {} }"
         >
-        <font-awesome-icon :icon="['fas', 'users']"/>
-      </button>
+          <button
+            class='button button-sqr'
+          >
+            <font-awesome-icon :icon="['fas', 'users']"/>
+          </button>
+        </router-link>
       </div>
       <aside
         @mouseleave='shrinkSidebar'
         class="sidebar">
-        <router-link
-          :to="{ name: 'dashboard', params: {} }"
-        >
-
-        </router-link>
         <br>
         <div class="">
           <h3 class='count'

@@ -9,8 +9,7 @@
         @change='filterByWorker'
       >
       </FormulateInput>
-
-
+      
       <button
         type="button"
         name="button"
