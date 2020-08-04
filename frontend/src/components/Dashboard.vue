@@ -9,7 +9,7 @@
         @change='filterByWorker'
       >
       </FormulateInput>
-      
+
       <button
         type="button"
         name="button"
@@ -180,18 +180,17 @@ export default {
       color: #2c3e50;
     }
   .cards {
-    width: 100%;
+    width: 90%;
     margin: 0 auto;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    grid-gap: 1.5rem;
+    max-width: 1200px;
   }
   .card {
     width: 80%;
     height: 87%;
     background: white;
     border-radius: 5px;
-    background-color: rgba(209, 209, 209, .2);
     margin-top: 2rem;
   }
 
