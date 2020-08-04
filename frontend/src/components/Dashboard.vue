@@ -185,11 +185,11 @@ export default {
     margin: 0 auto;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    grid-gap: 3.5rem;
+    grid-gap: 1.5rem;
   }
   .card {
-    width: 100%;
-    height: 100%;
+    width: 80%;
+    height: 87%;
     background: white;
     border-radius: 5px;
     background-color: rgba(209, 209, 209, .2);
