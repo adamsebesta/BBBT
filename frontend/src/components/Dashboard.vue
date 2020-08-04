@@ -1,5 +1,9 @@
 <template lang="html">
   <div class="container">
+
+    <dashboard-new-project>
+    </dashboard-new-project>
+    <br>
     <div class="filters">
       <FormulateInput
         v-model="selected_worker"
@@ -27,9 +31,6 @@
         +
       </button>
     </div>
-    <dashboard-new-project>
-    </dashboard-new-project>
-    <br>
     <div class="cards">
       <div class="card box-shadow"
         v-for='project in combinedFiltered'
@@ -163,7 +164,7 @@ export default {
 <style lang="scss" scoped>
 
   .container {
-    width: 95%;
+    width: 90%;
     height: 100%;
   }
 
@@ -171,6 +172,7 @@ export default {
       display: flex;
       width: 50%;
       justify-content:  flex-start;
+      padding-top: 1.5rem;
   }
 
   .link {
@@ -180,17 +182,16 @@ export default {
       color: #2c3e50;
     }
   .cards {
-    width: 90%;
+    width: 100%;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    max-width: 1200px;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-gap: 1.5rem;
   }
   .card {
-    width: 80%;
+    max-width: 100%;
     height: 87%;
     background: white;
-    border-radius: 5px;
     margin-top: 2rem;
   }
 

@@ -86,16 +86,12 @@ export default {
   methods: {
     shrinkSidebar() {
       const d = document;
-      if (!this.asideShrunk) {
-         d.querySelector('aside').style.flex = '0 1 0%';
-         d.querySelector('aside').style.borderRight = '';
-         this.asideShrunk = true;
-      }
+      d.querySelector('aside').style.display = 'none';
+      this.asideShrunk = true;
     },
     growSidebar() {
       const d = document;
-      d.querySelector('aside').style.flex = '0 1 15%';
-      d.querySelector('aside').style.borderRight = '2px solid rgba(246, 246, 246, 1)';
+      d.querySelector('aside').style.display = 'block';
       this.asideShrunk = false;
     }
   },
@@ -128,34 +124,45 @@ export default {
 
   main {
     display: flex;
-    height: calc(100vh - 90px);
+    height: calc(100vh - 10px);
     max-width: 1700px;
-    margin: 90px 0;
     margin-left: auto;
     margin-right: auto;
 
   }
   aside {
-    flex: 0 1 0%;
+    position: absolute;
+    display: none;
+    left: 4rem;
+    background: white;
+    z-index: 2;
     height: 100%;
     overflow-y: auto;
     overflow-x: hidden;
-    width: 20%;
+    width: 15%;
     transition: 0.2s;
     box-sizing: border-box;
     border-bottom: 2px solid rgba(246, 246, 246, 1);
+    border-right: 2px solid rgba(246, 246, 246, 1);
     border-radius: 3px;
     flex-direction: column;
     justify-content: center;
     h3 {
       margin: 0;
     }
+    .count {
+      margin-top: 1rem;
+    }
     margin-left: 15px;
   }
 
   .fixed-sidebar {
-    width: 3%;
+    min-width: 3%;
     border-right: 2px solid rgba(246, 246, 246, 1);
+    padding-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
   }
 
   .collapse {
@@ -219,6 +226,7 @@ export default {
   .button-sqr {
     width: 25px;
     height: 25px;
+    margin: 0 auto;
   }
 
   .shadowed {
