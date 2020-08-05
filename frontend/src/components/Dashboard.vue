@@ -6,7 +6,7 @@
     <br>
     <div class="filters">
       <FormulateInput
-        v-model="selected_worker"
+        v-model="selected_worker_filter"
         :options="current_workers"
         type="select"
         placeholder="Select a worker"
@@ -83,7 +83,7 @@ export default {
   mixins: [ProjectMixin, WorkerMixin, ClientMixin],
   data() {
     return {
-      selected_worker: null,
+      selected_worker_filter: null,
       current_workers: null,
       current_clients: null,
       projectsFilteredByWorker: null,
@@ -122,7 +122,7 @@ export default {
       this.projects.forEach((p) => {
         //maps workers objects to their IDs
         const wl = p.workers.map(w => w.worker._id)
-        if (wl.includes(this.selected_worker)) {
+        if (wl.includes(this.selected_worker_filter)) {
           newList.push(p);
         }
       })
@@ -130,7 +130,7 @@ export default {
     },
     resetFilters() {
       if (this.combinedFiltered) {
-      this.selected_worker = null;
+      this.selected_worker_filter = null;
       this.projectsFilteredByWorker = null;
       }
     },
@@ -232,7 +232,7 @@ export default {
   }
 
   .box-shadow {
-    box-shadow: -2px 0px 5px rgba(7, 23, 79, 0.5) !important;
+    box-shadow: -1px 0px 5px rgba(7, 23, 79, 0.5) !important;
   }
 
   .button {

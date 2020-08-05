@@ -50,7 +50,6 @@
 
         </div>
 
-
       <h2> Tasks: {{this.selected_project.tasks.length}}</h2>
       <table style="width:100%">
         <tr>

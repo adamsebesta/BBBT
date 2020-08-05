@@ -80,8 +80,8 @@ export default {
   },
   computed : {
     projectCount() {
-      return this.$store.getters['projectCount']
-    }
+      return this.$store.getters['projectCount'];
+    },
   },
   methods: {
     shrinkSidebar() {
@@ -93,6 +93,14 @@ export default {
       const d = document;
       d.querySelector('aside').style.display = 'block';
       this.asideShrunk = false;
+    },
+    async removeOverlay() {
+      await this.$store.dispatch('clearSelections');
+      this.$store.commit('SET_MODAL_OPEN', false);
+      document.querySelector('.modal-overlay').style.display = 'none';
+      document.querySelectorAll('.modal').forEach((modal) =>{
+        modal.style.display = 'none';
+      });
     }
   },
   created() {
@@ -235,15 +243,15 @@ export default {
 
 
   .modal-overlay {
-      display: none;
-      position: absolute;
-      top:0;
-      left:0;
-      right: 0;
-      bottom: 0;
-      z-index: 2;
-      background-color: rgba(0, 0, 0, 0.3);
-      min-height: 2000px;
+    display: none;
+    position: absolute;
+    top:0;
+    left:0;
+    right: 0;
+    bottom: 0;
+    z-index: 2;
+    background-color: rgba(0, 0, 0, 0.3);
+    min-height: 2000px;
   }
 
   .modal {
@@ -278,6 +286,7 @@ export default {
     width: 95%;
     margin-left: 10rem
   }
+
 
   .worker {
     display: flex;
