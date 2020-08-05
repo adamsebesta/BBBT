@@ -8,6 +8,7 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import Project from './components/Project.vue';
 import Dashboard from './components/Dashboard.vue';
+import Workers from './components/Workers.vue';
 import VueTippy, { TippyComponent } from "vue-tippy";
 import Notifications from 'vue-notification';
 
@@ -40,6 +41,12 @@ const router = new Router({
       path: '/dashboard',
       name: 'dashboard',
       component: Dashboard,
+      props: true
+    },
+    {
+      path: '/workers',
+      name: 'workers',
+      component: Workers,
       props: true
     }
   ],
