@@ -73,7 +73,7 @@ exports.update = (req, res) => {
   });
 }
 
-const id = req.params.id;
+const id = req.body._id;
 
 Worker.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
   .then(data => {
@@ -88,7 +88,6 @@ Worker.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
       message: "Error updating Worker with id=" + id
     });
   });
-
 };
 
 // Delete a Worker with the specified id in the request

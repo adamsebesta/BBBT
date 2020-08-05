@@ -6,8 +6,9 @@
   >
     <div class="worker-details-modal">
       <FormulateForm
-        id='worker-formulate'
+        id='worker-formulate-update'
         name='update-worker'
+        @submit='updateWorker'
       >
         <div class="upper-fields">
           <div class="">
@@ -26,6 +27,19 @@
               label="Brutto Rate"
               validation='required|number'
               :value='selected_worker.rate_brutto'
+            >
+            </FormulateInput>
+
+            <FormulateInput
+              type="select"
+              name="internal"
+              label="Internal"
+              validation='required'
+              :options="{
+                'true': 'Yes',
+                'false': 'No'
+              }"
+              :value='selected_worker.internal'
             >
             </FormulateInput>
           </div>
@@ -75,7 +89,7 @@ export default {
 
 .worker-details-modal {
   width: 100%;
-  margin: 5rem
+  margin-left: 5.5rem;
 }
 
 .modal {

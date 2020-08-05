@@ -30,6 +30,41 @@ export default {
         modal.style.display = 'none';
       });
     },
+    async postUpdatedWorker(w) {
+      await fetch(`http://localhost:8080/api/workers`, {
+        method: 'PUT',
+        body: JSON.stringify(w),
+        headers: {
+        'Content-Type': 'application/json'
+        }
+      });
+      //notify with server response
+      this.$notify({
+          group: 'foo',
+          title: 'Worker Update:',
+          text: `${w['first_name']} ${w['last_name']} successfully updated`
+      });
+      this.removeOverlay();
+      // refetch worker to refresh worker list
+      this.$store.dispatch('fetchWorkers');
+    },
+    updateWorker() {
+      const ob = {};
+      const fields = document.getElementById('worker-formulate-update');
+      fields.forEach((f) => {
+        if (f.value) {
+          if (f.name == 'rate_brutto') {
+            ob[f.name] = parseFloat(f.value);
+          } else {
+            ob[f.name] = f.value;
+          }
+        }
+      });
+      // change internal to boolean for DB
+      ob['internal'] = ob['internal'] == 'true';
+      ob['_id'] = this.selected_worker._id;
+      this.postUpdatedWorker(ob);
+    },
   },
   computed: {
     all_workers() {
