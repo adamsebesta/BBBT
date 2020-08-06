@@ -15,10 +15,32 @@
     </workers-new-modal>
     <table style="width:100%">
       <tr>
-        <th @click="sortByWrapper('first_name')">Name</th>
-        <th @click="sortByWrapper('rate_brutto')">Brutto Rate (€)</th>
-        <th @click="sortByWrapper('internal')">Internal</th>
-        <th @click="sortByWrapper('role')">Role</th>
+        <th @click="sortByWrapper('first_name')">
+          Name
+          <sort-by-arrow
+            field='first_name'
+            :sorts='sorts'>
+          </sort-by-arrow>
+        </th>
+        <th @click="sortByWrapper('rate_brutto')">
+          Brutto Rate (€)
+          <sort-by-arrow
+            field='rate_brutto'
+            :sorts='sorts'>
+          </sort-by-arrow>
+      </th>
+        <th @click="sortByWrapper('internal')">Internal
+          <sort-by-arrow
+            field='internal'
+            :sorts='sorts'>
+          </sort-by-arrow>
+        </th>
+        <th @click="sortByWrapper('role')">Role
+          <sort-by-arrow
+            field='role'
+            :sorts='sorts'>
+          </sort-by-arrow>
+        </th>
       </tr>
       <tr
         class= "main-workers"
@@ -40,13 +62,15 @@
 import WorkerMixin  from '../mixins/WorkerMixin';
 import WorkersUpdateModal from './WorkersUpdateModal';
 import WorkersNewModal from './WorkersNewModal';
+import SortByArrow from './ui/SortByArrow';
 
 export default {
   name: 'Workers',
   mixins: [WorkerMixin],
   components: {
     WorkersUpdateModal,
-    WorkersNewModal
+    WorkersNewModal,
+    SortByArrow
   },
   data() {
     return {
@@ -62,6 +86,10 @@ export default {
 </script>
 
   <style lang="scss" scoped>
+
+  .worker-table {
+    margin-left: 4rem;
+  }
   th {
     text-align: left;
     margin-bottom: 1.5rem;

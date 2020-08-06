@@ -2,6 +2,11 @@
   <div class="project" v-if="selected_project">
     <div class="project_name">
       <h1>{{ selected_project.name }}</h1>
+    </div>
+    <project-update-modal>
+    </project-update-modal>
+
+    <div id="tabs" class="container">
       <button
         type="button"
         @click='deleteProject(selected_project._id)'
@@ -17,12 +22,6 @@
       >
         Update project
       </button>
-    </div>
-    <project-update-modal>
-    </project-update-modal>
-
-    <div id="tabs" class="container">
-
     <div class="tabs">
         <a
           v-on:click="activetab=1"
@@ -103,6 +102,7 @@ export default {
     padding: 0px 10px 10px;
     height: 100vh;
     margin-left: 3rem;
+    margin-top: 2rem;
 
   }
 
@@ -137,7 +137,7 @@ export default {
     position: relative;
     text-transform: uppercase;
     z-index: 1;
-    margin-top: 0;
+    margin-top: 3rem;
     text-align: center;
   }
   .project .project_description {
@@ -174,6 +174,7 @@ export default {
    overflow: hidden;
    margin-left: 20px;
    margin-bottom: -2px; // hide bottom border
+   margin-top: 2rem;
 }
 
 .tabs ul {

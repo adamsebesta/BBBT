@@ -21,12 +21,13 @@
               placeholder='Enter first name'
             >
             </FormulateInput>
+
             <FormulateInput
               type="text"
-              name="rate_brutto"
-              label="Brutto Rate"
-              validation='required|number'
-              placeholder='Enter hourly rate'
+              name="last_name"
+              label="Last Name"
+              validation='required'
+              placeholder='Enter last name'
             >
             </FormulateInput>
 
@@ -43,12 +44,13 @@
             </FormulateInput>
           </div>
           <div class="">
+
             <FormulateInput
               type="text"
-              name="last_name"
-              label="Last Name"
-              validation='required'
-              placeholder='Enter last name'
+              name="rate_brutto"
+              label="Brutto Rate"
+              validation='required|number'
+              placeholder='Enter hourly rate'
             >
             </FormulateInput>
 

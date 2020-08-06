@@ -118,7 +118,6 @@ export default {
       this.postNewWorker(ob);
     },
     sortBy(field, sort) {
-
       // field to be sorted, sort direction, and primer case insensitivity
       this.all_workers.sort((a, b) => {
         var x =  typeof a[field] == 'string'? a[field].toUpperCase(): a[field]; // ignore upper and lowercase
@@ -146,9 +145,18 @@ export default {
       });
     },
     sortByWrapper(field) {
+      //if field has not been sorted or is false
       if (!this.sorts[field]) {
         this.sortBy(field, 'asc');
+        //reset sortby state
+        this.sorts = {
+          first_name: null,
+          rate_brutto: null,
+          internal: null,
+          role: null
+        }
         this.sorts[field] = true;
+        //reverse sort
       } else {
         this.sortBy(field, 'desc');
         this.sorts[field] = false;
