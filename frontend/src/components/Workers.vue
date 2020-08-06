@@ -15,10 +15,10 @@
     </workers-new-modal>
     <table style="width:100%">
       <tr>
-        <th>Name</th>
-        <th>Brutto Rate (€)</th>
-        <th>Internal</th>
-        <th>Role</th>
+        <th @click="sortByWrapper('first_name')">Name</th>
+        <th @click="sortByWrapper('rate_brutto')">Brutto Rate (€)</th>
+        <th @click="sortByWrapper('internal')">Internal</th>
+        <th @click="sortByWrapper('role')">Role</th>
       </tr>
       <tr
         class= "main-workers"
@@ -47,6 +47,16 @@ export default {
   components: {
     WorkersUpdateModal,
     WorkersNewModal
+  },
+  data() {
+    return {
+      sorts: {
+          first_name: null,
+          rate_brutto: null,
+          internal: null,
+          role: null
+      }
+    }
   }
 }
 </script>

@@ -236,7 +236,9 @@ export default {
     cursor: pointer;
     align-items: center;
     height: 35px;
+    outline: none;
   }
+
 
   .formulate-input[data-classification='button'] button {
     padding: .50em 1em;

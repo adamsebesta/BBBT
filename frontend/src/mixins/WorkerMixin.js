@@ -117,6 +117,43 @@ export default {
       ob['internal'] = ob['internal'] == 'true';
       this.postNewWorker(ob);
     },
+    sortBy(field, sort) {
+
+      // field to be sorted, sort direction, and primer case insensitivity
+      this.all_workers.sort((a, b) => {
+        var x =  typeof a[field] == 'string'? a[field].toUpperCase(): a[field]; // ignore upper and lowercase
+        var y =  typeof b[field] == 'string'? b[field].toUpperCase(): b[field];
+
+        if (sort == 'asc') {
+          if (x < y) {
+            return -1;
+          }
+          if (x > y) {
+            return 1;
+          }
+          return 0;
+        }
+
+        if (sort == 'desc') {
+          if (x < y) {
+            return 1;
+          }
+          if (x > y) {
+            return -1;
+        }
+          return 0;
+        }
+      });
+    },
+    sortByWrapper(field) {
+      if (!this.sorts[field]) {
+        this.sortBy(field, 'asc');
+        this.sorts[field] = true;
+      } else {
+        this.sortBy(field, 'desc');
+        this.sorts[field] = false;
+      }
+    }
   },
   computed: {
     all_workers() {
