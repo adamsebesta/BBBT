@@ -134,8 +134,7 @@ export default {
     display: flex;
     height: calc(100vh - 10px);
     max-width: 1700px;
-    margin-left: auto;
-    margin-right: auto;
+
 
   }
   aside {
@@ -165,12 +164,14 @@ export default {
   }
 
   .fixed-sidebar {
-    min-width: 3%;
+    max-width: 3%;
     border-right: 2px solid rgba(246, 246, 246, 1);
     padding-top: 1.5rem;
+    padding-right: 0.4rem;
     display: flex;
     flex-direction: column;
     align-content: center;
+    position: sticky
   }
 
   .collapse {
@@ -210,21 +211,35 @@ export default {
   }
 
   .button {
-    display: flex;
-    align-items: center;
-    width: 75px;
-    height: 25px;
-    font-size: 12px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: .3em;
+    border: 1px solid #cecece;
+    box-sizing: border-box;
+    background-color: transparent;
+    font-size: .9em;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    padding: .50em 1em;
+    display: block;
+    width: 100%;
+    font-weight: 400;
+    line-height: 1.2em;
+    opacity: 0.9;
+    margin: 0;
+    border-color: #41b883;
+    background-color: #41b883;
+    color: white;
+    min-width: 0;
+    width: auto;
     font-weight: bold;
-    opacity: .7;
-    border: none;
-    border-radius: 3px;
-    justify-content: center;
     cursor: pointer;
-    box-shadow: 0.5px 0.5px rgba(0, 0, 0, 0.1);
-    outline: none;
-    margin-right: 2rem;
-    padding: 18px;
+    align-items: center;
+    height: 35px;
+  }
+
+  .formulate-input[data-classification='button'] button {
+    padding: .50em 1em;
   }
 
   .button:hover {
@@ -232,15 +247,14 @@ export default {
   }
 
   .button-sqr {
-    width: 25px;
-    height: 25px;
-    margin: 0 auto;
+    width: 30px;
+    height: 30px;
+    padding: 0rem;
   }
 
   .shadowed {
     text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
   }
-
 
   .modal-overlay {
     display: none;
@@ -304,7 +318,6 @@ export default {
 
   .worker-wrapper::v-deep .formulate-input-element {
     max-width: 56rem;
-
   }
 
   @media (min-width: 650px) {

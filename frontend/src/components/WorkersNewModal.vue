@@ -1,14 +1,14 @@
 <template lang="html">
   <div
-    id="worker-update-modal"
+    id="worker-new-modal"
     :style='{display: "none"}'
     class='modal'
   >
     <div class="worker-details-modal">
       <FormulateForm
-        id='worker-formulate-update'
-        name='update-worker'
-        @submit='updateWorker'
+        id='worker-formulate-new'
+        name='new-worker'
+        @submit='createWorker'
       >
         <div class="upper-fields">
           <div class="">
@@ -18,7 +18,7 @@
               name="first_name"
               label="First Name"
               validation='required'
-              :value='selected_worker.first_name'
+              placeholder='Enter first name'
             >
             </FormulateInput>
             <FormulateInput
@@ -26,7 +26,7 @@
               name="rate_brutto"
               label="Brutto Rate"
               validation='required|number'
-              :value='selected_worker.rate_brutto'
+              placeholder='Enter hourly rate'
             >
             </FormulateInput>
 
@@ -39,7 +39,6 @@
                 'true': 'Yes',
                 'false': 'No'
               }"
-              :value='selected_worker.internal'
             >
             </FormulateInput>
           </div>
@@ -49,7 +48,7 @@
               name="last_name"
               label="Last Name"
               validation='required'
-              :value='selected_worker.last_name'
+              placeholder='Enter last name'
             >
             </FormulateInput>
 
@@ -58,7 +57,7 @@
               name="role"
               label="Role"
               validation='required'
-              :value='selected_worker.role'
+              placeholder='Enter worker role'
             >
             </FormulateInput>
           </div>
@@ -68,7 +67,7 @@
         <br>
         <FormulateInput
           type="submit"
-          label="Update worker"
+          label="Create worker"
         />
       </FormulateForm>
     </div>
@@ -80,7 +79,7 @@
 import WorkerMixin  from '../mixins/WorkerMixin';
 
 export default {
-  name: 'WorkerUpdateModal',
+  name: 'WorkersNewModal',
   mixins: [WorkerMixin]
 }
 </script>

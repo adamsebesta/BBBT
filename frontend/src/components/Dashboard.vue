@@ -167,12 +167,19 @@ export default {
     width: 90%;
     height: 100%;
   }
+  .button {
+    margin-left: 1rem;
+  }
 
   .filters {
-      display: flex;
-      width: 50%;
-      justify-content:  flex-start;
-      padding-top: 1.5rem;
+    display: flex;
+    width: 50%;
+    justify-content:  flex-start;
+    padding-top: 1.5rem;
+    align-items: baseline;
+  }
+  select {
+    margin-bottom: 0;
   }
 
   .link {
@@ -235,24 +242,7 @@ export default {
     box-shadow: -1px 0px 5px rgba(7, 23, 79, 0.5) !important;
   }
 
-  .button {
-    display: flex;
-    align-items: center;
-    width: 75px;
-    height: 25px;
-    font-size: 12px;
-    font-weight: bold;
-    opacity: .7;
-    border: none;
-    border-radius: 3px;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: 0.5px 0.5px rgba(0, 0, 0, 0.1);
-    outline: none;
-    margin-left: 2rem;
-    margin-top: .1rem;
-    padding: 18px;
-  }
+
 
 
 

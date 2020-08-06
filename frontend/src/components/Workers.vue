@@ -1,8 +1,18 @@
 <template lang="html">
   <div class="worker-table">
+    <button
+      type="button"
+      name="button"
+      @click="showModal('worker-new-modal')"
+      class='button'
+    >
+      +
+    </button>
     <h2 v-if='this.all_workers'> Workers: {{this.all_workers.length}}</h2>
-    <worker-update-modal v-if='selected_worker'>
-    </worker-update-modal>
+    <workers-update-modal v-if='selected_worker'>
+    </workers-update-modal>
+    <workers-new-modal v-if='!selected_worker'>
+    </workers-new-modal>
     <table style="width:100%">
       <tr>
         <th>Name</th>
@@ -28,13 +38,15 @@
 <script>
 
 import WorkerMixin  from '../mixins/WorkerMixin';
-import WorkerUpdateModal from './WorkerUpdateModal';
+import WorkersUpdateModal from './WorkersUpdateModal';
+import WorkersNewModal from './WorkersNewModal';
 
 export default {
   name: 'Workers',
   mixins: [WorkerMixin],
   components: {
-    WorkerUpdateModal
+    WorkersUpdateModal,
+    WorkersNewModal
   }
 }
 </script>

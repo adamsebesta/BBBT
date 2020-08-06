@@ -7,16 +7,15 @@
         @click='deleteProject(selected_project._id)'
         class='button'
       >
-        delete Project
+        Delete project
       </button>
-      <br>
       <br>
       <button
         type="button"
         @click="showModal('project-modal-update')"
         class='button'
       >
-        update project
+        Update project
       </button>
     </div>
     <project-update-modal>
@@ -103,6 +102,7 @@ export default {
     margin: 0 auto;
     padding: 0px 10px 10px;
     height: 100vh;
+    margin-left: 3rem;
 
   }
 
@@ -112,6 +112,10 @@ export default {
     margin-left: 10px;
     width: 100%;
     flex-direction: column;
+  }
+
+  .button {
+    padding: 0em 1em;
   }
 
 

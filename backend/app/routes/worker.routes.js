@@ -19,7 +19,7 @@ module.exports = app => {
   router.put("/", workers.update);
 
   // Delete a Worker with id
-  router.delete("/:id", workers.delete);
+  router.delete("/deleteWorker", workers.delete);
 
   // Create a new Worker
   router.delete("/", workers.deleteAll);

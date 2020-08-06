@@ -139,6 +139,7 @@ export default {
 
   .worker-wrapper::v-deep .formulate-input-element {
     max-width: 56rem;
-
   }
+
+  
 </style>
