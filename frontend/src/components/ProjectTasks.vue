@@ -10,7 +10,7 @@
     </transition>
 
       <div class="tasks">
-        <div class="ctr-justify">
+        <div class="filters">
 
           <FormulateInput
             v-model="selected_cat"
@@ -53,11 +53,41 @@
       <h2> Tasks: {{this.selected_project.tasks.length}}</h2>
       <table style="width:100%">
         <tr>
-          <th>Category</th>
-          <th>Description</th>
-          <th>Estimated Hrs.</th>
-          <th>Tracked Hours</th>
-        </tr>
+          <th @click="sortByWrapper('category')">
+            Category
+            <sort-by-arrow
+              field='category'
+              :sorts='sorts'>
+            </sort-by-arrow>
+          </th>
+          <th @click="sortByWrapper('description')">
+            Description
+            <sort-by-arrow
+              field='description'
+              :sorts='sorts'>
+            </sort-by-arrow>
+          </th>
+          <th @click="sortByWrapper('estimation.time')">
+            Estimated Hrs.
+            <sort-by-arrow
+              field='estimation.time'
+              :sorts='sorts'>
+            </sort-by-arrow>
+          </th>
+          <th @click="sortByWrapper('tracked_hours')">
+            Tracked Hours
+            <sort-by-arrow
+              field='tracked_hours'
+              :sorts='sorts'>
+            </sort-by-arrow>
+          </th>
+          <th @click="sortByWrapper('status')">
+            Status
+            <sort-by-arrow
+              field='status'
+              :sorts='sorts'>
+            </sort-by-arrow>
+          </th>
         <tr
           class= "main-tasks"
           v-for='task in combinedFiltered'
@@ -68,6 +98,7 @@
           <td>{{task.description}}</td>
           <td>{{task.estimation.time}} </td>
           <td>{{calcHours(task)}}</td>
+          <td>{{task.status}}</td>
         </tr>
       </table>
     </div>
@@ -80,14 +111,15 @@ import TaskMixin  from '../mixins/TaskMixin';
 import ProjectMixin  from '../mixins/ProjectMixin';
 import ProjectTasksNewTaskModal from './ProjectTasksNewTaskModal';
 import ProjectTasksUpdateTaskModal from './ProjectTasksUpdateTaskModal';
+import SortByArrow from './ui/SortByArrow';
 
 export default {
   name: 'ProjectTasks',
   mixins: [TaskMixin, ProjectMixin],
   components: {
     ProjectTasksNewTaskModal,
-    ProjectTasksUpdateTaskModal
-
+    ProjectTasksUpdateTaskModal,
+    SortByArrow
   },
   data() {
     return {
@@ -95,6 +127,15 @@ export default {
       selected_cat: null,
       tasksFilteredByCat: null,
       tasksFilteredByWorker: null,
+      sorts: {
+        category: null,
+        description: null,
+        estimation: {
+          time: null
+        },
+        tracked_hours: null,
+        status: null
+      }
     }
   },
   watch: {
@@ -107,11 +148,13 @@ export default {
 
 <style lang="scss" scoped>
 
-  .ctr-justify {
+  .filters {
     display: flex;
-    width: 50%;
     margin: 0 auto;
-    justify-content: space-around;
+    justify-content: flex-start;
+    button, div {
+      margin-right: 1em;
+    }
   }
 
   th {
@@ -141,5 +184,5 @@ export default {
     max-width: 56rem;
   }
 
-  
+
 </style>

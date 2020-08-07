@@ -154,7 +154,7 @@ export default {
           rate_brutto: null,
           internal: null,
           role: null
-        }
+        };
         this.sorts[field] = true;
         //reverse sort
       } else {

@@ -133,6 +133,88 @@ export default {
         // call API from store
         this.$store.dispatch('updateTask', updateObj);
       },
+      sortBy(field, sort) {
+        // field to be sorted, sort direction, and primer case insensitivity
+        //to be refactored
+        this.combinedFiltered.sort((a, b) => {
+          let _ = require("lodash");
+          if (field == 'tracked_hours') {
+            // Sum total hours of tracked hours on each task
+            const x = this.calcHours(a);
+            const y = this.calcHours(b);
+            // logic for ascending sort
+            if (sort == 'asc') {
+              if (x < y) {
+                return -1;
+              }
+              if (x > y) {
+                return 1;
+              }
+              return 0;
+            }
+            // logic for descending sort
+            if (sort == 'desc') {
+              if (x < y) {
+                return 1;
+              }
+              if (x > y) {
+                return -1;
+            }
+              return 0;
+            }
+
+            } else {
+            // dig into array to get sorted value to be sorted
+            const aValue = _.get(a, field);
+            const bValue = _.get(b, field);
+            var x =  typeof aValue == 'string'? aValue.toUpperCase(): aValue; // ignore upper and lowercase
+            var y =  typeof bValue == 'string'? bValue .toUpperCase(): bValue;
+            }
+
+          if (sort == 'asc') {
+            if (x < y) {
+              return -1;
+            }
+            if (x > y) {
+              return 1;
+            }
+            return 0;
+          }
+
+          if (sort == 'desc') {
+            if (x < y) {
+              return 1;
+            }
+            if (x > y) {
+              return -1;
+          }
+            return 0;
+          }
+        });
+      },
+      sortByWrapper(field) {
+        let _ = require("lodash");
+        //if field has not been sorted or is false
+        if (!_.get(this.sorts, field)) {
+          this.sortBy(field, 'asc');
+          //reset sortby state
+          this.sorts = {
+            category: null,
+            description: null,
+            estimation: {
+              time: null
+            },
+            tracked_hours: null,
+            status: null
+          }
+          // dig into object and set value of given key to true
+          _.set(this.sorts, field, true);
+          //reverse sort
+        } else {
+          this.sortBy(field, 'desc');
+          _.set(this.sorts, field, false);
+        }
+      },
     },
     computed: {
       selected_project() {

@@ -279,11 +279,11 @@ export default {
     box-shadow: 0.5px 0.5px rgba(0, 0, 0, 0.1);
     width: 100%;
     max-width: 1200px;
-    height: 900px;
+    margin: 2rem 0;
+    height: 800px;
     background-color: #FFF;
     border-radius: 3px;
     cursor: default;
-    padding: 5px;
     overflow-y: scroll;
     align-items: center;
     display: flex;

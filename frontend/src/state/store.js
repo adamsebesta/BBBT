@@ -12,7 +12,7 @@ export const store = new Vuex.Store({
     endpoint: 'http://localhost:8080/api/',
     selected_project: null,
     selected_task: null,
-    selected_worker: null
+    selected_worker: null,
   },
   mutations: {
     INCREMENT_PROJECT_COUNT(state) {

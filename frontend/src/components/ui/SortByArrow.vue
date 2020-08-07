@@ -1,10 +1,10 @@
 <template lang="html">
   <span>
     <font-awesome-icon
-      v-if='sorts[field]'
+      v-if='checkForValue(field)'
       :icon="['fas', 'angle-down']"/>
     <font-awesome-icon
-      v-if='sorts[field] == false'
+      v-if='checkForValue(field) == false'
       :icon="['fas', 'angle-up']"/>
   </span>
 </template>
@@ -15,7 +15,13 @@ export default {
     field: String,
     sorts: Object
   },
-  name: 'SortByArrow'
+  name: 'SortByArrow',
+  methods: {
+    checkForValue(field) {
+      let _ = require("lodash");
+      return _.get(this.sorts, field)
+    }
+  }
 }
 </script>
 
