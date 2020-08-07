@@ -169,26 +169,25 @@ export default {
             const bValue = _.get(b, field);
             var x =  typeof aValue == 'string'? aValue.toUpperCase(): aValue; // ignore upper and lowercase
             var y =  typeof bValue == 'string'? bValue .toUpperCase(): bValue;
+            if (sort == 'asc') {
+              if (x < y) {
+                return -1;
+              }
+              if (x > y) {
+                return 1;
+              }
+              return 0;
             }
 
-          if (sort == 'asc') {
-            if (x < y) {
-              return -1;
+            if (sort == 'desc') {
+              if (x < y) {
+                return 1;
+              }
+              if (x > y) {
+                return -1;
             }
-            if (x > y) {
-              return 1;
+              return 0;
             }
-            return 0;
-          }
-
-          if (sort == 'desc') {
-            if (x < y) {
-              return 1;
-            }
-            if (x > y) {
-              return -1;
-          }
-            return 0;
           }
         });
       },
