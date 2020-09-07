@@ -42,7 +42,7 @@
         >
             <div class="top-row">
               <div class="img">
-                <img class='' src="https://news.pg.com/sites/pg.newshq.businesswire.com/files/logo/image/2018_PGlogo.png" alt="">
+                <img class='' src="@/assets/Logo.png" alt="">
               </div>
               <div class="right">
                   <p><strong>{{project.code}}</strong></p>
@@ -197,7 +197,7 @@ export default {
   }
   .card {
     max-width: 100%;
-    height: 87%;
+    height: 85%;
     background: white;
     margin-top: 2rem;
   }
@@ -216,8 +216,11 @@ export default {
       }
   }
 
-  .img img {
-    width: 100%;
+  .img {
+  text-align: center;
+    img {
+    width: 70%;
+    }
   }
 
   .low-row {
@@ -226,12 +229,14 @@ export default {
     justify-content: flex-start;
     flex-direction: column;
     padding: 0.5rem;
+    p {
+      margin: 5px 0;
+    }
   }
 
 
   a:hover, a:visited, a:link, a:active{
     text-decoration: none;
-    color: black;
   }
 
   .shadowed {

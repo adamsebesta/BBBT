@@ -51,7 +51,6 @@ export const store = new Vuex.Store({
     selected_project: state => state.selected_project,
     selected_task: state => state.selected_task,
     selected_worker: state => state.selected_worker,
-    endpoint: state => state.selected_task,
     clients: state => state.clients,
   },
   actions: {
