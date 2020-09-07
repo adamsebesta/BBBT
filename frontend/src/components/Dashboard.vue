@@ -6,7 +6,7 @@
     <br>
     <div class="filters">
       <FormulateInput
-        v-model="selected_worker"
+        v-model="selected_worker_filter"
         :options="current_workers"
         type="select"
         placeholder="Select a worker"
@@ -42,7 +42,7 @@
         >
             <div class="top-row">
               <div class="img">
-                <img class='' src="https://news.pg.com/sites/pg.newshq.businesswire.com/files/logo/image/2018_PGlogo.png" alt="">
+                <img class='' src="@/assets/Logo.png" alt="">
               </div>
               <div class="right">
                   <p><strong>{{project.code}}</strong></p>
@@ -83,7 +83,7 @@ export default {
   mixins: [ProjectMixin, WorkerMixin, ClientMixin],
   data() {
     return {
-      selected_worker: null,
+      selected_worker_filter: null,
       current_workers: null,
       current_clients: null,
       projectsFilteredByWorker: null,
@@ -122,7 +122,7 @@ export default {
       this.projects.forEach((p) => {
         //maps workers objects to their IDs
         const wl = p.workers.map(w => w.worker._id)
-        if (wl.includes(this.selected_worker)) {
+        if (wl.includes(this.selected_worker_filter)) {
           newList.push(p);
         }
       })
@@ -130,7 +130,7 @@ export default {
     },
     resetFilters() {
       if (this.combinedFiltered) {
-      this.selected_worker = null;
+      this.selected_worker_filter = null;
       this.projectsFilteredByWorker = null;
       }
     },
@@ -167,12 +167,19 @@ export default {
     width: 90%;
     height: 100%;
   }
+  .button {
+    margin-left: 1rem;
+  }
 
   .filters {
-      display: flex;
-      width: 50%;
-      justify-content:  flex-start;
-      padding-top: 1.5rem;
+    display: flex;
+    width: 50%;
+    justify-content:  flex-start;
+    padding-top: 1.5rem;
+    align-items: baseline;
+  }
+  select {
+    margin-bottom: 0;
   }
 
   .link {
@@ -190,7 +197,7 @@ export default {
   }
   .card {
     max-width: 100%;
-    height: 87%;
+    height: 85%;
     background: white;
     margin-top: 2rem;
   }
@@ -209,8 +216,11 @@ export default {
       }
   }
 
-  .img img {
-    width: 100%;
+  .img {
+  text-align: center;
+    img {
+    width: 70%;
+    }
   }
 
   .low-row {
@@ -219,12 +229,14 @@ export default {
     justify-content: flex-start;
     flex-direction: column;
     padding: 0.5rem;
+    p {
+      margin: 5px 0;
+    }
   }
 
 
   a:hover, a:visited, a:link, a:active{
     text-decoration: none;
-    color: black;
   }
 
   .shadowed {
@@ -232,27 +244,10 @@ export default {
   }
 
   .box-shadow {
-    box-shadow: -2px 0px 5px rgba(7, 23, 79, 0.5) !important;
+    box-shadow: -1px 0px 5px rgba(7, 23, 79, 0.5) !important;
   }
 
-  .button {
-    display: flex;
-    align-items: center;
-    width: 75px;
-    height: 25px;
-    font-size: 12px;
-    font-weight: bold;
-    opacity: .7;
-    border: none;
-    border-radius: 3px;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: 0.5px 0.5px rgba(0, 0, 0, 0.1);
-    outline: none;
-    margin-left: 2rem;
-    margin-top: .1rem;
-    padding: 18px;
-  }
+
 
 
 

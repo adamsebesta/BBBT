@@ -284,7 +284,11 @@ export default {
 
   .worker-wrapper::v-deep .formulate-input-element {
   max-width: 56rem;
+  }
 
-}
+  #project-formulate-update .upper-fields {
+    margin-top: 10rem;
+    
+  }
 
 </style>

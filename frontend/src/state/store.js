@@ -12,6 +12,7 @@ export const store = new Vuex.Store({
     endpoint: 'http://localhost:8080/api/',
     selected_project: null,
     selected_task: null,
+    selected_worker: null,
   },
   mutations: {
     INCREMENT_PROJECT_COUNT(state) {
@@ -29,15 +30,18 @@ export const store = new Vuex.Store({
     SET_CLIENTS(state, results) {
       state.clients = results;
     },
-    SET_SELECTED_PROJECT(state, results) {
-      state.selected_project = results
+    SET_SELECTED_PROJECT(state, p) {
+      state.selected_project = p
+    },
+    SET_SELECTED_TASK(state, t) {
+      state.selected_task = t
+    },
+    SET_SELECTED_WORKER(state, w) {
+      state.selected_worker = w
     },
     SET_MODAL_OPEN (state, bool) {
       state.modalOpen = bool
     },
-    SET_SELECTED_TASK(state, results) {
-      state.selected_task = results
-    }
   },
   getters: {
     projects: state => state.projects,
@@ -46,7 +50,7 @@ export const store = new Vuex.Store({
     workers: state => state.workers,
     selected_project: state => state.selected_project,
     selected_task: state => state.selected_task,
-    endpoint: state => state.selected_task,
+    selected_worker: state => state.selected_worker,
     clients: state => state.clients,
   },
   actions: {
@@ -71,5 +75,9 @@ export const store = new Vuex.Store({
       let data = await res.json();
       commit('SET_CLIENTS', data);
     },
+    async clearSelections({commit}) {
+      commit('SET_SELECTED_TASK', null);
+      commit('SET_SELECTED_WORKER', null);
+    }
   }
 })
